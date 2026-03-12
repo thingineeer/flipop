@@ -18,6 +18,7 @@ class AuthService {
 
   User? get currentUser => FirebaseAuth.instance.currentUser;
   bool get isSignedIn => FirebaseAuth.instance.currentUser != null;
+  bool get isAnonymous => FirebaseAuth.instance.currentUser?.isAnonymous ?? true;
 
   String? get nickname => _repo.currentUser?.nickname;
   String? get avatarId => _repo.currentUser?.avatarId;
