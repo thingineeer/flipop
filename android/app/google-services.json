@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "576288394502",
+    "project_id": "flipop-game",
+    "storage_bucket": "flipop-game.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576288394502:android:0b4933ed836c18ddd8a287",
+        "android_client_info": {
+          "package_name": "com.thingineeer.flipop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCisykrtSAM5MGwS2dQnC9on-KYCpflnwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
