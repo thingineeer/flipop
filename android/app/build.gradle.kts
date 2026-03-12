@@ -35,8 +35,10 @@ android {
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // TODO: release 빌드용 signing config 설정 필요
+            // 1. android/key.properties 파일 생성 (storeFile, storePassword, keyAlias, keyPassword)
+            // 2. signingConfigs { create("release") { ... } } 블록 추가
+            // 3. 아래 debug → release 서명으로 교체
             signingConfig = signingConfigs.getByName("debug")
         }
     }
