@@ -63,6 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '576288394502',
     projectId: 'flipop-game',
     storageBucket: 'flipop-game.firebasestorage.app',
+    iosClientId: '576288394502-j92en6occ209ggudreg6ghjsclfgjipb.apps.googleusercontent.com',
     iosBundleId: 'com.thingineeer.flipop',
   );
+
 }

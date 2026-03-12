@@ -12,7 +12,12 @@
           "package_name": "com.thingineeer.flipop"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "576288394502-0gpbesgu4gpvvm53p0iejjftgbdob5mf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCisykrtSAM5MGwS2dQnC9on-KYCpflnwQ"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "576288394502-0gpbesgu4gpvvm53p0iejjftgbdob5mf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "576288394502-j92en6occ209ggudreg6ghjsclfgjipb.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.thingineeer.flipop"
+              }
+            }
+          ]
         }
       }
     }
