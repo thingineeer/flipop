@@ -7,9 +7,11 @@ import 'firebase_options.dart';
 import 'di/service_locator.dart';
 import 'services/ad_service.dart';
 import 'services/auth_service.dart';
+import 'services/secure_storage_service.dart';
 import 'ui/game_screen.dart';
 import 'ui/home_screen.dart';
 import 'ui/nickname_screen.dart';
+import 'ui/welcome_screen.dart';
 import 'game/game_state.dart';
 import 'game/game_colors.dart';
 
@@ -64,7 +66,7 @@ class AuthGate extends StatefulWidget {
   State<AuthGate> createState() => _AuthGateState();
 }
 
-enum _Screen { loading, home, nickname, game }
+enum _Screen { loading, welcome, home, nickname, game }
 
 class _AuthGateState extends State<AuthGate> {
   _Screen _screen = _Screen.loading;
@@ -86,7 +88,12 @@ class _AuthGateState extends State<AuthGate> {
           });
         }
       } else {
-        if (mounted) setState(() => _screen = _Screen.home);
+        final hasSeenWelcome = await SecureStorageService().hasSeenWelcome();
+        if (mounted) {
+          setState(() {
+            _screen = hasSeenWelcome ? _Screen.home : _Screen.welcome;
+          });
+        }
       }
     } catch (e) {
       // Firebase 오류 시 홈 화면 표시
@@ -97,6 +104,43 @@ class _AuthGateState extends State<AuthGate> {
   /// 비로그인(익명) 시작 → 바로 게임
   void _onGuestStart() {
     setState(() => _screen = _Screen.game);
+  }
+
+  /// WelcomeScreen: 로그인 없이 시작 (익명 로그인 → 게임)
+  Future<void> _startAsGuest() async {
+    await SecureStorageService().setSeenWelcome();
+    try {
+      await AuthService().signInAnonymously();
+    } catch (_) {
+      // 익명 로그인 실패해도 게임 진입 허용
+    }
+    if (mounted) setState(() => _screen = _Screen.game);
+  }
+
+  /// WelcomeScreen: Google 로그인
+  Future<void> _onWelcomeGoogleSignIn() async {
+    final (user, failure) = await AuthService().signInWithGoogle();
+    if (failure != null || user == null) return;
+    await SecureStorageService().setSeenWelcome();
+    final hasProfile = await AuthService().hasProfile();
+    if (mounted) {
+      setState(() {
+        _screen = hasProfile ? _Screen.game : _Screen.nickname;
+      });
+    }
+  }
+
+  /// WelcomeScreen: Apple 로그인
+  Future<void> _onWelcomeAppleSignIn() async {
+    final (user, failure) = await AuthService().signInWithApple();
+    if (failure != null || user == null) return;
+    await SecureStorageService().setSeenWelcome();
+    final hasProfile = await AuthService().hasProfile();
+    if (mounted) {
+      setState(() {
+        _screen = hasProfile ? _Screen.game : _Screen.nickname;
+      });
+    }
   }
 
   /// 소셜 로그인 성공
@@ -122,6 +166,12 @@ class _AuthGateState extends State<AuthGate> {
               color: GameColors.textSecondary,
             ),
           ),
+        );
+      case _Screen.welcome:
+        return WelcomeScreen(
+          onSkip: _startAsGuest,
+          onGoogleSignIn: _onWelcomeGoogleSignIn,
+          onAppleSignIn: _onWelcomeAppleSignIn,
         );
       case _Screen.home:
         return HomeScreen(
