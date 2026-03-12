@@ -328,6 +328,19 @@ class GameState {
     );
   }
 
+  /// 점수를 변경한 새 GameState 반환
+  GameState withScore(int newScore) => GameState(
+        grid: grid,
+        score: newScore,
+        bestScore: max(bestScore, newScore),
+        moves: moves,
+        combo: combo,
+        colorCount: colorCount,
+        isGameOver: isGameOver,
+        addRowEvery: addRowEvery,
+        nextId: nextId,
+      );
+
   int get highestRow {
     for (int r = rows - 1; r >= 0; r--) {
       for (int c = 0; c < cols; c++) {

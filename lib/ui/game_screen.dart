@@ -24,6 +24,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   int _bestScore = 0;
   bool _showOnboarding = true;
   bool _hasUsedRevive = false; // 게임당 1회만 이어하기 허용
+  bool _hasUsedTimeBonus = false; // 게임당 1회만 시간 +30초 허용
+  bool _hasUsedScoreDouble = false; // 게임당 1회만 점수 2배 허용
 
   // 파티클 이펙트
   final List<_ParticleData> _activeParticles = [];
@@ -157,6 +159,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _state = GameState.newGame(colorCount: 3, bestScore: _bestScore);
       _activeParticles.clear();
       _hasUsedRevive = false;
+      _hasUsedTimeBonus = false;
+      _hasUsedScoreDouble = false;
     });
   }
 
@@ -165,6 +169,23 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _state = _state.revive();
       _hasUsedRevive = true;
       _activeParticles.clear();
+    });
+  }
+
+  void _onTimeBonus() {
+    setState(() {
+      // 시간 제한 시스템이 추가되면 _remainingSeconds += 30 처리
+      _hasUsedTimeBonus = true;
+    });
+  }
+
+  void _onScoreDouble() {
+    setState(() {
+      _state = _state.withScore(_state.score * 2);
+      if (_state.score > _bestScore) {
+        _bestScore = _state.score;
+      }
+      _hasUsedScoreDouble = true;
     });
   }
 
@@ -287,6 +308,10 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 onRestart: _restart,
                 canRevive: !_hasUsedRevive,
                 onRevive: _revive,
+                canTimeBonus: !_hasUsedTimeBonus,
+                onTimeBonus: _onTimeBonus,
+                canScoreDouble: !_hasUsedScoreDouble,
+                onScoreDouble: _onScoreDouble,
               ),
 
             if (_showOnboarding && !_state.isGameOver)

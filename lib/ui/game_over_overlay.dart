@@ -11,6 +11,10 @@ class GameOverOverlay extends StatefulWidget {
   final VoidCallback? onLeaderboard;
   final VoidCallback? onRevive;
   final bool canRevive;
+  final VoidCallback? onTimeBonus;
+  final bool canTimeBonus;
+  final VoidCallback? onScoreDouble;
+  final bool canScoreDouble;
 
   const GameOverOverlay({
     super.key,
@@ -20,6 +24,10 @@ class GameOverOverlay extends StatefulWidget {
     this.onLeaderboard,
     this.onRevive,
     this.canRevive = false,
+    this.onTimeBonus,
+    this.canTimeBonus = false,
+    this.onScoreDouble,
+    this.canScoreDouble = false,
   });
 
   @override
@@ -52,15 +60,31 @@ class _GameOverOverlayState extends State<GameOverOverlay>
     super.dispose();
   }
 
-  void _onReviveTap() {
+  void _showRewardedAd({required VoidCallback onRewarded}) {
     final adService = AdService();
     if (!adService.isRewardedReady) return;
 
     adService.showRewardedAd(
-      onRewarded: () {
-        widget.onRevive?.call();
-      },
+      onRewarded: onRewarded,
     );
+  }
+
+  void _onReviveTap() {
+    _showRewardedAd(onRewarded: () {
+      widget.onRevive?.call();
+    });
+  }
+
+  void _onTimeBonusTap() {
+    _showRewardedAd(onRewarded: () {
+      widget.onTimeBonus?.call();
+    });
+  }
+
+  void _onScoreDoubleTap() {
+    _showRewardedAd(onRewarded: () {
+      widget.onScoreDouble?.call();
+    });
   }
 
   @override
@@ -133,49 +157,28 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                       ),
                       const SizedBox(height: 28),
 
-                      // 이어하기 (광고) 버튼
-                      if (widget.canRevive && widget.onRevive != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: GestureDetector(
-                            onTap: _onReviveTap,
-                            child: Container(
-                              width: double.infinity,
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 16),
-                              decoration: BoxDecoration(
-                                color:
-                                    GameColors.blockColors[BlockColor.yellow],
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: GameColors
-                                        .blockDarkColors[BlockColor.yellow]!
-                                        .withValues(alpha: 0.4),
-                                    offset: const Offset(0, 4),
-                                    blurRadius: 0,
-                                  ),
-                                ],
-                              ),
-                              child: const Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.play_circle_outline,
-                                      color: Colors.white, size: 20),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    '이어하기 (광고)',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                      // 리워드 광고 버튼들
+                      _buildRewardButton(
+                        icon: Icons.play_circle_outline,
+                        label: '이어하기 (광고)',
+                        enabled: widget.canRevive && widget.onRevive != null,
+                        onTap: _onReviveTap,
+                      ),
+                      const SizedBox(height: 8),
+                      _buildRewardButton(
+                        icon: Icons.timer_outlined,
+                        label: '시간 +30초 (광고)',
+                        enabled: widget.canTimeBonus && widget.onTimeBonus != null,
+                        onTap: _onTimeBonusTap,
+                      ),
+                      const SizedBox(height: 8),
+                      _buildRewardButton(
+                        icon: Icons.star_outline,
+                        label: '점수 2배 (광고)',
+                        enabled: widget.canScoreDouble && widget.onScoreDouble != null,
+                        onTap: _onScoreDoubleTap,
+                      ),
+                      const SizedBox(height: 16),
 
                       // PLAY AGAIN 버튼
                       GestureDetector(
@@ -247,6 +250,54 @@ class _GameOverOverlayState extends State<GameOverOverlay>
           ),
         );
       },
+    );
+  }
+
+  Widget _buildRewardButton({
+    required IconData icon,
+    required String label,
+    required bool enabled,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: enabled ? onTap : null,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: enabled
+              ? GameColors.blockColors[BlockColor.yellow]
+              : GameColors.gridLine,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: enabled
+              ? [
+                  BoxShadow(
+                    color: GameColors.blockDarkColors[BlockColor.yellow]!
+                        .withValues(alpha: 0.4),
+                    offset: const Offset(0, 4),
+                    blurRadius: 0,
+                  ),
+                ]
+              : null,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon,
+                color: enabled ? Colors.white : GameColors.textSecondary,
+                size: 20),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: TextStyle(
+                color: enabled ? Colors.white : GameColors.textSecondary,
+                fontSize: 15,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
