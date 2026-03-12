@@ -1,0 +1,70 @@
+default_platform(:android)
+
+platform :android do
+
+  desc "Flutter clean + build appbundle"
+  private_lane :build_appbundle do
+    Dir.chdir("../..") do
+      sh("flutter", "clean")
+      sh("flutter", "pub", "get")
+      sh("flutter", "build", "appbundle", "--release")
+    end
+  end
+
+  # ---------- 내부 테스트 ----------
+  desc "내부 테스트 트랙에 업로드"
+  lane :internal do
+    build_appbundle
+
+    upload_to_play_store(
+      track: "internal",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  # ---------- 비공개 테스트 (클로즈드 베타) ----------
+  desc "비공개 테스트 트랙에 업로드"
+  lane :beta do
+    build_appbundle
+
+    upload_to_play_store(
+      track: "beta",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  # ---------- 프로덕션 ----------
+  desc "프로덕션 트랙에 업로드"
+  lane :release do
+    build_appbundle
+
+    upload_to_play_store(
+      track: "production",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_changelogs: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+  # ---------- 메타데이터만 업로드 ----------
+  desc "메타데이터만 업로드 (바이너리 제외)"
+  lane :metadata do
+    upload_to_play_store(
+      skip_upload_apk: true,
+      skip_upload_aab: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+    )
+  end
+
+end
