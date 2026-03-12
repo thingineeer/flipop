@@ -1,108 +1,67 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../di/service_locator.dart';
+import '../domain/entities/app_user.dart';
+import '../domain/failures/auth_failure.dart';
+import '../domain/repositories/auth_repository.dart';
+
+/// AuthService — facade 패턴
+/// 기존 UI 코드(game_screen, nickname_screen 등)와의 호환성 유지
+/// 내부적으로 AuthRepository에 위임
 class AuthService {
   static final AuthService _instance = AuthService._();
   factory AuthService() => _instance;
   AuthService._();
 
-  final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
+  AuthRepository get _repo => ServiceLocator().authRepository;
 
-  User? get currentUser => _auth.currentUser;
-  bool get isSignedIn => _auth.currentUser != null;
+  User? get currentUser => FirebaseAuth.instance.currentUser;
+  bool get isSignedIn => FirebaseAuth.instance.currentUser != null;
 
-  String? _nickname;
-  String? _avatarId;
+  String? get nickname => _repo.currentUser?.nickname;
+  String? get avatarId => _repo.currentUser?.avatarId;
 
-  String? get nickname => _nickname;
-  String? get avatarId => _avatarId;
+  /// 현재 AppUser
+  AppUser? get appUser => _repo.currentUser;
 
   /// 익명 로그인
   Future<User> signInAnonymously() async {
-    if (_auth.currentUser != null) {
-      await _loadProfile();
-      return _auth.currentUser!;
-    }
-
-    final credential = await _auth.signInAnonymously();
-    return credential.user!;
+    await _repo.signInAnonymously();
+    return FirebaseAuth.instance.currentUser!;
   }
 
-  /// 닉네임 정규표현식 검증
-  /// 2~12자, 한글/영문/숫자만 허용, 공백/특수문자/이모지 불가
-  static final _nicknameRegex = RegExp(r'^[가-힣a-zA-Z0-9]{2,12}$');
+  /// 소셜 로그인
+  Future<(AppUser?, AuthFailure?)> signInWithGoogle() => _repo.signInWithGoogle();
+  Future<(AppUser?, AuthFailure?)> signInWithApple() => _repo.signInWithApple();
 
-  /// 닉네임 유효성 검증. 유효하면 null, 아니면 에러 메시지 반환.
-  String? validateNickname(String nickname) {
-    if (nickname.isEmpty) {
-      return '닉네임을 입력해주세요';
-    }
-    if (nickname.length < 2) {
-      return '닉네임은 2자 이상이어야 합니다';
-    }
-    if (nickname.length > 12) {
-      return '닉네임은 12자 이하여야 합니다';
-    }
-    if (!_nicknameRegex.hasMatch(nickname)) {
-      return '한글, 영문, 숫자만 사용 가능합니다';
-    }
-    return null;
-  }
+  /// 소셜 연동 (익명 → 소셜 업그레이드)
+  Future<(AppUser?, AuthFailure?)> linkWithGoogle() => _repo.linkWithGoogle();
+  Future<(AppUser?, AuthFailure?)> linkWithApple() => _repo.linkWithApple();
 
-  /// 닉네임 중복 체크. 사용 가능하면 true, 중복이면 false.
-  /// 자기 자신의 uid는 제외.
-  Future<bool> checkNicknameAvailable(String nickname) async {
-    final query = await _firestore
-        .collection('users')
-        .where('nickname', isEqualTo: nickname)
-        .limit(1)
-        .get();
+  /// 닉네임 검증
+  String? validateNickname(String nickname) => _repo.validateNickname(nickname);
 
-    if (query.docs.isEmpty) return true;
+  /// 닉네임 중복 체크
+  Future<bool> checkNicknameAvailable(String nickname) =>
+      _repo.checkNicknameAvailable(nickname);
 
-    // 자기 자신이면 허용
-    final myUid = _auth.currentUser?.uid;
-    if (myUid != null && query.docs.length == 1 && query.docs.first.id == myUid) {
-      return true;
-    }
+  /// 프로필 저장
+  Future<void> saveProfile(String nickname, String avatarId) =>
+      _repo.saveProfile(nickname, avatarId);
 
-    return false;
-  }
+  /// 프로필 존재 여부
+  Future<bool> hasProfile() => _repo.hasProfile();
 
-  /// 프로필(닉네임+아바타) 저장
-  Future<void> saveProfile(String nickname, String avatarId) async {
-    final user = _auth.currentUser;
-    if (user == null) return;
+  /// 로그아웃
+  Future<void> signOut() => _repo.signOut();
 
-    _nickname = nickname;
-    _avatarId = avatarId;
+  /// 계정 삭제
+  Future<(bool, AuthFailure?)> deleteAccount() => _repo.deleteAccount();
 
-    await _firestore.collection('users').doc(user.uid).set({
-      'nickname': nickname,
-      'avatarId': avatarId,
-      'createdAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
-  }
+  /// ID 토큰
+  Future<String?> getIdToken({bool forceRefresh = false}) =>
+      _repo.getIdToken(forceRefresh: forceRefresh);
 
-  /// 프로필 로드
-  Future<void> _loadProfile() async {
-    final user = _auth.currentUser;
-    if (user == null) return;
-
-    final doc = await _firestore.collection('users').doc(user.uid).get();
-    if (doc.exists) {
-      _nickname = doc.data()?['nickname'] as String?;
-      _avatarId = doc.data()?['avatarId'] as String?;
-    }
-  }
-
-  /// 프로필 존재 여부 확인
-  Future<bool> hasProfile() async {
-    final user = _auth.currentUser;
-    if (user == null) return false;
-
-    await _loadProfile();
-    return _nickname != null && _nickname!.isNotEmpty;
-  }
+  /// auth 상태 변경 스트림
+  Stream<AppUser?> authStateChanges() => _repo.authStateChanges();
 }
