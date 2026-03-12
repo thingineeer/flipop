@@ -290,16 +290,30 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
           ),
           const SizedBox(width: 12),
 
-          // 닉네임
+          // 닉네임 + 국기
           Expanded(
-            child: Text(
-              entry.nickname,
-              style: TextStyle(
-                color: GameColors.textPrimary,
-                fontSize: 15,
-                fontWeight: isMe ? FontWeight.w800 : FontWeight.w600,
-              ),
-              overflow: TextOverflow.ellipsis,
+            child: Row(
+              children: [
+                if (countryCodeToFlag(entry.countryCode).isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: Text(
+                      countryCodeToFlag(entry.countryCode),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                  ),
+                Flexible(
+                  child: Text(
+                    entry.nickname,
+                    style: TextStyle(
+                      color: GameColors.textPrimary,
+                      fontSize: 15,
+                      fontWeight: isMe ? FontWeight.w800 : FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
           ),
 

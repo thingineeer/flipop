@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../di/service_locator.dart';
@@ -23,6 +24,14 @@ class AuthService {
 
   /// 현재 AppUser
   AppUser? get appUser => _repo.currentUser;
+
+  /// 기기 locale에서 국가코드 가져오기
+  String? get countryCode {
+    final locale = PlatformDispatcher.instance.locale;
+    final code = locale.countryCode;
+    if (code != null && code.length == 2) return code;
+    return null;
+  }
 
   /// 익명 로그인
   Future<User> signInAnonymously() async {

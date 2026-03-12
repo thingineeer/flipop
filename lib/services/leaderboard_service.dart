@@ -6,6 +6,7 @@ class LeaderboardEntry {
   final String avatarId;
   final int score;
   final DateTime? playedAt;
+  final String? countryCode;
 
   LeaderboardEntry({
     required this.uid,
@@ -13,6 +14,7 @@ class LeaderboardEntry {
     required this.avatarId,
     required this.score,
     this.playedAt,
+    this.countryCode,
   });
 
   factory LeaderboardEntry.fromDoc(DocumentSnapshot doc) {
@@ -23,8 +25,19 @@ class LeaderboardEntry {
       avatarId: data['avatarId'] as String? ?? 'cat',
       score: data['bestScore'] as int? ?? 0,
       playedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
+      countryCode: data['countryCode'] as String?,
     );
   }
+}
+
+/// 국가코드(ISO 3166-1 alpha-2)를 국기 이모지로 변환
+/// 예: "KR" → "🇰🇷", "US" → "🇺🇸"
+String countryCodeToFlag(String? code) {
+  if (code == null || code.length != 2) return '';
+  final upper = code.toUpperCase();
+  final first = String.fromCharCode(0x1F1E6 + upper.codeUnitAt(0) - 0x41);
+  final second = String.fromCharCode(0x1F1E6 + upper.codeUnitAt(1) - 0x41);
+  return '$first$second';
 }
 
 class LeaderboardService {
@@ -40,6 +53,7 @@ class LeaderboardService {
     required String nickname,
     required String avatarId,
     required int score,
+    String? countryCode,
   }) async {
     final docRef = _firestore.collection('leaderboard').doc(uid);
     final doc = await docRef.get();
@@ -50,6 +64,7 @@ class LeaderboardService {
         'avatarId': avatarId,
         'bestScore': score,
         'updatedAt': FieldValue.serverTimestamp(),
+        if (countryCode != null) 'countryCode': countryCode,
       }, SetOptions(merge: true));
     }
   }

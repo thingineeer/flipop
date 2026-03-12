@@ -178,6 +178,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
         nickname: auth.nickname!,
         avatarId: auth.avatarId ?? 'cat',
         score: _state.score,
+        countryCode: auth.countryCode,
       );
     } catch (_) {
       // 순위 제출 실패는 조용히 무시
