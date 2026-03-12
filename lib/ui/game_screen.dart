@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../game/game_state.dart';
@@ -20,12 +22,18 @@ class GameScreen extends StatefulWidget {
 }
 
 class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
+  static const int _initialTime = 90; // 1분 30초
+
   late GameState _state;
   int _bestScore = 0;
   bool _showOnboarding = true;
   bool _hasUsedRevive = false; // 게임당 1회만 이어하기 허용
   bool _hasUsedTimeBonus = false; // 게임당 1회만 시간 +30초 허용
   bool _hasUsedScoreDouble = false; // 게임당 1회만 점수 2배 허용
+
+  // 타이머
+  Timer? _gameTimer;
+  int _remainingSeconds = _initialTime;
 
   // 파티클 이펙트
   final List<_ParticleData> _activeParticles = [];
@@ -52,12 +60,46 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     _shakeAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(parent: _shakeController!, curve: Curves.elasticIn),
     );
+
+    _startTimer();
   }
 
   @override
   void dispose() {
+    _gameTimer?.cancel();
     _shakeController?.dispose();
     super.dispose();
+  }
+
+  void _startTimer() {
+    _gameTimer?.cancel();
+    _gameTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (_state.isGameOver) return;
+      setState(() {
+        _remainingSeconds--;
+        if (_remainingSeconds <= 0) {
+          _remainingSeconds = 0;
+          _gameTimer?.cancel();
+          _state = GameState(
+            grid: _state.grid,
+            score: _state.score,
+            bestScore: _state.bestScore,
+            moves: _state.moves,
+            combo: _state.combo,
+            colorCount: _state.colorCount,
+            isGameOver: true,
+            addRowEvery: _state.addRowEvery,
+            nextId: _state.nextId,
+          );
+          if (_state.score > _bestScore) {
+            _bestScore = _state.score;
+          }
+          HapticFeedback.heavyImpact();
+          _submitScore();
+          AdService().showInterstitialAd();
+        }
+      });
+    });
   }
 
   void _onTap(int row, int col) {
@@ -95,6 +137,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
     setState(() {
       _state = newState;
+
+      // 줄 클리어 시 보너스 시간 적용
+      if (_state.timeBonus > 0) {
+        _remainingSeconds += _state.timeBonus;
+      }
 
       if (_state.score > oldScore) {
         final newCombo = _state.combo;
@@ -161,7 +208,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _hasUsedRevive = false;
       _hasUsedTimeBonus = false;
       _hasUsedScoreDouble = false;
+      _remainingSeconds = _initialTime;
     });
+    _startTimer();
   }
 
   void _revive() {
@@ -169,7 +218,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _state = _state.revive();
       _hasUsedRevive = true;
       _activeParticles.clear();
+      _remainingSeconds = 30; // 이어하기 시 30초 부여
     });
+    _startTimer();
   }
 
   void _onTimeBonus() {
@@ -245,6 +296,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               child: Column(
                 children: [
                   _buildHeader(),
+                  const SizedBox(height: 8),
+                  _buildTimerBar(),
                   const SizedBox(height: 8),
                   _buildTurnIndicator(),
                   const SizedBox(height: 12),
@@ -424,6 +477,62 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimerBar() {
+    final progress = _remainingSeconds / _initialTime;
+    final isUrgent = _remainingSeconds <= 15;
+    final minutes = _remainingSeconds ~/ 60;
+    final seconds = _remainingSeconds % 60;
+    final timeText = '$minutes:${seconds.toString().padLeft(2, '0')}';
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'TIME',
+                style: TextStyle(
+                  color: isUrgent
+                      ? GameColors.blockColors[BlockColor.red]
+                      : GameColors.textSecondary,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              Text(
+                timeText,
+                style: TextStyle(
+                  color: isUrgent
+                      ? GameColors.blockColors[BlockColor.red]
+                      : GameColors.textPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: LinearProgressIndicator(
+              value: progress.clamp(0.0, 1.0),
+              backgroundColor: GameColors.gridLine,
+              valueColor: AlwaysStoppedAnimation(
+                isUrgent
+                    ? GameColors.blockColors[BlockColor.red]!
+                    : GameColors.blockColors[BlockColor.yellow]!,
+              ),
+              minHeight: 6,
+            ),
           ),
         ],
       ),

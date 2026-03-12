@@ -45,6 +45,7 @@ class GameState {
   final bool isGameOver;
   final int addRowEvery;
   final int nextId;
+  final int timeBonus; // 줄 클리어 시 보너스 시간 (초)
 
   const GameState({
     required this.grid,
@@ -56,6 +57,7 @@ class GameState {
     this.isGameOver = false,
     this.addRowEvery = 3,
     this.nextId = 0,
+    this.timeBonus = 0,
   });
 
   /// 새 게임 (랜덤)
@@ -151,6 +153,7 @@ class GameState {
       colorCount: colorCount,
       addRowEvery: addRowEvery,
       nextId: nextId,
+      timeBonus: 0,
     );
 
     // 줄 클리어 + 연쇄
@@ -190,6 +193,16 @@ class GameState {
     final newCombo = combo + 1;
     final points = linesCleared * 100 * newCombo;
 
+    // 콤보에 따른 시간 보너스 계산
+    int bonus;
+    if (newCombo >= 3) {
+      bonus = 7;
+    } else if (newCombo == 2) {
+      bonus = 5;
+    } else {
+      bonus = 3;
+    }
+
     // 중력
     _applyGravity(newGrid);
 
@@ -202,6 +215,7 @@ class GameState {
       colorCount: colorCount,
       addRowEvery: addRowEvery,
       nextId: nextId,
+      timeBonus: timeBonus + bonus,
     );
 
     // 연쇄 체크 (중력 후 새 줄이 완성될 수 있음)
@@ -263,6 +277,7 @@ class GameState {
       colorCount: colorCount,
       addRowEvery: addRowEvery,
       nextId: id,
+      timeBonus: timeBonus,
     );
   }
 
@@ -280,6 +295,7 @@ class GameState {
           isGameOver: true,
           addRowEvery: addRowEvery,
           nextId: nextId,
+          timeBonus: timeBonus,
         );
       }
     }
@@ -325,6 +341,7 @@ class GameState {
       isGameOver: false,
       addRowEvery: addRowEvery,
       nextId: nextId,
+      timeBonus: 0,
     );
   }
 
