@@ -1,9 +1,19 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // 유저 프로필: 본인만 읽기/쓰기
+    // 닉네임 정규표현식 검증 함수
+    function isValidNickname(nickname) {
+      return nickname is string
+        && nickname.size() >= 2
+        && nickname.size() <= 12
+        && nickname.matches('^[가-힣a-zA-Z0-9]{2,12}$');
+    }
+
+    // 유저 프로필: 본인만 읽기/쓰기 + 닉네임 검증
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId
+                   && isValidNickname(request.resource.data.nickname);
     }
 
     // 순위표: 인증된 사용자 읽기, 본인만 쓰기
@@ -12,8 +22,7 @@ service cloud.firestore {
       allow write: if request.auth != null && request.auth.uid == userId
                    && request.resource.data.bestScore is int
                    && request.resource.data.bestScore >= 0
-                   && request.resource.data.nickname is string
-                   && request.resource.data.nickname.size() <= 12;
+                   && isValidNickname(request.resource.data.nickname);
     }
   }
 }

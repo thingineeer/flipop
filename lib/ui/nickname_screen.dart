@@ -16,6 +16,7 @@ class _NicknameScreenState extends State<NicknameScreen> {
   final _controller = TextEditingController();
   String _selectedAvatar = 'cat';
   bool _saving = false;
+  String? _errorText;
 
   static const _avatars = [
     {'id': 'cat', 'image': 'assets/images/cat_red.png', 'color': BlockColor.red},
@@ -24,13 +25,50 @@ class _NicknameScreenState extends State<NicknameScreen> {
     {'id': 'frog', 'image': 'assets/images/frog_green.png', 'color': BlockColor.green},
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(_onNicknameChanged);
+  }
+
+  void _onNicknameChanged() {
+    final nickname = _controller.text;
+    if (nickname.isEmpty) {
+      setState(() => _errorText = null);
+      return;
+    }
+    final error = AuthService().validateNickname(nickname);
+    setState(() => _errorText = error);
+  }
+
   Future<void> _save() async {
     final nickname = _controller.text.trim();
-    if (nickname.isEmpty || nickname.length > 12) return;
 
-    setState(() => _saving = true);
+    // 정규표현식 검증
+    final validationError = AuthService().validateNickname(nickname);
+    if (validationError != null) {
+      setState(() => _errorText = validationError);
+      return;
+    }
+
+    setState(() {
+      _saving = true;
+      _errorText = null;
+    });
 
     try {
+      // 중복 체크
+      final available = await AuthService().checkNicknameAvailable(nickname);
+      if (!available) {
+        if (mounted) {
+          setState(() {
+            _errorText = '이미 사용 중인 닉네임입니다';
+            _saving = false;
+          });
+        }
+        return;
+      }
+
       await AuthService().saveProfile(nickname, _selectedAvatar);
       widget.onComplete();
     } catch (e) {
@@ -46,6 +84,7 @@ class _NicknameScreenState extends State<NicknameScreen> {
 
   @override
   void dispose() {
+    _controller.removeListener(_onNicknameChanged);
     _controller.dispose();
     super.dispose();
   }
@@ -130,7 +169,12 @@ class _NicknameScreenState extends State<NicknameScreen> {
                 decoration: BoxDecoration(
                   color: GameColors.gridBackground,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: GameColors.gridLine, width: 2),
+                  border: Border.all(
+                    color: _errorText != null
+                        ? GameColors.blockColors[BlockColor.red]!
+                        : GameColors.gridLine,
+                    width: 2,
+                  ),
                 ),
                 child: TextField(
                   controller: _controller,
@@ -155,6 +199,20 @@ class _NicknameScreenState extends State<NicknameScreen> {
                   onSubmitted: (_) => _save(),
                 ),
               ),
+
+              // 에러 메시지
+              if (_errorText != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    _errorText!,
+                    style: TextStyle(
+                      color: GameColors.blockColors[BlockColor.red],
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               const SizedBox(height: 24),
 
               // 시작 버튼
