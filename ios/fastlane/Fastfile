@@ -1,0 +1,79 @@
+default_platform(:ios)
+
+platform :ios do
+  # ──────────────────────────────────────────
+  # beta: Flutter build → TestFlight 업로드
+  # ──────────────────────────────────────────
+  desc "Flutter build iOS & upload to TestFlight"
+  lane :beta do
+    # Flutter build
+    sh("cd ../.. && flutter build ios --release")
+
+    # Xcode archive & export
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "flipop.ipa"
+    )
+
+    # TestFlight 업로드
+    pilot(
+      skip_waiting_for_build_processing: true
+    )
+  end
+
+  # ──────────────────────────────────────────
+  # release: Flutter build → App Store 배포
+  # ──────────────────────────────────────────
+  desc "Flutter build iOS & submit to App Store"
+  lane :release do
+    # Flutter build
+    sh("cd ../.. && flutter build ios --release")
+
+    # Xcode archive & export
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "flipop.ipa"
+    )
+
+    # App Store 배포
+    deliver(
+      submit_for_review: true,
+      automatic_release: false,
+      force: true,
+      metadata_path: "./fastlane/metadata"
+    )
+  end
+
+  # ──────────────────────────────────────────
+  # screenshots: 스크린샷 자동화 & 업로드
+  # ──────────────────────────────────────────
+  desc "Capture screenshots and upload via deliver"
+  lane :screenshots do
+    capture_screenshots
+
+    deliver(
+      skip_binary_upload: true,
+      skip_metadata: true,
+      overwrite_screenshots: true
+    )
+  end
+
+  # ──────────────────────────────────────────
+  # metadata: 메타데이터만 업로드
+  # ──────────────────────────────────────────
+  desc "Upload metadata only (no binary)"
+  lane :metadata do
+    deliver(
+      skip_binary_upload: true,
+      skip_screenshots: true,
+      force: true,
+      metadata_path: "./fastlane/metadata"
+    )
+  end
+end

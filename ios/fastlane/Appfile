@@ -1,0 +1,3 @@
+app_identifier("com.thingineeer.flipop")
+apple_id("your-apple-id@example.com") # TODO: Apple ID 입력
+team_id("XXXXXXXXXX") # TODO: Team ID 입력
