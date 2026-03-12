@@ -13,8 +13,10 @@ class OnboardingOverlay extends StatefulWidget {
 
 class _OnboardingOverlayState extends State<OnboardingOverlay>
     with SingleTickerProviderStateMixin {
-  int _step = 0;
   static const _totalSteps = 3;
+
+  late final PageController _pageController;
+  int _currentPage = 0;
 
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
@@ -29,6 +31,7 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     _pulseController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -40,13 +43,17 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
 
   @override
   void dispose() {
+    _pageController.dispose();
     _pulseController.dispose();
     super.dispose();
   }
 
   void _next() {
-    if (_step < _totalSteps - 1) {
-      setState(() => _step++);
+    if (_currentPage < _totalSteps - 1) {
+      _pageController.nextPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
     } else {
       widget.onDismiss();
     }
@@ -77,80 +84,52 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
               mainAxisSize: MainAxisSize.min,
               children: [
                 // 단계 인디케이터
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                    _totalSteps,
-                    (i) => Container(
-                      width: i == _step ? 24 : 8,
-                      height: 8,
-                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                      decoration: BoxDecoration(
-                        color: i == _step
-                            ? GameColors.blockColors[BlockColor.blue]
-                            : GameColors.gridLine,
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                    ),
-                  ),
-                ),
+                _buildIndicator(),
                 const SizedBox(height: 20),
 
-                // 일러스트
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    return _buildIllustration(_step, constraints.maxWidth);
-                  },
-                ),
-
-                const SizedBox(height: 16),
-
-                // 제목
-                Text(
-                  _titles[_step],
-                  style: const TextStyle(
-                    color: GameColors.textPrimary,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w900,
+                // PageView 영역
+                SizedBox(
+                  height: 280,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _totalSteps,
+                    onPageChanged: (index) {
+                      setState(() => _currentPage = index);
+                    },
+                    itemBuilder: (context, index) {
+                      return _buildPage(index);
+                    },
                   ),
                 ),
-                const SizedBox(height: 8),
 
-                // 설명
-                Text(
-                  _descriptions[_step],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: GameColors.textSecondary,
-                    fontSize: 15,
-                    height: 1.5,
-                  ),
-                ),
                 const SizedBox(height: 20),
 
                 // 버튼
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  decoration: BoxDecoration(
-                    color: GameColors.blockColors[BlockColor.blue],
-                    borderRadius: BorderRadius.circular(14),
-                    boxShadow: [
-                      BoxShadow(
-                        color: GameColors.blockDarkColors[BlockColor.blue]!
-                            .withValues(alpha: 0.4),
-                        offset: const Offset(0, 3),
-                        blurRadius: 0,
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      _step < _totalSteps - 1 ? '다음' : '시작하기!',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                GestureDetector(
+                  onTap: _next,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      color: GameColors.blockColors[BlockColor.blue],
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [
+                        BoxShadow(
+                          color: GameColors.blockDarkColors[BlockColor.blue]!
+                              .withValues(alpha: 0.4),
+                          offset: const Offset(0, 3),
+                          blurRadius: 0,
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        _currentPage < _totalSteps - 1 ? '다음' : '시작하기!',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
                   ),
@@ -160,6 +139,67 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
           ),
         ),
       ),
+    );
+  }
+
+  /// 하단 인디케이터 (현재 페이지에 따라 애니메이션)
+  Widget _buildIndicator() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(
+        _totalSteps,
+        (i) => AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          width: i == _currentPage ? 24 : 8,
+          height: 8,
+          margin: const EdgeInsets.symmetric(horizontal: 3),
+          decoration: BoxDecoration(
+            color: i == _currentPage
+                ? GameColors.blockColors[BlockColor.blue]
+                : GameColors.gridLine,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 각 페이지 콘텐츠
+  Widget _buildPage(int step) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // 일러스트
+            _buildIllustration(step, constraints.maxWidth),
+            const SizedBox(height: 16),
+
+            // 제목
+            Text(
+              _titles[step],
+              style: const TextStyle(
+                color: GameColors.textPrimary,
+                fontSize: 22,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // 설명
+            Text(
+              _descriptions[step],
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: GameColors.textSecondary,
+                fontSize: 15,
+                height: 1.5,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
