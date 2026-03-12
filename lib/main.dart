@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'firebase_options.dart';
+import 'di/service_locator.dart';
 import 'services/ad_service.dart';
 import 'services/auth_service.dart';
 import 'ui/game_screen.dart';
@@ -12,6 +15,9 @@ import 'game/game_colors.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // 디버그 모드에서 Analytics 수집 비활성화
+  await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(!kDebugMode);
+  ServiceLocator().init();
   await AdService().initialize();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   SystemChrome.setSystemUIOverlayStyle(
@@ -38,7 +44,13 @@ class FlipopApp extends StatelessWidget {
         ),
         fontFamily: 'SF Pro Rounded',
       ),
-      home: const AuthGate(),
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (_) => const AuthGate(),
+          settings: settings,
+        );
+      },
     );
   }
 }

@@ -10,6 +10,7 @@ import 'game_over_overlay.dart';
 import 'leaderboard_screen.dart';
 import 'onboarding_overlay.dart';
 import 'pop_particle.dart';
+import 'settings_screen.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -189,6 +190,12 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     );
   }
 
+  void _openSettings() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => const SettingsScreen()),
+    );
+  }
+
   void _dismissOnboarding() {
     setState(() {
       _showOnboarding = false;
@@ -350,24 +357,44 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               ),
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          Row(
             children: [
-              Text(
-                'BEST',
-                style: TextStyle(
-                  color: GameColors.textSecondary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.5,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'BEST',
+                    style: TextStyle(
+                      color: GameColors.textSecondary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                  Text(
+                    '$_bestScore',
+                    style: TextStyle(
+                      color: GameColors.textPrimary,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                '$_bestScore',
-                style: TextStyle(
-                  color: GameColors.textPrimary,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
+              const SizedBox(width: 8),
+              GestureDetector(
+                onTap: _openSettings,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: GameColors.gridBackground,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Icon(
+                    Icons.settings,
+                    color: GameColors.textSecondary,
+                    size: 20,
+                  ),
                 ),
               ),
             ],
