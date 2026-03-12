@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../game/game_state.dart';
 import '../game/game_colors.dart';
+import '../services/ad_service.dart';
 import 'leaderboard_screen.dart';
 
 class GameOverOverlay extends StatefulWidget {
@@ -8,6 +9,8 @@ class GameOverOverlay extends StatefulWidget {
   final int bestScore;
   final VoidCallback onRestart;
   final VoidCallback? onLeaderboard;
+  final VoidCallback? onRevive;
+  final bool canRevive;
 
   const GameOverOverlay({
     super.key,
@@ -15,6 +18,8 @@ class GameOverOverlay extends StatefulWidget {
     required this.bestScore,
     required this.onRestart,
     this.onLeaderboard,
+    this.onRevive,
+    this.canRevive = false,
   });
 
   @override
@@ -45,6 +50,17 @@ class _GameOverOverlayState extends State<GameOverOverlay>
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _onReviveTap() {
+    final adService = AdService();
+    if (!adService.isRewardedReady) return;
+
+    adService.showRewardedAd(
+      onRewarded: () {
+        widget.onRevive?.call();
+      },
+    );
   }
 
   @override
@@ -116,6 +132,52 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                         ),
                       ),
                       const SizedBox(height: 28),
+
+                      // 이어하기 (광고) 버튼
+                      if (widget.canRevive && widget.onRevive != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: GestureDetector(
+                            onTap: _onReviveTap,
+                            child: Container(
+                              width: double.infinity,
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 16),
+                              decoration: BoxDecoration(
+                                color:
+                                    GameColors.blockColors[BlockColor.yellow],
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: GameColors
+                                        .blockDarkColors[BlockColor.yellow]!
+                                        .withValues(alpha: 0.4),
+                                    offset: const Offset(0, 4),
+                                    blurRadius: 0,
+                                  ),
+                                ],
+                              ),
+                              child: const Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.play_circle_outline,
+                                      color: Colors.white, size: 20),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '이어하기 (광고)',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      // PLAY AGAIN 버튼
                       GestureDetector(
                         onTap: widget.onRestart,
                         child: Container(
@@ -126,7 +188,8 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: GameColors.blockDarkColors[BlockColor.blue]!
+                                color: GameColors
+                                    .blockDarkColors[BlockColor.blue]!
                                     .withValues(alpha: 0.4),
                                 offset: const Offset(0, 4),
                                 blurRadius: 0,

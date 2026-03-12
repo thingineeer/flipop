@@ -301,6 +301,33 @@ class GameState {
     return grid[row][col]?.color;
   }
 
+  /// 이어하기: 게임오버 상태에서 맨 윗줄(maxVisibleRows) 블록 제거 + isGameOver 해제
+  GameState revive() {
+    if (!isGameOver) return this;
+
+    final newGrid = _copyGrid();
+
+    // maxVisibleRows(인덱스 6) 줄의 블록 제거
+    for (int c = 0; c < cols; c++) {
+      newGrid[maxVisibleRows][c] = null;
+    }
+
+    // 중력 적용
+    _applyGravity(newGrid);
+
+    return GameState(
+      grid: newGrid,
+      score: score,
+      bestScore: bestScore,
+      moves: moves,
+      combo: 0,
+      colorCount: colorCount,
+      isGameOver: false,
+      addRowEvery: addRowEvery,
+      nextId: nextId,
+    );
+  }
+
   int get highestRow {
     for (int r = rows - 1; r >= 0; r--) {
       for (int c = 0; c < cols; c++) {

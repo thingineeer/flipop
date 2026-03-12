@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../game/game_state.dart';
 import '../game/game_colors.dart';
+import '../services/ad_service.dart';
 import '../services/auth_service.dart';
 import '../services/leaderboard_service.dart';
 import 'block_widget.dart';
@@ -21,6 +22,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   late GameState _state;
   int _bestScore = 0;
   bool _showOnboarding = true;
+  bool _hasUsedRevive = false; // 게임당 1회만 이어하기 허용
 
   // 파티클 이펙트
   final List<_ParticleData> _activeParticles = [];
@@ -113,6 +115,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       if (_state.isGameOver) {
         HapticFeedback.heavyImpact();
         _submitScore();
+        // 게임 오버 시 인터스티셜 광고 표시 (NEVER during solving)
+        AdService().showInterstitialAd();
       }
     });
   }
@@ -150,6 +154,15 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   void _restart() {
     setState(() {
       _state = GameState.newGame(colorCount: 3, bestScore: _bestScore);
+      _activeParticles.clear();
+      _hasUsedRevive = false;
+    });
+  }
+
+  void _revive() {
+    setState(() {
+      _state = _state.revive();
+      _hasUsedRevive = true;
       _activeParticles.clear();
     });
   }
@@ -264,6 +277,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 score: _state.score,
                 bestScore: _bestScore,
                 onRestart: _restart,
+                canRevive: !_hasUsedRevive,
+                onRevive: _revive,
               ),
 
             if (_showOnboarding && !_state.isGameOver)
