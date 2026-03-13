@@ -142,6 +142,17 @@ class _MoreScreenState extends State<MoreScreen> {
 
   // ── 유틸 ──
 
+  String _friendlyErrorMessage(Object e) {
+    final msg = e.toString().toLowerCase();
+    if (msg.contains('network') || msg.contains('socket') || msg.contains('timeout')) {
+      return '네트워크 연결을 확인해주세요';
+    }
+    if (msg.contains('permission')) {
+      return '권한 오류가 발생했습니다';
+    }
+    return '일시적인 오류가 발생했습니다';
+  }
+
   void _showError(AuthFailure failure) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
@@ -573,7 +584,7 @@ class _MoreScreenState extends State<MoreScreen> {
       if (mounted) {
         setState(() => _loading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.saveFailed(e.toString()))),
+          SnackBar(content: Text(_friendlyErrorMessage(e))),
         );
       }
     }

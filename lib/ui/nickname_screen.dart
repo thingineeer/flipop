@@ -113,12 +113,23 @@ class _NicknameScreenState extends State<NicknameScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('저장 실패: $e')),
+          SnackBar(content: Text(_friendlyErrorMessage(e))),
         );
       }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
+  }
+
+  String _friendlyErrorMessage(Object e) {
+    final msg = e.toString().toLowerCase();
+    if (msg.contains('network') || msg.contains('socket') || msg.contains('timeout')) {
+      return '네트워크 연결을 확인해주세요';
+    }
+    if (msg.contains('permission')) {
+      return '권한 오류가 발생했습니다';
+    }
+    return '저장에 실패했습니다. 다시 시도해주세요';
   }
 
   @override

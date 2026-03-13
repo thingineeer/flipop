@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (failure != null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.googleSignInFailed(failure.message))),
+            SnackBar(content: Text(failure.message)),
           );
         }
         return;
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.googleSignInFailed(e.toString()))),
+          SnackBar(content: Text(_friendlyErrorMessage(e))),
         );
       }
     } finally {
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (failure != null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(AppLocalizations.of(context)!.appleSignInFailed(failure.message))),
+            SnackBar(content: Text(failure.message)),
           );
         }
         return;
@@ -86,12 +86,23 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocalizations.of(context)!.appleSignInFailed(e.toString()))),
+          SnackBar(content: Text(_friendlyErrorMessage(e))),
         );
       }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
+  }
+
+  String _friendlyErrorMessage(Object e) {
+    final msg = e.toString().toLowerCase();
+    if (msg.contains('network') || msg.contains('socket') || msg.contains('timeout')) {
+      return '네트워크 연결을 확인해주세요';
+    }
+    if (msg.contains('cancel')) {
+      return '로그인이 취소되었습니다';
+    }
+    return '일시적인 오류가 발생했습니다';
   }
 
   @override
