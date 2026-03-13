@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../game/avatar_data.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 import '../services/auth_service.dart';
@@ -23,20 +24,6 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
   List<LeaderboardEntry>? _entries;
   int? _myRank;
   bool _loading = true;
-
-  static const _avatarImages = {
-    'cat': 'assets/images/cat_red.png',
-    'puppy': 'assets/images/puppy_blue.png',
-    'bunny': 'assets/images/bunny_yellow.png',
-    'frog': 'assets/images/frog_green.png',
-  };
-
-  static const _avatarColors = {
-    'cat': BlockColor.red,
-    'puppy': BlockColor.blue,
-    'bunny': BlockColor.yellow,
-    'frog': BlockColor.green,
-  };
 
   @override
   void initState() {
@@ -203,8 +190,8 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
   Widget _buildMyRankCard() {
     final auth = AuthService();
     final avatarImage =
-        _avatarImages[auth.avatarId] ?? 'assets/images/cat_red.png';
-    final avatarColor = _avatarColors[auth.avatarId] ?? BlockColor.red;
+        AvatarData.images[auth.avatarId] ?? 'assets/images/cat_red.png';
+    final avatarColor = AvatarData.avatarColors[auth.avatarId] ?? BlockColor.red;
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -264,8 +251,8 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
     final rank = index + 1;
     final isMe = entry.uid == AuthService().currentUser?.uid;
     final avatarImage =
-        _avatarImages[entry.avatarId] ?? 'assets/images/cat_red.png';
-    final avatarColor = _avatarColors[entry.avatarId] ?? BlockColor.red;
+        AvatarData.images[entry.avatarId] ?? 'assets/images/cat_red.png';
+    final avatarColor = AvatarData.avatarColors[entry.avatarId] ?? BlockColor.red;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 8),

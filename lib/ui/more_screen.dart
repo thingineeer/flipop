@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../domain/entities/app_user.dart';
 import '../domain/failures/auth_failure.dart';
+import '../game/avatar_data.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 import '../services/auth_service.dart';
@@ -21,21 +22,6 @@ class MoreScreen extends StatefulWidget {
 
 class _MoreScreenState extends State<MoreScreen> {
   bool _loading = false;
-
-  // 아바타 이미지 매핑 (leaderboard_screen과 동일)
-  static const _avatarImages = {
-    'cat': 'assets/images/cat_red.png',
-    'puppy': 'assets/images/puppy_blue.png',
-    'bunny': 'assets/images/bunny_yellow.png',
-    'frog': 'assets/images/frog_green.png',
-  };
-
-  static const _avatarColors = {
-    'cat': BlockColor.red,
-    'puppy': BlockColor.blue,
-    'bunny': BlockColor.yellow,
-    'frog': BlockColor.green,
-  };
 
   AppUser? get _user => AuthService().appUser;
 
@@ -320,12 +306,262 @@ class _MoreScreenState extends State<MoreScreen> {
 
   // ── 프로필 카드 ──
 
+  // ── 아바타 선택 BottomSheet ──
+
+  void _showAvatarPicker() {
+    final auth = AuthService();
+    String selectedId = auth.avatarId ?? 'cat';
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: GameColors.background,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 32),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // 핸들 바
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: GameColors.gridLine,
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 타이틀
+                  const Text(
+                    '아바타 선택',
+                    style: TextStyle(
+                      color: GameColors.textPrimary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // 기본 섹션
+                  _buildAvatarSectionLabel('기본'),
+                  const SizedBox(height: 8),
+                  _buildAvatarGrid(
+                    AvatarData.basicAvatars,
+                    selectedId,
+                    onSelect: (id) => setSheetState(() => selectedId = id),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 추가 섹션
+                  _buildAvatarSectionLabel('추가'),
+                  const SizedBox(height: 8),
+                  _buildAvatarGrid(
+                    AvatarData.extraAvatars,
+                    selectedId,
+                    onSelect: (id) => setSheetState(() => selectedId = id),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 특별 섹션
+                  _buildAvatarSectionLabel('특별'),
+                  const SizedBox(height: 8),
+                  _buildAvatarGrid(
+                    AvatarData.specialAvatars,
+                    selectedId,
+                    forceLockedAll: true,
+                    onSelect: (_) {},
+                  ),
+                  const SizedBox(height: 24),
+
+                  // 저장 버튼
+                  GestureDetector(
+                    onTap: () async {
+                      Navigator.pop(context);
+                      await _saveAvatar(selectedId);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      decoration: BoxDecoration(
+                        color: GameColors.blockColors[BlockColor.blue],
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: GameColors.blockColors[BlockColor.blue]!
+                                .withValues(alpha: 0.3),
+                            offset: const Offset(0, 3),
+                            blurRadius: 0,
+                          ),
+                        ],
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '저장',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _buildAvatarSectionLabel(String label) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 2),
+      child: Text(
+        label.toUpperCase(),
+        style: const TextStyle(
+          color: GameColors.textSecondary,
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 1.5,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAvatarGrid(
+    List<String> avatarIds,
+    String selectedId, {
+    bool forceLockedAll = false,
+    required ValueChanged<String> onSelect,
+  }) {
+    return Row(
+      children: avatarIds.map((id) {
+        final isAvailable = AvatarData.availableAvatars.contains(id);
+        final locked = forceLockedAll || !isAvailable;
+        final isSelected = id == selectedId;
+        final image = AvatarData.images[id] ?? 'assets/images/cat_red.png';
+        final color = AvatarData.avatarColors[id] ?? BlockColor.red;
+
+        return Expanded(
+          child: GestureDetector(
+            onTap: locked ? null : () => onSelect(id),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 4),
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: locked
+                    ? GameColors.gridBackground
+                    : GameColors.blockColors[color]?.withValues(alpha: 0.2),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(
+                  color: isSelected && !locked
+                      ? GameColors.blockColors[color] ?? GameColors.gridLine
+                      : GameColors.gridLine,
+                  width: isSelected && !locked ? 2.5 : 1.5,
+                ),
+              ),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: Stack(
+                  children: [
+                    // 아바타 이미지 (이미지가 있을 때만 표시)
+                    if (isAvailable)
+                      Center(
+                        child: Opacity(
+                          opacity: locked ? 0.3 : 1.0,
+                          child: Image.asset(image, fit: BoxFit.contain),
+                        ),
+                      ),
+
+                    // 잠금 오버레이
+                    if (locked)
+                      Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.lock_rounded,
+                              color: GameColors.textSecondary,
+                              size: 20,
+                            ),
+                            if (AvatarData.unlockConditions.containsKey(id)) ...[
+                              const SizedBox(height: 2),
+                              Text(
+                                AvatarData.unlockConditions[id]!,
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: GameColors.textSecondary,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ] else ...[
+                              const SizedBox(height: 2),
+                              const Text(
+                                'COMING\nSOON',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: GameColors.textSecondary,
+                                  fontSize: 7,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  Future<void> _saveAvatar(String avatarId) async {
+    final auth = AuthService();
+    final nickname = auth.nickname ?? '???';
+    final countryCode = _user?.countryCode;
+
+    setState(() => _loading = true);
+    try {
+      await auth.saveProfile(nickname, avatarId, countryCode: countryCode);
+      if (mounted) {
+        setState(() => _loading = false);
+        _showSuccess('아바타가 변경되었습니다');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _loading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('변경 실패: $e')),
+        );
+      }
+    }
+  }
+
   Widget _buildProfileCard() {
     final user = _user;
     final auth = AuthService();
     final avatarId = auth.avatarId ?? 'cat';
-    final avatarImage = _avatarImages[avatarId] ?? 'assets/images/cat_red.png';
-    final avatarColor = _avatarColors[avatarId] ?? BlockColor.red;
+    final avatarImage =
+        AvatarData.images[avatarId] ?? 'assets/images/cat_red.png';
+    final avatarColor = AvatarData.avatarColors[avatarId] ?? BlockColor.red;
     final nickname = auth.nickname ?? '???';
     final countryFlag = countryCodeToFlag(auth.countryCode);
     final isAnonymous = user?.isAnonymous ?? true;
@@ -340,17 +576,46 @@ class _MoreScreenState extends State<MoreScreen> {
       ),
       child: Row(
         children: [
-          // 아바타
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: GameColors.blockColors[avatarColor],
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(6),
-              child: Image.asset(avatarImage, fit: BoxFit.contain),
+          // 아바타 (탭하면 선택 BottomSheet)
+          GestureDetector(
+            onTap: _showAvatarPicker,
+            child: Stack(
+              children: [
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: GameColors.blockColors[avatarColor],
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(6),
+                    child: Image.asset(avatarImage, fit: BoxFit.contain),
+                  ),
+                ),
+                // 편집 아이콘
+                Positioned(
+                  right: -2,
+                  bottom: -2,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: GameColors.textPrimary,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(
+                        color: GameColors.gridBackground,
+                        width: 1.5,
+                      ),
+                    ),
+                    child: const Icon(
+                      Icons.edit_rounded,
+                      color: Colors.white,
+                      size: 12,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           const SizedBox(width: 16),
