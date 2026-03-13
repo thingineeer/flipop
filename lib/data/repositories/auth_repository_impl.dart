@@ -202,13 +202,7 @@ class AuthRepositoryImpl implements AuthRepository {
     if (user == null) return (false, const AuthUnknown('로그인 상태가 아닙니다'));
 
     try {
-      // Firestore 데이터 삭제
-      final batch = _firestore.batch();
-      batch.delete(_firestore.collection('users').doc(user.uid));
-      batch.delete(_firestore.collection('leaderboard').doc(user.uid));
-      await batch.commit();
-
-      // Auth 계정 삭제
+      // Auth 계정 삭제 (Firestore 정리는 Cloud Functions onUserDeleted가 담당)
       await user.delete();
       _clearCache();
       return (true, null);
