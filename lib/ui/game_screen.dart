@@ -31,6 +31,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   bool _hasUsedRevive = false; // 게임당 1회만 이어하기 허용
   bool _hasUsedTimeBonus = false; // 게임당 1회만 시간 +30초 허용
   bool _hasUsedScoreDouble = false; // 게임당 1회만 점수 2배 허용
+  bool _waitingToStart = true; // 게임 시작 전 대기 상태 (최초 진입 포함)
 
   // 타이머
   Timer? _gameTimer;
@@ -65,7 +66,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     widget.gameTabVisible?.addListener(_onTabVisibilityChanged);
 
     _checkOnboarding();
-    _startTimer();
+    // 최초 진입 시 타이머 시작하지 않음 — START 버튼 탭 후 시작
   }
 
   @override
@@ -80,7 +81,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     final isVisible = widget.gameTabVisible?.value ?? true;
     if (!isVisible) {
       _gameTimer?.cancel();
-    } else if (!_state.isGameOver && _remainingSeconds > 0) {
+    } else if (!_state.isGameOver && !_waitingToStart && _remainingSeconds > 0) {
       _startTimer();
     }
   }
@@ -215,6 +216,12 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     _shakeController?.forward();
   }
 
+  void _dismissGameOver() {
+    setState(() {
+      _waitingToStart = true;
+    });
+  }
+
   void _restart() {
     setState(() {
       _state = GameState.newGame(colorCount: 3, bestScore: _bestScore);
@@ -223,6 +230,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       _hasUsedTimeBonus = false;
       _hasUsedScoreDouble = false;
       _remainingSeconds = _initialTime;
+      _waitingToStart = false;
     });
     _startTimer();
   }
@@ -373,7 +381,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               ),
             ),
 
-            if (_state.isGameOver)
+            if (_state.isGameOver && !_waitingToStart)
               GameOverOverlay(
                 score: _state.score,
                 bestScore: _bestScore,
@@ -384,9 +392,14 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 onTimeBonus: _onTimeBonus,
                 canScoreDouble: !_hasUsedScoreDouble,
                 onScoreDouble: _onScoreDouble,
+                onClose: _dismissGameOver,
               ),
 
-            if (_showOnboarding && !_state.isGameOver)
+            // 게임 오버 닫기 후 대기 화면
+            if (_waitingToStart)
+              _buildStartOverlay(),
+
+            if (_showOnboarding && !_state.isGameOver && !_waitingToStart)
               OnboardingOverlay(onDismiss: _dismissOnboarding),
           ],
         ),
@@ -573,6 +586,43 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildStartOverlay() {
+    return GestureDetector(
+      onTap: _restart,
+      child: Container(
+        color: Colors.black.withValues(alpha: 0.5),
+        child: Center(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 60),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 32),
+            decoration: BoxDecoration(
+              color: GameColors.blockColors[BlockColor.blue],
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: GameColors.blockDarkColors[BlockColor.blue]!
+                      .withValues(alpha: 0.4),
+                  offset: const Offset(0, 5),
+                  blurRadius: 0,
+                ),
+              ],
+            ),
+            child: const Text(
+              'START',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 4,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

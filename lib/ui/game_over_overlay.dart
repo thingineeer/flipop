@@ -15,6 +15,7 @@ class GameOverOverlay extends StatefulWidget {
   final bool canTimeBonus;
   final VoidCallback? onScoreDouble;
   final bool canScoreDouble;
+  final VoidCallback? onClose;
 
   const GameOverOverlay({
     super.key,
@@ -27,6 +28,7 @@ class GameOverOverlay extends StatefulWidget {
     this.canTimeBonus = false,
     this.onScoreDouble,
     this.canScoreDouble = false,
+    this.onClose,
   });
 
   @override
@@ -242,6 +244,17 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                           ),
                         ),
                       ),
+                      if (widget.onClose != null) ...[
+                        const SizedBox(height: 16),
+                        GestureDetector(
+                          onTap: widget.onClose,
+                          child: const Icon(
+                            Icons.close_rounded,
+                            color: GameColors.textSecondary,
+                            size: 28,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
