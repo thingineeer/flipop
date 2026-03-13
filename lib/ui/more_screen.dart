@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../domain/entities/app_user.dart';
 import '../domain/failures/auth_failure.dart';
 import '../game/avatar_data.dart';
@@ -22,6 +23,20 @@ class MoreScreen extends StatefulWidget {
 
 class _MoreScreenState extends State<MoreScreen> {
   bool _loading = false;
+  String _appVersion = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAppVersion();
+  }
+
+  Future<void> _loadAppVersion() async {
+    final info = await PackageInfo.fromPlatform();
+    if (mounted) {
+      setState(() => _appVersion = 'v${info.version}');
+    }
+  }
 
   AppUser? get _user => AuthService().appUser;
 
@@ -279,9 +294,9 @@ class _MoreScreenState extends State<MoreScreen> {
                       icon: Icons.info_outline_rounded,
                       iconColor: GameColors.textSecondary,
                       title: '앱 버전',
-                      trailing: const Text(
-                        'v1.0.0',
-                        style: TextStyle(
+                      trailing: Text(
+                        _appVersion,
+                        style: const TextStyle(
                           color: GameColors.textSecondary,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
