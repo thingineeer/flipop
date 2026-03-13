@@ -16,6 +16,7 @@ class AuthRepositoryImpl implements AuthRepository {
   // 인메모리 캐시
   String? _nickname;
   String? _avatarId;
+  String? _countryCode;
 
   AuthRepositoryImpl({
     FirebaseAuth? auth,
@@ -131,18 +132,25 @@ class AuthRepositoryImpl implements AuthRepository {
   // ── 프로필 ──
 
   @override
-  Future<void> saveProfile(String nickname, String avatarId) async {
+  Future<void> saveProfile(String nickname, String avatarId, {String? countryCode}) async {
     final user = _auth.currentUser;
     if (user == null) return;
 
     _nickname = nickname;
     _avatarId = avatarId;
+    if (countryCode != null) _countryCode = countryCode;
 
-    await _firestore.collection('users').doc(user.uid).set({
+    final data = <String, dynamic>{
       'nickname': nickname,
       'avatarId': avatarId,
       'createdAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+    };
+    if (countryCode != null) data['countryCode'] = countryCode;
+
+    await _firestore.collection('users').doc(user.uid).set(
+      data,
+      SetOptions(merge: true),
+    );
   }
 
   @override
@@ -236,6 +244,7 @@ class AuthRepositoryImpl implements AuthRepository {
       provider: provider,
       nickname: _nickname,
       avatarId: _avatarId,
+      countryCode: _countryCode,
     );
   }
 
@@ -255,12 +264,14 @@ class AuthRepositoryImpl implements AuthRepository {
     if (doc.exists) {
       _nickname = doc.data()?['nickname'] as String?;
       _avatarId = doc.data()?['avatarId'] as String?;
+      _countryCode = doc.data()?['countryCode'] as String?;
     }
   }
 
   void _clearCache() {
     _nickname = null;
     _avatarId = null;
+    _countryCode = null;
   }
 
   AuthFailure _mapFirebaseError(FirebaseAuthException e) {
@@ -276,4 +287,5 @@ class AuthRepositoryImpl implements AuthRepository {
   // facade 호환 getter
   String? get nickname => _nickname;
   String? get avatarId => _avatarId;
+  String? get countryCode => _countryCode;
 }

@@ -56,8 +56,8 @@ class AuthService {
       _repo.checkNicknameAvailable(nickname);
 
   /// 프로필 저장
-  Future<void> saveProfile(String nickname, String avatarId) =>
-      _repo.saveProfile(nickname, avatarId);
+  Future<void> saveProfile(String nickname, String avatarId, {String? countryCode}) =>
+      _repo.saveProfile(nickname, avatarId, countryCode: countryCode);
 
   /// 프로필 존재 여부
   Future<bool> hasProfile() => _repo.hasProfile();

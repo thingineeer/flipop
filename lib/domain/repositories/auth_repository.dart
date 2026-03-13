@@ -12,7 +12,7 @@ abstract class AuthRepository {
   Future<(AppUser?, AuthFailure?)> linkWithApple();
 
   // 프로필
-  Future<void> saveProfile(String nickname, String avatarId);
+  Future<void> saveProfile(String nickname, String avatarId, {String? countryCode});
   Future<bool> hasProfile();
   String? validateNickname(String nickname);
   Future<bool> checkNicknameAvailable(String nickname);

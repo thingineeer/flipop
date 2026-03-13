@@ -6,6 +6,7 @@ class AppUser {
   final SignInProvider provider;
   final String? nickname;
   final String? avatarId;
+  final String? countryCode;
 
   const AppUser({
     required this.uid,
@@ -13,6 +14,7 @@ class AppUser {
     required this.provider,
     this.nickname,
     this.avatarId,
+    this.countryCode,
   });
 
   bool get isAnonymous => provider == SignInProvider.anonymous;
@@ -25,6 +27,7 @@ class AppUser {
     SignInProvider? provider,
     String? nickname,
     String? avatarId,
+    String? countryCode,
   }) {
     return AppUser(
       uid: uid ?? this.uid,
@@ -32,6 +35,7 @@ class AppUser {
       provider: provider ?? this.provider,
       nickname: nickname ?? this.nickname,
       avatarId: avatarId ?? this.avatarId,
+      countryCode: countryCode ?? this.countryCode,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
@@ -7,6 +8,7 @@ import '../domain/failures/auth_failure.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 import '../services/auth_service.dart';
+import '../services/leaderboard_service.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -115,6 +117,131 @@ class _SettingsScreenState extends State<SettingsScreen> {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const _RestartPlaceholder()),
       );
+    }
+  }
+
+  static const _countries = [
+    ('KR', '대한민국'),
+    ('US', '미국'),
+    ('JP', '일본'),
+    ('CN', '중국'),
+    ('TW', '대만'),
+    ('TH', '태국'),
+    ('VN', '베트남'),
+    ('ID', '인도네시아'),
+    ('PH', '필리핀'),
+    ('MY', '말레이시아'),
+    ('SG', '싱가포르'),
+    ('IN', '인도'),
+    ('GB', '영국'),
+    ('DE', '독일'),
+    ('FR', '프랑스'),
+    ('ES', '스페인'),
+    ('IT', '이탈리아'),
+    ('BR', '브라질'),
+    ('MX', '멕시코'),
+    ('AU', '호주'),
+    ('CA', '캐나다'),
+    ('RU', '러시아'),
+  ];
+
+  Future<void> _changeCountry() async {
+    final currentCode = _user?.countryCode ??
+        PlatformDispatcher.instance.locale.countryCode ??
+        'KR';
+
+    final selected = await showDialog<String>(
+      context: context,
+      builder: (context) {
+        String tempSelected = currentCode;
+        return StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+            backgroundColor: GameColors.background,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: const Text(
+              '국가 변경',
+              style: TextStyle(
+                color: GameColors.textPrimary,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            content: SizedBox(
+              width: double.maxFinite,
+              height: 300,
+              child: ListView.builder(
+                itemCount: _countries.length,
+                itemBuilder: (context, index) {
+                  final (code, name) = _countries[index];
+                  final flag = countryCodeToFlag(code);
+                  final isSelected = tempSelected == code;
+                  return ListTile(
+                    leading: Text(flag, style: const TextStyle(fontSize: 24)),
+                    title: Text(
+                      name,
+                      style: TextStyle(
+                        color: isSelected
+                            ? GameColors.blockColors[BlockColor.blue]
+                            : GameColors.textPrimary,
+                        fontWeight:
+                            isSelected ? FontWeight.w800 : FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                    trailing: isSelected
+                        ? Icon(
+                            Icons.check_circle,
+                            color: GameColors.blockColors[BlockColor.blue],
+                          )
+                        : null,
+                    onTap: () {
+                      setDialogState(() => tempSelected = code);
+                    },
+                  );
+                },
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('취소'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, tempSelected),
+                child: Text(
+                  '변경',
+                  style: TextStyle(
+                    color: GameColors.blockColors[BlockColor.blue],
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (selected == null || selected == currentCode) return;
+    if (!mounted) return;
+
+    setState(() => _loading = true);
+    try {
+      final nickname = _user?.nickname ?? '';
+      final avatarId = _user?.avatarId ?? 'cat';
+      await AuthService().saveProfile(nickname, avatarId, countryCode: selected);
+      if (mounted) {
+        setState(() => _loading = false);
+        _showSuccess('국가가 변경되었습니다');
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _loading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('변경 실패: $e')),
+        );
+      }
     }
   }
 
@@ -318,13 +445,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const SizedBox(height: 12),
           if (_user?.nickname != null)
-            Text(
-              _user!.nickname!,
-              style: const TextStyle(
-                color: GameColors.textPrimary,
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-              ),
+            Row(
+              children: [
+                if (_user?.countryCode != null)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Text(
+                      countryCodeToFlag(_user!.countryCode),
+                      style: const TextStyle(fontSize: 22),
+                    ),
+                  ),
+                Expanded(
+                  child: Text(
+                    _user!.nickname!,
+                    style: const TextStyle(
+                      color: GameColors.textPrimary,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _changeCountry,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: GameColors.blockColors[BlockColor.blue]!
+                          .withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      '국가 변경',
+                      style: TextStyle(
+                        color: GameColors.blockColors[BlockColor.blue],
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           const SizedBox(height: 4),
           Text(

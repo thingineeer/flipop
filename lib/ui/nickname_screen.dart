@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 import '../services/auth_service.dart';
+import '../services/leaderboard_service.dart';
 
 class NicknameScreen extends StatefulWidget {
   final VoidCallback onComplete;
@@ -15,8 +18,34 @@ class NicknameScreen extends StatefulWidget {
 class _NicknameScreenState extends State<NicknameScreen> {
   final _controller = TextEditingController();
   String _selectedAvatar = 'cat';
+  String _selectedCountry = 'KR';
   bool _saving = false;
   String? _errorText;
+
+  static const _countries = [
+    ('KR', '대한민국'),
+    ('US', '미국'),
+    ('JP', '일본'),
+    ('CN', '중국'),
+    ('TW', '대만'),
+    ('TH', '태국'),
+    ('VN', '베트남'),
+    ('ID', '인도네시아'),
+    ('PH', '필리핀'),
+    ('MY', '말레이시아'),
+    ('SG', '싱가포르'),
+    ('IN', '인도'),
+    ('GB', '영국'),
+    ('DE', '독일'),
+    ('FR', '프랑스'),
+    ('ES', '스페인'),
+    ('IT', '이탈리아'),
+    ('BR', '브라질'),
+    ('MX', '멕시코'),
+    ('AU', '호주'),
+    ('CA', '캐나다'),
+    ('RU', '러시아'),
+  ];
 
   static const _avatars = [
     {'id': 'cat', 'image': 'assets/images/cat_red.png', 'color': BlockColor.red},
@@ -29,6 +58,12 @@ class _NicknameScreenState extends State<NicknameScreen> {
   void initState() {
     super.initState();
     _controller.addListener(_onNicknameChanged);
+    // 기기 locale에서 국가코드 자동 감지
+    final deviceCountry = PlatformDispatcher.instance.locale.countryCode;
+    if (deviceCountry != null &&
+        _countries.any((c) => c.$1 == deviceCountry)) {
+      _selectedCountry = deviceCountry;
+    }
   }
 
   void _onNicknameChanged() {
@@ -69,7 +104,7 @@ class _NicknameScreenState extends State<NicknameScreen> {
         return;
       }
 
-      await AuthService().saveProfile(nickname, _selectedAvatar);
+      await AuthService().saveProfile(nickname, _selectedAvatar, countryCode: _selectedCountry);
       widget.onComplete();
     } catch (e) {
       if (mounted) {
@@ -162,7 +197,55 @@ class _NicknameScreenState extends State<NicknameScreen> {
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 28),
+              const SizedBox(height: 20),
+
+              // 국가 선택
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                  color: GameColors.gridBackground,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: GameColors.gridLine, width: 2),
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _selectedCountry,
+                    isExpanded: true,
+                    dropdownColor: GameColors.gridBackground,
+                    icon: const Icon(
+                      Icons.arrow_drop_down,
+                      color: GameColors.textSecondary,
+                    ),
+                    style: const TextStyle(
+                      color: GameColors.textPrimary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    items: _countries.map((country) {
+                      final (code, name) = country;
+                      final flag = countryCodeToFlag(code);
+                      return DropdownMenuItem<String>(
+                        value: code,
+                        child: Text(
+                          '$flag  $name',
+                          style: const TextStyle(
+                            color: GameColors.textPrimary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => _selectedCountry = value);
+                      }
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
 
               // 닉네임 입력
               Container(
