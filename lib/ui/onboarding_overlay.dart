@@ -25,8 +25,8 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
 
   final _titles = const ['블록을 탭!', '한 줄 완성!', '연쇄 콤보!'];
   final _descriptions = const [
-    '탭하면 상하좌우 블록의\n색이 바뀌어요',
-    '가로 한 줄을 같은 색으로\n만들면 클리어!',
+    '탭하면 상하좌우 블록이\n다음 색으로 바뀌어요',
+    '가로 한 줄을 같은 색으로\n채우면 클리어!',
     '클리어 후 블록이 떨어져서\n연쇄가 터지면 대박 점수!',
   ];
 
@@ -150,7 +150,7 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
 
                 // PageView 영역
                 SizedBox(
-                  height: 280,
+                  height: 330,
                   child: PageView.builder(
                     controller: _pageController,
                     itemCount: _totalSteps,
@@ -323,18 +323,19 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('↑←→↓ ',
+            Text('탭 → ',
                 style: TextStyle(
                     fontSize: 12,
                     color: GameColors.blockColors[BlockColor.blue],
                     fontWeight: FontWeight.w800)),
-            const Text('주변 4칸 색 변화!',
+            const Text('주변 4칸이 다음 색으로!',
                 style: TextStyle(
                     fontSize: 12,
                     color: GameColors.textSecondary,
                     fontWeight: FontWeight.w600)),
           ],
         ),
+        _buildColorCycleHint(),
       ],
     );
   }
@@ -419,13 +420,13 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
             ],
           ),
           const SizedBox(height: 8),
-          const Text('COMBO x1  →  +100',
+          const Text('COMBO x1  →  +100점  +3초',
               style:
                   TextStyle(fontSize: 14, color: GameColors.textSecondary)),
-          const Text('COMBO x2  →  +200',
+          const Text('COMBO x2  →  +200점  +5초',
               style:
                   TextStyle(fontSize: 14, color: GameColors.textSecondary)),
-          const Text('COMBO x3  →  +300 🔥',
+          const Text('COMBO x3  →  +300점  +7초 🔥',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
@@ -582,6 +583,54 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
             ),
           ),
       ],
+    );
+  }
+
+  /// 색 순환 규칙 다이어그램 (빨강→파랑→노랑→빨강)
+  Widget _buildColorCycleHint() {
+    const colors = [BlockColor.red, BlockColor.blue, BlockColor.yellow];
+    return Container(
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: GameColors.gridBackground,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          for (int i = 0; i < colors.length; i++) ...[
+            _colorCycleItem(colors[i]),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              child: Text('→',
+                  style: TextStyle(
+                    color: GameColors.textSecondary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  )),
+            ),
+          ],
+          // 다시 처음으로 돌아가는 표시
+          _colorCycleItem(colors[0]),
+        ],
+      ),
+    );
+  }
+
+  Widget _colorCycleItem(BlockColor bc) {
+    return Container(
+      width: 28,
+      height: 28,
+      decoration: BoxDecoration(
+        color: GameColors.blockColors[bc],
+        borderRadius: BorderRadius.circular(7),
+      ),
+      padding: const EdgeInsets.all(3),
+      child: Image.asset(
+        GameColors.blockImages[bc]!,
+        fit: BoxFit.contain,
+      ),
     );
   }
 
