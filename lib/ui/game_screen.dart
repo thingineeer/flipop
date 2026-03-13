@@ -237,9 +237,11 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   void _onTimeBonus() {
     setState(() {
-      // 시간 제한 시스템이 추가되면 _remainingSeconds += 30 처리
       _hasUsedTimeBonus = true;
+      _remainingSeconds += 30;
+      _state = _state.withGameOver(false);
     });
+    _startTimer();
   }
 
   void _onScoreDouble() {
