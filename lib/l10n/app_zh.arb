@@ -1,0 +1,96 @@
+{
+  "@@locale": "zh",
+
+  "appTitle": "FLIPOP",
+  "welcomeCharacters": "和可爱的角色一起玩！",
+  "welcomeDescription": "点击方块改变颜色，\n完成一整行！",
+  "welcomeCompete": "与全球玩家竞争！",
+  "welcomeCompeteDesc": "登录后分数会被保存，\n参与世界排名！",
+  "welcomeAccountHint": "绑定账号后即使删除应用\n记录也会保留",
+  "welcomeStart": "现在开始！",
+  "signInApple": "使用Apple登录",
+  "signInGoogle": "使用Google登录",
+  "orDivider": "或",
+  "signInGuest": "无需登录直接开始",
+  "signInLaterHint": "之后可以随时在设置中登录",
+
+  "startNow": "立即开始",
+  "loginBenefitHint": "登录后可以保存记录并参与排名！",
+
+  "scoreLabel": "SCORE",
+  "rankingLabel": "RANKING",
+  "bestLabel": "BEST",
+  "timeLabel": "TIME",
+  "turnsUntilNewRow": "距离新行还有{remaining}回合",
+  "@turnsUntilNewRow": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "comboDisplay": "COMBO x{combo}",
+  "@comboDisplay": {
+    "placeholders": {
+      "combo": {
+        "type": "int"
+      }
+    }
+  },
+  "tapHint": "点击改变周围颜色！将一行变为相同颜色 🎯",
+
+  "gameOver": "GAME OVER",
+  "newBest": "🎉 NEW BEST!",
+  "continueWithAd": "继续（广告）",
+  "timeBonus": "时间 +30秒（广告）",
+  "scoreDouble": "分数翻倍（广告）",
+  "playAgain": "PLAY AGAIN",
+
+  "setNickname": "请设置昵称！",
+  "nicknameHint": "昵称（2~12个字符）",
+  "nicknameTaken": "该昵称已被使用",
+
+  "noRecords": "还没有记录！",
+  "myRank": "我的排名：#{rank}",
+  "@myRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+
+  "settings": "设置",
+  "notLoggedIn": "未登录",
+  "googleAccount": "Google账号",
+  "appleAccount": "Apple账号",
+  "guest": "游客",
+  "accountLinkHint": "绑定社交账号后即使删除应用\n账号也会保留",
+  "linkAccount": "绑定账号",
+  "linkGoogle": "绑定Google",
+  "linkApple": "绑定Apple",
+  "changeCountry": "更改国家",
+  "logout": "退出登录",
+  "deleteAccount": "删除账号",
+  "cancel": "取消",
+  "confirm": "确认",
+  "change": "更改",
+  "delete": "删除",
+  "logoutTitle": "退出登录",
+  "logoutMessage": "退出登录后将以游客身份开始新会话。\n您可以通过社交登录重新登录。",
+  "deleteTitle": "删除账号",
+  "deleteMessage": "删除账号后，所有游戏数据和\n排名记录将被永久删除。\n\n此操作无法撤销。",
+  "countryChanged": "国家已更改",
+  "googleLinked": "Google账号已绑定",
+  "appleLinked": "Apple账号已绑定",
+
+  "tutorialTapTitle": "点击方块！",
+  "tutorialTapDesc": "点击后上下左右的方块\n会变成下一个颜色",
+  "tutorialTapHint": "点击 → 周围4格变为下一个颜色！",
+  "tutorialClearTitle": "完成一行！",
+  "tutorialClearDesc": "将横排一行填满\n相同颜色即可消除！",
+  "tutorialComboTitle": "连锁连击！",
+  "tutorialComboDesc": "消除后方块下落，\n连锁消除可获得超高分数！",
+  "tutorialNext": "下一步",
+  "tutorialStart": "开始！"
+}

@@ -1,0 +1,96 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "FLIPOP",
+  "welcomeCharacters": "Play with cute characters!",
+  "welcomeDescription": "Tap blocks to change colors\nand complete a row!",
+  "welcomeCompete": "Compete with players worldwide!",
+  "welcomeCompeteDesc": "Sign in to save your scores\nand join the global ranking!",
+  "welcomeAccountHint": "Link your account to keep\nyour records even if you delete the app",
+  "welcomeStart": "Start now!",
+  "signInApple": "Sign in with Apple",
+  "signInGoogle": "Sign in with Google",
+  "orDivider": "or",
+  "signInGuest": "Start without signing in",
+  "signInLaterHint": "You can sign in anytime from Settings",
+
+  "startNow": "Start Now",
+  "loginBenefitHint": "Sign in to save records and join the ranking!",
+
+  "scoreLabel": "SCORE",
+  "rankingLabel": "RANKING",
+  "bestLabel": "BEST",
+  "timeLabel": "TIME",
+  "turnsUntilNewRow": "{remaining} turns until new row",
+  "@turnsUntilNewRow": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "comboDisplay": "COMBO x{combo}",
+  "@comboDisplay": {
+    "placeholders": {
+      "combo": {
+        "type": "int"
+      }
+    }
+  },
+  "tapHint": "Tap to change nearby colors! Match a row 🎯",
+
+  "gameOver": "GAME OVER",
+  "newBest": "🎉 NEW BEST!",
+  "continueWithAd": "Continue (Ad)",
+  "timeBonus": "Time +30s (Ad)",
+  "scoreDouble": "Score x2 (Ad)",
+  "playAgain": "PLAY AGAIN",
+
+  "setNickname": "Choose your nickname!",
+  "nicknameHint": "Nickname (2–12 characters)",
+  "nicknameTaken": "This nickname is already taken",
+
+  "noRecords": "No records yet!",
+  "myRank": "My rank: #{rank}",
+  "@myRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+
+  "settings": "Settings",
+  "notLoggedIn": "Not signed in",
+  "googleAccount": "Google account",
+  "appleAccount": "Apple account",
+  "guest": "Guest",
+  "accountLinkHint": "Link a social account to keep\nyour account even if you delete the app",
+  "linkAccount": "Link Account",
+  "linkGoogle": "Link with Google",
+  "linkApple": "Link with Apple",
+  "changeCountry": "Change Country",
+  "logout": "Sign Out",
+  "deleteAccount": "Delete Account",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "change": "Change",
+  "delete": "Delete",
+  "logoutTitle": "Sign Out",
+  "logoutMessage": "Signing out will start a new guest session.\nYou can return by signing in again.",
+  "deleteTitle": "Delete Account",
+  "deleteMessage": "Deleting your account will permanently remove\nall game data and ranking records.\n\nThis action cannot be undone.",
+  "countryChanged": "Country has been changed",
+  "googleLinked": "Google account has been linked",
+  "appleLinked": "Apple account has been linked",
+
+  "tutorialTapTitle": "Tap a block!",
+  "tutorialTapDesc": "Tapping changes the blocks\nabove, below, left, and right to the next color",
+  "tutorialTapHint": "Tap → 4 adjacent blocks change color!",
+  "tutorialClearTitle": "Complete a row!",
+  "tutorialClearDesc": "Fill a horizontal row with\nthe same color to clear it!",
+  "tutorialComboTitle": "Chain combo!",
+  "tutorialComboDesc": "After clearing, blocks fall down\nand chain clears earn huge scores!",
+  "tutorialNext": "Next",
+  "tutorialStart": "Start!"
+}

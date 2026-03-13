@@ -1,0 +1,96 @@
+{
+  "@@locale": "ja",
+
+  "appTitle": "FLIPOP",
+  "welcomeCharacters": "かわいいキャラと一緒に！",
+  "welcomeDescription": "ブロックをタップして色を変えて、\n一列を完成させよう！",
+  "welcomeCompete": "世界中のプレイヤーと競争！",
+  "welcomeCompeteDesc": "ログインするとスコアが保存され\n世界ランキングに参加できます！",
+  "welcomeAccountHint": "アカウントを連携すると\nアプリを削除しても記録が残ります",
+  "welcomeStart": "今すぐ始めよう！",
+  "signInApple": "Appleで始める",
+  "signInGoogle": "Googleで始める",
+  "orDivider": "または",
+  "signInGuest": "ログインなしで始める",
+  "signInLaterHint": "設定からいつでもログインできます",
+
+  "startNow": "今すぐスタート",
+  "loginBenefitHint": "ログインすると記録が保存され、ランキングに参加できます！",
+
+  "scoreLabel": "SCORE",
+  "rankingLabel": "RANKING",
+  "bestLabel": "BEST",
+  "timeLabel": "TIME",
+  "turnsUntilNewRow": "新しい列まで{remaining}ターン",
+  "@turnsUntilNewRow": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "comboDisplay": "COMBO x{combo}",
+  "@comboDisplay": {
+    "placeholders": {
+      "combo": {
+        "type": "int"
+      }
+    }
+  },
+  "tapHint": "タップすると周りの色が変わる！一列を同じ色に 🎯",
+
+  "gameOver": "GAME OVER",
+  "newBest": "🎉 NEW BEST!",
+  "continueWithAd": "続ける（広告）",
+  "timeBonus": "時間 +30秒（広告）",
+  "scoreDouble": "スコア2倍（広告）",
+  "playAgain": "PLAY AGAIN",
+
+  "setNickname": "ニックネームを決めよう！",
+  "nicknameHint": "ニックネーム（2〜12文字）",
+  "nicknameTaken": "このニックネームは既に使われています",
+
+  "noRecords": "まだ記録がありません！",
+  "myRank": "自分の順位: #{rank}",
+  "@myRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+
+  "settings": "設定",
+  "notLoggedIn": "未ログイン",
+  "googleAccount": "Googleアカウント",
+  "appleAccount": "Appleアカウント",
+  "guest": "ゲスト",
+  "accountLinkHint": "ソーシャルアカウントを連携すると\nアプリを削除してもアカウントが維持されます",
+  "linkAccount": "アカウント連携",
+  "linkGoogle": "Googleで連携",
+  "linkApple": "Appleで連携",
+  "changeCountry": "国を変更",
+  "logout": "ログアウト",
+  "deleteAccount": "アカウント削除",
+  "cancel": "キャンセル",
+  "confirm": "確認",
+  "change": "変更",
+  "delete": "削除",
+  "logoutTitle": "ログアウト",
+  "logoutMessage": "ログアウトするとゲストとして新しいセッションが始まります。\nソーシャルログインで再び戻ることができます。",
+  "deleteTitle": "アカウント削除",
+  "deleteMessage": "アカウントを削除すると、すべてのゲームデータと\nランキング記録が永久に削除されます。\n\nこの操作は元に戻せません。",
+  "countryChanged": "国が変更されました",
+  "googleLinked": "Googleアカウントが連携されました",
+  "appleLinked": "Appleアカウントが連携されました",
+
+  "tutorialTapTitle": "ブロックをタップ！",
+  "tutorialTapDesc": "タップすると上下左右のブロックが\n次の色に変わります",
+  "tutorialTapHint": "タップ → 周り4マスが次の色に！",
+  "tutorialClearTitle": "一列完成！",
+  "tutorialClearDesc": "横一列を同じ色で\n揃えるとクリア！",
+  "tutorialComboTitle": "連鎖コンボ！",
+  "tutorialComboDesc": "クリア後にブロックが落ちて\n連鎖すると大量スコア！",
+  "tutorialNext": "次へ",
+  "tutorialStart": "スタート！"
+}

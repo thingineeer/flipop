@@ -1,0 +1,96 @@
+{
+  "@@locale": "ko",
+
+  "appTitle": "FLIPOP",
+  "welcomeCharacters": "귀여운 캐릭터와 함께!",
+  "welcomeDescription": "블록을 탭해서 색을 바꾸고,\n한 줄을 완성하세요!",
+  "welcomeCompete": "전 세계 플레이어와 경쟁!",
+  "welcomeCompeteDesc": "로그인하면 점수가 저장되고\n세계 랭킹에 참여!",
+  "welcomeAccountHint": "계정을 연동하면 앱을 삭제해도\n기록이 유지됩니다",
+  "welcomeStart": "지금 시작하세요!",
+  "signInApple": "Apple로 시작",
+  "signInGoogle": "Google로 시작",
+  "orDivider": "또는",
+  "signInGuest": "로그인 없이 시작하기",
+  "signInLaterHint": "나중에 설정에서 언제든 로그인할 수 있어요",
+
+  "startNow": "바로 시작하기",
+  "loginBenefitHint": "로그인하면 기록이 저장되고 랭킹에 참여할 수 있어요!",
+
+  "scoreLabel": "SCORE",
+  "rankingLabel": "RANKING",
+  "bestLabel": "BEST",
+  "timeLabel": "TIME",
+  "turnsUntilNewRow": "새 줄까지 {remaining}턴",
+  "@turnsUntilNewRow": {
+    "placeholders": {
+      "remaining": {
+        "type": "int"
+      }
+    }
+  },
+  "comboDisplay": "COMBO x{combo}",
+  "@comboDisplay": {
+    "placeholders": {
+      "combo": {
+        "type": "int"
+      }
+    }
+  },
+  "tapHint": "탭하면 주변 색이 바뀌어요! 한 줄을 같은 색으로 🎯",
+
+  "gameOver": "GAME OVER",
+  "newBest": "🎉 NEW BEST!",
+  "continueWithAd": "이어하기 (광고)",
+  "timeBonus": "시간 +30초 (광고)",
+  "scoreDouble": "점수 2배 (광고)",
+  "playAgain": "PLAY AGAIN",
+
+  "setNickname": "닉네임을 정해주세요!",
+  "nicknameHint": "닉네임 (2~12자)",
+  "nicknameTaken": "이미 사용 중인 닉네임입니다",
+
+  "noRecords": "아직 기록이 없어요!",
+  "myRank": "내 순위: #{rank}",
+  "@myRank": {
+    "placeholders": {
+      "rank": {
+        "type": "int"
+      }
+    }
+  },
+
+  "settings": "설정",
+  "notLoggedIn": "로그인 안 됨",
+  "googleAccount": "Google 계정",
+  "appleAccount": "Apple 계정",
+  "guest": "게스트",
+  "accountLinkHint": "소셜 계정을 연동하면 앱을 삭제해도\n계정이 유지됩니다",
+  "linkAccount": "계정 연동",
+  "linkGoogle": "Google로 연동",
+  "linkApple": "Apple로 연동",
+  "changeCountry": "국가 변경",
+  "logout": "로그아웃",
+  "deleteAccount": "계정 삭제",
+  "cancel": "취소",
+  "confirm": "확인",
+  "change": "변경",
+  "delete": "삭제",
+  "logoutTitle": "로그아웃",
+  "logoutMessage": "로그아웃하면 게스트로 새 세션이 시작됩니다.\n소셜 로그인으로 다시 돌아올 수 있습니다.",
+  "deleteTitle": "계정 삭제",
+  "deleteMessage": "계정을 삭제하면 모든 게임 데이터와\n랭킹 기록이 영구적으로 삭제됩니다.\n\n이 작업은 되돌릴 수 없습니다.",
+  "countryChanged": "국가가 변경되었습니다",
+  "googleLinked": "Google 계정이 연동되었습니다",
+  "appleLinked": "Apple 계정이 연동되었습니다",
+
+  "tutorialTapTitle": "블록을 탭!",
+  "tutorialTapDesc": "탭하면 상하좌우 블록이\n다음 색으로 바뀌어요",
+  "tutorialTapHint": "탭 → 주변 4칸이 다음 색으로!",
+  "tutorialClearTitle": "한 줄 완성!",
+  "tutorialClearDesc": "가로 한 줄을 같은 색으로\n채우면 클리어!",
+  "tutorialComboTitle": "연쇄 콤보!",
+  "tutorialComboDesc": "클리어 후 블록이 떨어져서\n연쇄가 터지면 대박 점수!",
+  "tutorialNext": "다음",
+  "tutorialStart": "시작하기!"
+}
