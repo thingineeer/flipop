@@ -12,6 +12,7 @@ import 'ui/home_screen.dart';
 import 'ui/main_screen.dart';
 import 'ui/nickname_screen.dart';
 import 'ui/welcome_screen.dart';
+import 'l10n/app_localizations.dart';
 import 'game/game_state.dart';
 import 'game/game_colors.dart';
 
@@ -43,6 +44,8 @@ class FlipopApp extends StatelessWidget {
     return MaterialApp(
       title: 'FLIPOP',
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: GameColors.blockColors[BlockColor.blue]!,
