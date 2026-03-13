@@ -43,6 +43,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   AnimationController? _shakeController;
   Animation<double>? _shakeAnimation;
 
+  // 인접 블록 glow 효과
+  Set<String> _glowingCells = {};
+
   // 그리드 레이아웃 정보 (파티클 위치 계산용)
   double _cellSize = 0;
   double _gap = 0;
@@ -106,6 +109,29 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     if (_state.isGameOver) return;
 
     HapticFeedback.lightImpact();
+
+    // 인접 셀 glow 효과
+    final adjacentKeys = <String>{};
+    const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
+    for (final dir in directions) {
+      final nr = row + dir[0];
+      final nc = col + dir[1];
+      if (nr >= 0 && nr < GameState.rows && nc >= 0 && nc < GameState.cols) {
+        if (_state.grid[nr][nc] != null) {
+          adjacentKeys.add('${nr}_$nc');
+        }
+      }
+    }
+    setState(() {
+      _glowingCells = adjacentKeys;
+    });
+    Future.delayed(const Duration(milliseconds: 200), () {
+      if (mounted) {
+        setState(() {
+          _glowingCells = {};
+        });
+      }
+    });
 
     final oldGrid = _state.grid;
     final oldScore = _state.score;
@@ -300,7 +326,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                   _buildTimerBar(),
                   const SizedBox(height: 8),
                   _buildTurnIndicator(),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 6),
+                  _buildColorCycleIndicator(),
+                  const SizedBox(height: 8),
                   Expanded(
                     child: Center(
                       child: Padding(
@@ -597,6 +625,95 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     );
   }
 
+  Widget _buildColorCycleIndicator() {
+    final colors = BlockColor.values.sublist(0, _state.colorCount);
+    final children = <Widget>[];
+
+    for (int i = 0; i < colors.length; i++) {
+      // 블록 이미지
+      children.add(
+        Container(
+          width: 20,
+          height: 20,
+          decoration: BoxDecoration(
+            color: GameColors.blockColors[colors[i]],
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: Padding(
+              padding: const EdgeInsets.all(1.5),
+              child: Image.asset(
+                GameColors.blockImages[colors[i]]!,
+                width: 17,
+                height: 17,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      // 화살표
+      if (i < colors.length - 1) {
+        children.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Text(
+              '\u2192',
+              style: TextStyle(
+                color: GameColors.textSecondary,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    // 순환 화살표 (마지막 → 첫번째)
+    children.add(
+      Padding(
+        padding: const EdgeInsets.only(left: 4),
+        child: Text(
+          '\u21A9',
+          style: TextStyle(
+            color: GameColors.textSecondary,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: GameColors.gridBackground.withValues(alpha: 0.7),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: GameColors.gridLine, width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'TAP ',
+            style: TextStyle(
+              color: GameColors.textSecondary,
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1,
+            ),
+          ),
+          ...children,
+        ],
+      ),
+    );
+  }
+
   Widget _buildGrid(double cellSize, int visibleRows, double gap) {
     return Container(
       key: _gridKey,
@@ -642,8 +759,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   Widget _buildCell(int row, int col, double cellSize) {
     final cell = _state.grid[row][col];
+    final isGlowing = _glowingCells.contains('${row}_$col');
 
-    return AnimatedSwitcher(
+    Widget cellWidget = AnimatedSwitcher(
       duration: const Duration(milliseconds: 200),
       switchInCurve: Curves.easeOutBack,
       switchOutCurve: Curves.easeIn,
@@ -673,6 +791,25 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               onTap: () => _onTap(row, col),
             ),
     );
+
+    if (isGlowing && cell != null) {
+      final glowColor = GameColors.blockColors[cell.color]!;
+      cellWidget = Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(cellSize * 0.2),
+          boxShadow: [
+            BoxShadow(
+              color: glowColor.withValues(alpha: 0.6),
+              blurRadius: 8,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: cellWidget,
+      );
+    }
+
+    return cellWidget;
   }
 }
 
