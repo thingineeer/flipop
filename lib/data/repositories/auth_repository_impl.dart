@@ -216,12 +216,55 @@ class AuthRepositoryImpl implements AuthRepository {
       return (true, null);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
-        return (false, const AuthRequiresRecentLogin());
+        // re-auth 후 재시도
+        final reAuthResult = await _reAuthAndDelete(user);
+        return reAuthResult;
       }
       return (false, _mapFirebaseError(e));
     } catch (e) {
       return (false, AuthUnknown(e.toString()));
     }
+  }
+
+  Future<(bool, AuthFailure?)> _reAuthAndDelete(User user) async {
+    try {
+      final provider = _resolveProvider(user);
+      OAuthCredential? credential;
+
+      if (provider == SignInProvider.google) {
+        credential = await _googleDatasource.getCredential();
+      } else if (provider == SignInProvider.apple) {
+        credential = await _appleDatasource.getCredential();
+      }
+
+      if (credential != null) {
+        await user.reauthenticateWithCredential(credential);
+        await user.delete();
+        _clearCache();
+        return (true, null);
+      }
+
+      // 익명 유저는 re-auth 불필요 → 직접 Firestore 삭제 후 Auth 삭제
+      if (provider == SignInProvider.anonymous) {
+        await _deleteUserData(user.uid);
+        await user.delete();
+        _clearCache();
+        return (true, null);
+      }
+
+      return (false, const AuthRequiresRecentLogin());
+    } on FirebaseAuthException catch (e) {
+      return (false, _mapFirebaseError(e));
+    } catch (e) {
+      return (false, AuthUnknown(e.toString()));
+    }
+  }
+
+  Future<void> _deleteUserData(String uid) async {
+    final batch = _firestore.batch();
+    batch.delete(_firestore.collection('users').doc(uid));
+    batch.delete(_firestore.collection('leaderboard').doc(uid));
+    await batch.commit();
   }
 
   // ── 스트림 ──
