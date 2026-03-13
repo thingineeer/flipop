@@ -50,3 +50,16 @@ functions/lib/
 
 # Firebase
 .firebase/
+
+# Signing & secrets
+android/key.properties
+*.jks
+*.keystore
+**/fastlane/report.xml
+**/fastlane/Preview.html
+**/fastlane/screenshots
+**/fastlane/test_output
+**/fastlane/README.md
+vendor/
+.bundle/
+google-play-service-account*.json

@@ -1,26 +1,40 @@
 default_platform(:ios)
 
 platform :ios do
+
+  # ── 공통: Flutter 빌드 ──
+  private_lane :flutter_build_ios do
+    Dir.chdir("../..") do
+      sh("flutter", "clean")
+      sh("flutter", "pub", "get")
+      sh("flutter", "build", "ios", "--release", "--no-codesign")
+    end
+  end
+
   # ──────────────────────────────────────────
   # beta: Flutter build → TestFlight 업로드
   # ──────────────────────────────────────────
   desc "Flutter build iOS & upload to TestFlight"
   lane :beta do
-    # Flutter build
-    sh("cd ../.. && flutter build ios --release")
+    flutter_build_ios
 
-    # Xcode archive & export
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       export_method: "app-store",
       output_directory: "./build",
-      output_name: "flipop.ipa"
+      output_name: "flipop.ipa",
+      export_options: {
+        signingStyle: "automatic",
+        teamID: "8Q4H7X3Q58",
+        uploadBitcode: false,
+        uploadSymbols: true,
+      }
     )
 
-    # TestFlight 업로드
     pilot(
-      skip_waiting_for_build_processing: true
+      skip_waiting_for_build_processing: true,
+      distribute_external: false,
     )
   end
 
@@ -29,38 +43,28 @@ platform :ios do
   # ──────────────────────────────────────────
   desc "Flutter build iOS & submit to App Store"
   lane :release do
-    # Flutter build
-    sh("cd ../.. && flutter build ios --release")
+    flutter_build_ios
 
-    # Xcode archive & export
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       export_method: "app-store",
       output_directory: "./build",
-      output_name: "flipop.ipa"
+      output_name: "flipop.ipa",
+      export_options: {
+        signingStyle: "automatic",
+        teamID: "8Q4H7X3Q58",
+        uploadBitcode: false,
+        uploadSymbols: true,
+      }
     )
 
-    # App Store 배포
     deliver(
-      submit_for_review: true,
+      submit_for_review: false,
       automatic_release: false,
       force: true,
-      metadata_path: "./fastlane/metadata"
-    )
-  end
-
-  # ──────────────────────────────────────────
-  # screenshots: 스크린샷 자동화 & 업로드
-  # ──────────────────────────────────────────
-  desc "Capture screenshots and upload via deliver"
-  lane :screenshots do
-    capture_screenshots
-
-    deliver(
-      skip_binary_upload: true,
-      skip_metadata: true,
-      overwrite_screenshots: true
+      skip_screenshots: true,
+      metadata_path: "./fastlane/metadata",
     )
   end
 
@@ -73,7 +77,19 @@ platform :ios do
       skip_binary_upload: true,
       skip_screenshots: true,
       force: true,
-      metadata_path: "./fastlane/metadata"
+      metadata_path: "./fastlane/metadata",
+    )
+  end
+
+  # ──────────────────────────────────────────
+  # screenshots: 스크린샷만 업로드
+  # ──────────────────────────────────────────
+  desc "Upload screenshots only"
+  lane :screenshots do
+    deliver(
+      skip_binary_upload: true,
+      skip_metadata: true,
+      overwrite_screenshots: true,
     )
   end
 end

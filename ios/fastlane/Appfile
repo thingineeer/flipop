@@ -1,3 +1,5 @@
 app_identifier("com.thingineeer.flipop")
-apple_id("your-apple-id@example.com") # TODO: Apple ID 입력
-team_id("XXXXXXXXXX") # TODO: Team ID 입력
+apple_id(ENV["APPLE_ID"] || "dlaudwls1203@gmail.com")
+team_id("8Q4H7X3Q58")
+
+itc_team_id(ENV["ITC_TEAM_ID"]) # App Store Connect team (optional, auto-detected)
