@@ -7,6 +7,7 @@ import '../game/game_colors.dart';
 import '../services/ad_service.dart';
 import '../services/auth_service.dart';
 import '../services/leaderboard_service.dart';
+import '../services/secure_storage_service.dart';
 import 'block_widget.dart';
 import 'game_over_overlay.dart';
 import 'onboarding_overlay.dart';
@@ -63,6 +64,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
     widget.gameTabVisible?.addListener(_onTabVisibilityChanged);
 
+    _checkOnboarding();
     _startTimer();
   }
 
@@ -271,10 +273,18 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     }
   }
 
+  Future<void> _checkOnboarding() async {
+    final seen = await SecureStorageService().hasSeenOnboarding();
+    if (seen && mounted) {
+      setState(() => _showOnboarding = false);
+    }
+  }
+
   void _dismissOnboarding() {
     setState(() {
       _showOnboarding = false;
     });
+    SecureStorageService().setSeenOnboarding();
   }
 
   @override

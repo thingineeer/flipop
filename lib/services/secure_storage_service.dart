@@ -12,6 +12,7 @@ class SecureStorageService {
 
   static const _keyHasSeenWelcome = 'has_seen_welcome';
   static const _keyLastLoginProvider = 'last_login_provider';
+  static const _keyHasSeenOnboarding = 'has_seen_onboarding';
 
   Future<bool> hasSeenWelcome() async {
     final value = await _storage.read(key: _keyHasSeenWelcome);
@@ -28,6 +29,15 @@ class SecureStorageService {
 
   Future<void> setLastLoginProvider(String provider) async {
     await _storage.write(key: _keyLastLoginProvider, value: provider);
+  }
+
+  Future<bool> hasSeenOnboarding() async {
+    final value = await _storage.read(key: _keyHasSeenOnboarding);
+    return value == 'true';
+  }
+
+  Future<void> setSeenOnboarding() async {
+    await _storage.write(key: _keyHasSeenOnboarding, value: 'true');
   }
 
   Future<void> clearAll() async {
