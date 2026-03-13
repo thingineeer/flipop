@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../domain/entities/app_user.dart';
 import '../domain/failures/auth_failure.dart';
 import '../game/avatar_data.dart';
@@ -127,11 +128,13 @@ class _MoreScreenState extends State<MoreScreen> {
     }
   }
 
-  // ── URL 오픈 (url_launcher 추가 후 교체 예정) ──
+  // ── URL 오픈 ──
 
-  void _openUrl(String url) {
-    // TODO: url_launcher 패키지 추가 후 launchUrl() 사용
-    _showSuccess('준비 중입니다');
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    }
   }
 
   // ── 유틸 ──
