@@ -63,3 +63,6 @@ android/key.properties
 vendor/
 .bundle/
 google-play-service-account*.json
+
+# Claude Code
+.claude/worktrees/
