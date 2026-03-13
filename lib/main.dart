@@ -8,8 +8,8 @@ import 'di/service_locator.dart';
 import 'services/ad_service.dart';
 import 'services/auth_service.dart';
 import 'services/secure_storage_service.dart';
-import 'ui/game_screen.dart';
 import 'ui/home_screen.dart';
+import 'ui/main_screen.dart';
 import 'ui/nickname_screen.dart';
 import 'ui/welcome_screen.dart';
 import 'game/game_state.dart';
@@ -26,7 +26,10 @@ void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
+      statusBarBrightness: Brightness.light,         // iOS
+      statusBarIconBrightness: Brightness.dark,       // Android
+      systemNavigationBarColor: Color(0xFFF8F5F0),   // Android bottom nav
+      systemNavigationBarIconBrightness: Brightness.dark,
     ),
   );
   runApp(const FlipopApp());
@@ -181,7 +184,7 @@ class _AuthGateState extends State<AuthGate> {
       case _Screen.nickname:
         return NicknameScreen(onComplete: _onNicknameComplete);
       case _Screen.game:
-        return const GameScreen();
+        return const MainScreen();
     }
   }
 }

@@ -1,17 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 import '../services/auth_service.dart';
 import '../services/leaderboard_service.dart';
 
 class LeaderboardScreen extends StatefulWidget {
-  const LeaderboardScreen({super.key});
+  final bool embedded;
+  final ValueNotifier<bool>? tabVisible;
+
+  const LeaderboardScreen({
+    super.key,
+    this.embedded = false,
+    this.tabVisible,
+  });
 
   @override
-  State<LeaderboardScreen> createState() => _LeaderboardScreenState();
+  State<LeaderboardScreen> createState() => LeaderboardScreenState();
 }
 
-class _LeaderboardScreenState extends State<LeaderboardScreen> {
+class LeaderboardScreenState extends State<LeaderboardScreen> {
   List<LeaderboardEntry>? _entries;
   int? _myRank;
   bool _loading = true;
@@ -33,6 +41,23 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
   @override
   void initState() {
     super.initState();
+    _loadData();
+    widget.tabVisible?.addListener(_onTabVisibleChanged);
+  }
+
+  @override
+  void dispose() {
+    widget.tabVisible?.removeListener(_onTabVisibleChanged);
+    super.dispose();
+  }
+
+  void _onTabVisibleChanged() {
+    if (widget.tabVisible?.value == true) {
+      _loadData();
+    }
+  }
+
+  void refresh() {
     _loadData();
   }
 
@@ -63,44 +88,57 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: GameColors.background,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _buildHeader(),
-            if (_myRank != null) _buildMyRankCard(),
-            Expanded(
-              child: _loading
-                  ? const Center(
-                      child: CircularProgressIndicator(
-                        color: GameColors.textSecondary,
-                      ),
-                    )
-                  : _entries == null || _entries!.isEmpty
-                      ? const Center(
-                          child: Text(
-                            '아직 기록이 없어요!',
-                            style: TextStyle(
-                              color: GameColors.textSecondary,
-                              fontSize: 16,
-                            ),
-                          ),
-                        )
-                      : RefreshIndicator(
-                          onRefresh: _loadData,
-                          child: ListView.builder(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            itemCount: _entries!.length,
-                            itemBuilder: (context, index) =>
-                                _buildRankItem(index, _entries![index]),
+    final body = SafeArea(
+      bottom: !widget.embedded,
+      child: Column(
+        children: [
+          _buildHeader(),
+          if (_myRank != null) _buildMyRankCard(),
+          Expanded(
+            child: _loading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: GameColors.textSecondary,
+                    ),
+                  )
+                : _entries == null || _entries!.isEmpty
+                    ? const Center(
+                        child: Text(
+                          '아직 기록이 없어요!',
+                          style: TextStyle(
+                            color: GameColors.textSecondary,
+                            fontSize: 16,
                           ),
                         ),
-            ),
-          ],
-        ),
+                      )
+                    : RefreshIndicator(
+                        onRefresh: _loadData,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          itemCount: _entries!.length,
+                          itemBuilder: (context, index) =>
+                              _buildRankItem(index, _entries![index]),
+                        ),
+                      ),
+          ),
+        ],
       ),
+    );
+
+    if (widget.embedded) {
+      return AnnotatedRegion<SystemUiOverlayStyle>(
+        value: SystemUiOverlayStyle.dark,
+        child: Container(
+          color: GameColors.background,
+          child: body,
+        ),
+      );
+    }
+
+    return Scaffold(
+      backgroundColor: GameColors.background,
+      body: body,
     );
   }
 
@@ -109,24 +147,26 @@ class _LeaderboardScreenState extends State<LeaderboardScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () => Navigator.of(context).pop(),
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: GameColors.gridBackground,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: GameColors.gridLine, width: 2),
-              ),
-              child: const Icon(
-                Icons.arrow_back_rounded,
-                color: GameColors.textPrimary,
-                size: 20,
+          if (!widget.embedded) ...[
+            GestureDetector(
+              onTap: () => Navigator.of(context).pop(),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: GameColors.gridBackground,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: GameColors.gridLine, width: 2),
+                ),
+                child: const Icon(
+                  Icons.arrow_back_rounded,
+                  color: GameColors.textPrimary,
+                  size: 20,
+                ),
               ),
             ),
-          ),
-          const SizedBox(width: 12),
+            const SizedBox(width: 12),
+          ],
           const Expanded(
             child: Text(
               'RANKING',

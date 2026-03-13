@@ -9,13 +9,13 @@ import '../services/auth_service.dart';
 import '../services/leaderboard_service.dart';
 import 'block_widget.dart';
 import 'game_over_overlay.dart';
-import 'leaderboard_screen.dart';
 import 'onboarding_overlay.dart';
 import 'pop_particle.dart';
-import 'settings_screen.dart';
 
 class GameScreen extends StatefulWidget {
-  const GameScreen({super.key});
+  final ValueNotifier<bool>? gameTabVisible;
+
+  const GameScreen({super.key, this.gameTabVisible});
 
   @override
   State<GameScreen> createState() => _GameScreenState();
@@ -43,9 +43,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   AnimationController? _shakeController;
   Animation<double>? _shakeAnimation;
 
-  // 인접 블록 glow 효과
-  Set<String> _glowingCells = {};
-
   // 그리드 레이아웃 정보 (파티클 위치 계산용)
   double _cellSize = 0;
   double _gap = 0;
@@ -64,14 +61,26 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       CurvedAnimation(parent: _shakeController!, curve: Curves.elasticIn),
     );
 
+    widget.gameTabVisible?.addListener(_onTabVisibilityChanged);
+
     _startTimer();
   }
 
   @override
   void dispose() {
+    widget.gameTabVisible?.removeListener(_onTabVisibilityChanged);
     _gameTimer?.cancel();
     _shakeController?.dispose();
     super.dispose();
+  }
+
+  void _onTabVisibilityChanged() {
+    final isVisible = widget.gameTabVisible?.value ?? true;
+    if (!isVisible) {
+      _gameTimer?.cancel();
+    } else if (!_state.isGameOver && _remainingSeconds > 0) {
+      _startTimer();
+    }
   }
 
   void _startTimer() {
@@ -109,29 +118,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     if (_state.isGameOver) return;
 
     HapticFeedback.lightImpact();
-
-    // 인접 셀 glow 효과
-    final adjacentKeys = <String>{};
-    const directions = [[0, 1], [0, -1], [1, 0], [-1, 0]];
-    for (final dir in directions) {
-      final nr = row + dir[0];
-      final nc = col + dir[1];
-      if (nr >= 0 && nr < GameState.rows && nc >= 0 && nc < GameState.cols) {
-        if (_state.grid[nr][nc] != null) {
-          adjacentKeys.add('${nr}_$nc');
-        }
-      }
-    }
-    setState(() {
-      _glowingCells = adjacentKeys;
-    });
-    Future.delayed(const Duration(milliseconds: 200), () {
-      if (mounted) {
-        setState(() {
-          _glowingCells = {};
-        });
-      }
-    });
 
     final oldGrid = _state.grid;
     final oldScore = _state.score;
@@ -283,18 +269,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     }
   }
 
-  void _openLeaderboard() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const LeaderboardScreen()),
-    );
-  }
-
-  void _openSettings() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const SettingsScreen()),
-    );
-  }
-
   void _dismissOnboarding() {
     setState(() {
       _showOnboarding = false;
@@ -303,12 +277,19 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: GameColors.background,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            AnimatedBuilder(
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(
+        backgroundColor: GameColors.background,
+        body: SafeArea(
+          bottom: false,
+          child: Stack(
+            children: [
+              AnimatedBuilder(
               animation: _shakeAnimation!,
               builder: (context, child) {
                 final shakeOffset = _shakeController!.isAnimating
@@ -326,9 +307,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                   _buildTimerBar(),
                   const SizedBox(height: 8),
                   _buildTurnIndicator(),
-                  const SizedBox(height: 6),
-                  _buildColorCycleIndicator(),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 12),
                   Expanded(
                     child: Center(
                       child: Padding(
@@ -400,6 +379,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
           ],
         ),
       ),
+      ),
     );
   }
 
@@ -409,102 +389,62 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'SCORE',
-                style: TextStyle(
-                  color: GameColors.textSecondary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 1.5,
-                ),
-              ),
-              Text(
-                '${_state.score}',
-                style: TextStyle(
-                  color: GameColors.textPrimary,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-            ],
-          ),
-          Column(
-            children: [
-              const Text(
-                'FLIPOP',
-                style: TextStyle(
-                  color: GameColors.textPrimary,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 3,
-                ),
-              ),
-              const SizedBox(height: 2),
-              GestureDetector(
-                onTap: _openLeaderboard,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: GameColors.blockColors[BlockColor.yellow]!.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Text(
-                    'RANKING',
-                    style: TextStyle(
-                      color: GameColors.textSecondary,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: 1,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    'BEST',
-                    style: TextStyle(
-                      color: GameColors.textSecondary,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.5,
-                    ),
-                  ),
-                  Text(
-                    '$_bestScore',
-                    style: TextStyle(
-                      color: GameColors.textPrimary,
-                      fontSize: 32,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(width: 8),
-              GestureDetector(
-                onTap: _openSettings,
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: GameColors.gridBackground,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.settings,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'SCORE',
+                  style: TextStyle(
                     color: GameColors.textSecondary,
-                    size: 20,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.5,
                   ),
                 ),
-              ),
-            ],
+                Text(
+                  '${_state.score}',
+                  style: TextStyle(
+                    color: GameColors.textPrimary,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Text(
+            'FLIPOP',
+            style: TextStyle(
+              color: GameColors.textPrimary,
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 3,
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  'BEST',
+                  style: TextStyle(
+                    color: GameColors.textSecondary,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.5,
+                  ),
+                ),
+                Text(
+                  '$_bestScore',
+                  style: TextStyle(
+                    color: GameColors.textPrimary,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -625,95 +565,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildColorCycleIndicator() {
-    final colors = BlockColor.values.sublist(0, _state.colorCount);
-    final children = <Widget>[];
-
-    for (int i = 0; i < colors.length; i++) {
-      // 블록 이미지
-      children.add(
-        Container(
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(
-            color: GameColors.blockColors[colors[i]],
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: Padding(
-              padding: const EdgeInsets.all(1.5),
-              child: Image.asset(
-                GameColors.blockImages[colors[i]]!,
-                width: 17,
-                height: 17,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-        ),
-      );
-
-      // 화살표
-      if (i < colors.length - 1) {
-        children.add(
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: Text(
-              '\u2192',
-              style: TextStyle(
-                color: GameColors.textSecondary,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-        );
-      }
-    }
-
-    // 순환 화살표 (마지막 → 첫번째)
-    children.add(
-      Padding(
-        padding: const EdgeInsets.only(left: 4),
-        child: Text(
-          '\u21A9',
-          style: TextStyle(
-            color: GameColors.textSecondary,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ),
-    );
-
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: GameColors.gridBackground.withValues(alpha: 0.7),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: GameColors.gridLine, width: 1),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            'TAP ',
-            style: TextStyle(
-              color: GameColors.textSecondary,
-              fontSize: 10,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1,
-            ),
-          ),
-          ...children,
-        ],
-      ),
-    );
-  }
-
   Widget _buildGrid(double cellSize, int visibleRows, double gap) {
     return Container(
       key: _gridKey,
@@ -759,9 +610,8 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   Widget _buildCell(int row, int col, double cellSize) {
     final cell = _state.grid[row][col];
-    final isGlowing = _glowingCells.contains('${row}_$col');
 
-    Widget cellWidget = AnimatedSwitcher(
+    return AnimatedSwitcher(
       duration: const Duration(milliseconds: 200),
       switchInCurve: Curves.easeOutBack,
       switchOutCurve: Curves.easeIn,
@@ -791,25 +641,6 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               onTap: () => _onTap(row, col),
             ),
     );
-
-    if (isGlowing && cell != null) {
-      final glowColor = GameColors.blockColors[cell.color]!;
-      cellWidget = Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(cellSize * 0.2),
-          boxShadow: [
-            BoxShadow(
-              color: glowColor.withValues(alpha: 0.6),
-              blurRadius: 8,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: cellWidget,
-      );
-    }
-
-    return cellWidget;
   }
 }
 
