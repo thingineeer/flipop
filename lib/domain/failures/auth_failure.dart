@@ -22,6 +22,5 @@ class AuthRequiresRecentLogin extends AuthFailure {
 }
 
 class AuthUnknown extends AuthFailure {
-  const AuthUnknown([String message = '알 수 없는 오류가 발생했습니다'])
-      : super(message);
+  const AuthUnknown([super.message = '알 수 없는 오류가 발생했습니다']);
 }

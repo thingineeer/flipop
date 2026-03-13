@@ -680,7 +680,7 @@ void main() {
     test('진짜 연쇄 combo 2: 가로 클리어 → 중력 → 가로 완성', () {
       // row 1: RRRRR → 1차 가로 클리어
       // 중력 후 row 0에 BBBBB → 2차 가로 연쇄!
-      final s = makeState([
+      makeState([
         [B, B, R, B, B],
         [R, R, R, R, R], // 가로 클리어
         [B, R, B, R, B],
@@ -827,7 +827,6 @@ void main() {
         [R, R, R, R, R],
       ], addRowEvery: 1);
 
-      final originalRow0Colors = rowColors(s, 0);
       final after = s.tap(0, 0);
       // 기존 row 0 → row 1로 밀림 (tap에 의해 색이 변했을 수 있음)
       expect(after.hasBlock(1, 0), isTrue, reason: '기존 블록 위로 이동');
@@ -969,16 +968,6 @@ void main() {
     });
 
     test('row 6에 단 1개 블록만 있어도 게임오버', () {
-      final s = makeState([
-        [R, B, Y, R, B],
-        [B, Y, R, B, Y],
-        [Y, R, B, Y, R],
-        [R, B, Y, R, B],
-        [B, Y, R, B, Y],
-        [Y, R, B, Y, R],
-        // row 6은 fromGrid에서 7번째 줄로 설정해야 함
-      ]);
-
       // row 6에 직접 블록을 놓으려면 7줄 그리드가 필요
       final s7 = makeState([
         [R, B, Y, R, B],
@@ -1050,13 +1039,6 @@ void main() {
     });
 
     test('4색 모드에서 클리어 정상 작동', () {
-      final s = makeState([
-        [G, R, G, G, G],
-        [R, R, R, R, R],
-        [R, R, R, R, R],
-      ], colorCount: 4);
-
-      // tap(1,1): (0,1)R→B → row 0 = [G,B,G,G,G] → 클리어 아님
       // 4색 모드에서 가로 클리어를 만들려면:
       final s2 = makeState([
         [G, Y, G, G, G],
@@ -1327,14 +1309,6 @@ void main() {
   // ============================================================
   group('정밀 점수 검증', () {
     test('1줄 클리어 = 100', () {
-      final s = makeState([
-        [R, B, R, R, R], // (0,1)만 B
-        [R, R, R, R, R],
-        [R, R, R, R, R],
-      ]);
-      // tap(0,1): 자신 B 불변, (0,0)R→B, (0,2)R→B, (1,1)R→B
-      // row 0 = [B,B,B,R,R] → 클리어 안 됨
-      // 다른 설계:
       final s2 = makeState([
         [B, R, B, B, B],
         [R, R, R, R, R],
