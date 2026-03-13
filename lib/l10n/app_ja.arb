@@ -92,5 +92,29 @@
   "tutorialComboTitle": "連鎖コンボ！",
   "tutorialComboDesc": "クリア後にブロックが落ちて\n連鎖すると大量スコア！",
   "tutorialNext": "次へ",
-  "tutorialStart": "スタート！"
+  "tutorialStart": "スタート！",
+
+  "moreTitle": "その他",
+  "gameSection": "ゲーム",
+  "ranking": "ランキング",
+  "accountSection": "アカウント",
+  "infoSection": "情報",
+  "privacyPolicy": "プライバシーポリシー",
+  "termsOfService": "利用規約",
+  "appVersion": "アプリバージョン",
+  "avatarPicker": "アバター選択",
+  "avatarBasic": "基本",
+  "avatarExtra": "追加",
+  "avatarSpecial": "特別",
+  "save": "保存",
+  "avatarChanged": "アバターが変更されました",
+  "saveFailed": "変更失敗: {error}",
+  "@saveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "COMING\nSOON"
 }

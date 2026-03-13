@@ -92,5 +92,29 @@
   "tutorialComboTitle": "연쇄 콤보!",
   "tutorialComboDesc": "클리어 후 블록이 떨어져서\n연쇄가 터지면 대박 점수!",
   "tutorialNext": "다음",
-  "tutorialStart": "시작하기!"
+  "tutorialStart": "시작하기!",
+
+  "moreTitle": "더보기",
+  "gameSection": "게임",
+  "ranking": "랭킹",
+  "accountSection": "계정",
+  "infoSection": "정보",
+  "privacyPolicy": "개인정보 처리방침",
+  "termsOfService": "이용약관",
+  "appVersion": "앱 버전",
+  "avatarPicker": "아바타 선택",
+  "avatarBasic": "기본",
+  "avatarExtra": "추가",
+  "avatarSpecial": "특별",
+  "save": "저장",
+  "avatarChanged": "아바타가 변경되었습니다",
+  "saveFailed": "변경 실패: {error}",
+  "@saveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "COMING\nSOON"
 }

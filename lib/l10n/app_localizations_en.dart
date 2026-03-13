@@ -215,4 +215,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get tutorialStart => 'Start!';
+
+  @override
+  String get moreTitle => 'More';
+
+  @override
+  String get gameSection => 'Game';
+
+  @override
+  String get ranking => 'Ranking';
+
+  @override
+  String get accountSection => 'Account';
+
+  @override
+  String get infoSection => 'Info';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get appVersion => 'App Version';
+
+  @override
+  String get avatarPicker => 'Choose Avatar';
+
+  @override
+  String get avatarBasic => 'Basic';
+
+  @override
+  String get avatarExtra => 'Extra';
+
+  @override
+  String get avatarSpecial => 'Special';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get avatarChanged => 'Avatar has been changed';
+
+  @override
+  String saveFailed(String error) {
+    return 'Save failed: $error';
+  }
+
+  @override
+  String get comingSoon => 'COMING\nSOON';
 }

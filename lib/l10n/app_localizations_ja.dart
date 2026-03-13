@@ -207,4 +207,54 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get tutorialStart => 'スタート！';
+
+  @override
+  String get moreTitle => 'その他';
+
+  @override
+  String get gameSection => 'ゲーム';
+
+  @override
+  String get ranking => 'ランキング';
+
+  @override
+  String get accountSection => 'アカウント';
+
+  @override
+  String get infoSection => '情報';
+
+  @override
+  String get privacyPolicy => 'プライバシーポリシー';
+
+  @override
+  String get termsOfService => '利用規約';
+
+  @override
+  String get appVersion => 'アプリバージョン';
+
+  @override
+  String get avatarPicker => 'アバター選択';
+
+  @override
+  String get avatarBasic => '基本';
+
+  @override
+  String get avatarExtra => '追加';
+
+  @override
+  String get avatarSpecial => '特別';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get avatarChanged => 'アバターが変更されました';
+
+  @override
+  String saveFailed(String error) {
+    return '変更失敗: $error';
+  }
+
+  @override
+  String get comingSoon => 'COMING\nSOON';
 }

@@ -8,6 +8,7 @@ import '../domain/failures/auth_failure.dart';
 import '../game/avatar_data.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
+import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/leaderboard_service.dart';
 
@@ -41,13 +42,13 @@ class _MoreScreenState extends State<MoreScreen> {
 
   AppUser? get _user => AuthService().appUser;
 
-  String get _providerLabel {
+  String _providerLabel(AppLocalizations l) {
     final user = _user;
-    if (user == null) return '로그인 안 됨';
+    if (user == null) return l.notLoggedIn;
     return switch (user.provider) {
       SignInProvider.google => 'Google',
       SignInProvider.apple => 'Apple',
-      SignInProvider.anonymous => 'Guest',
+      SignInProvider.anonymous => l.guest,
     };
   }
 
@@ -64,7 +65,7 @@ class _MoreScreenState extends State<MoreScreen> {
       return;
     }
     if (user != null) {
-      _showSuccess('Google 계정이 연동되었습니다');
+      _showSuccess(AppLocalizations.of(context)!.googleLinked);
     }
   }
 
@@ -79,16 +80,17 @@ class _MoreScreenState extends State<MoreScreen> {
       return;
     }
     if (user != null) {
-      _showSuccess('Apple 계정이 연동되었습니다');
+      _showSuccess(AppLocalizations.of(context)!.appleLinked);
     }
   }
 
   // ── 로그아웃 / 계정 삭제 ──
 
   Future<void> _signOut() async {
+    final l = AppLocalizations.of(context)!;
     final confirmed = await _showConfirmDialog(
-      title: '로그아웃',
-      message: '로그아웃하면 게스트로 새 세션이 시작됩니다.\n소셜 로그인으로 다시 돌아올 수 있습니다.',
+      title: l.logoutTitle,
+      message: l.logoutMessage,
     );
     if (confirmed != true) return;
 
@@ -103,9 +105,10 @@ class _MoreScreenState extends State<MoreScreen> {
   }
 
   Future<void> _deleteAccount() async {
+    final l = AppLocalizations.of(context)!;
     final confirmed = await _showConfirmDialog(
-      title: '계정 삭제',
-      message: '계정을 삭제하면 모든 게임 데이터와\n랭킹 기록이 영구적으로 삭제됩니다.\n\n이 작업은 되돌릴 수 없습니다.',
+      title: l.deleteTitle,
+      message: l.deleteMessage,
       destructive: true,
     );
     if (confirmed != true) return;
@@ -187,12 +190,12 @@ class _MoreScreenState extends State<MoreScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('취소'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text(
-              destructive ? '삭제' : '확인',
+              destructive ? AppLocalizations.of(context)!.delete : AppLocalizations.of(context)!.confirm,
               style: TextStyle(
                 color: destructive
                     ? GameColors.blockColors[BlockColor.red]
@@ -222,14 +225,16 @@ class _MoreScreenState extends State<MoreScreen> {
                   color: GameColors.textSecondary,
                 ),
               )
-            : ListView(
+            : Builder(builder: (context) {
+                final l = AppLocalizations.of(context)!;
+                return ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 children: [
                   const SizedBox(height: 16),
                   // 타이틀
-                  const Text(
-                    '더보기',
-                    style: TextStyle(
+                  Text(
+                    l.moreTitle,
+                    style: const TextStyle(
                       color: GameColors.textPrimary,
                       fontSize: 28,
                       fontWeight: FontWeight.w900,
@@ -242,13 +247,13 @@ class _MoreScreenState extends State<MoreScreen> {
                   const SizedBox(height: 28),
 
                   // 2) 게임 섹션
-                  _buildSectionHeader('게임'),
+                  _buildSectionHeader(l.gameSection),
                   const SizedBox(height: 8),
                   _buildSectionCard(children: [
                     _buildListTile(
                       icon: Icons.emoji_events_rounded,
                       iconColor: GameColors.blockColors[BlockColor.yellow]!,
-                      title: '랭킹',
+                      title: l.ranking,
                       trailing: const Icon(
                         Icons.chevron_right_rounded,
                         color: GameColors.textSecondary,
@@ -262,13 +267,13 @@ class _MoreScreenState extends State<MoreScreen> {
                   _buildAccountSection(),
 
                   // 4) 정보 섹션
-                  _buildSectionHeader('정보'),
+                  _buildSectionHeader(l.infoSection),
                   const SizedBox(height: 8),
                   _buildSectionCard(children: [
                     _buildListTile(
                       icon: Icons.shield_outlined,
                       iconColor: GameColors.textSecondary,
-                      title: '개인정보 처리방침',
+                      title: l.privacyPolicy,
                       trailing: const Icon(
                         Icons.open_in_new_rounded,
                         color: GameColors.textSecondary,
@@ -282,7 +287,7 @@ class _MoreScreenState extends State<MoreScreen> {
                     _buildListTile(
                       icon: Icons.description_outlined,
                       iconColor: GameColors.textSecondary,
-                      title: '이용약관',
+                      title: l.termsOfService,
                       trailing: const Icon(
                         Icons.open_in_new_rounded,
                         color: GameColors.textSecondary,
@@ -296,7 +301,7 @@ class _MoreScreenState extends State<MoreScreen> {
                     _buildListTile(
                       icon: Icons.info_outline_rounded,
                       iconColor: GameColors.textSecondary,
-                      title: '앱 버전',
+                      title: l.appVersion,
                       trailing: Text(
                         _appVersion,
                         style: const TextStyle(
@@ -311,13 +316,14 @@ class _MoreScreenState extends State<MoreScreen> {
 
                   // 계정 삭제 (항상 표시)
                   _buildActionButton(
-                    label: '계정 삭제',
+                    label: l.deleteAccount,
                     color: GameColors.blockColors[BlockColor.red]!,
                     onTap: _deleteAccount,
                   ),
                   const SizedBox(height: 40),
                 ],
-              ),
+              );
+              }),
       ),
     );
   }
@@ -360,9 +366,9 @@ class _MoreScreenState extends State<MoreScreen> {
                   const SizedBox(height: 16),
 
                   // 타이틀
-                  const Text(
-                    '아바타 선택',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.avatarPicker,
+                    style: const TextStyle(
                       color: GameColors.textPrimary,
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -371,7 +377,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   const SizedBox(height: 20),
 
                   // 기본 섹션
-                  _buildAvatarSectionLabel('기본'),
+                  _buildAvatarSectionLabel(AppLocalizations.of(context)!.avatarBasic),
                   const SizedBox(height: 8),
                   _buildAvatarGrid(
                     AvatarData.basicAvatars,
@@ -381,7 +387,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   const SizedBox(height: 16),
 
                   // 추가 섹션
-                  _buildAvatarSectionLabel('추가'),
+                  _buildAvatarSectionLabel(AppLocalizations.of(context)!.avatarExtra),
                   const SizedBox(height: 8),
                   _buildAvatarGrid(
                     AvatarData.extraAvatars,
@@ -391,7 +397,7 @@ class _MoreScreenState extends State<MoreScreen> {
                   const SizedBox(height: 16),
 
                   // 특별 섹션
-                  _buildAvatarSectionLabel('특별'),
+                  _buildAvatarSectionLabel(AppLocalizations.of(context)!.avatarSpecial),
                   const SizedBox(height: 8),
                   _buildAvatarGrid(
                     AvatarData.specialAvatars,
@@ -422,10 +428,10 @@ class _MoreScreenState extends State<MoreScreen> {
                           ),
                         ],
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Text(
-                          '저장',
-                          style: TextStyle(
+                          AppLocalizations.of(context)!.save,
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
@@ -527,10 +533,10 @@ class _MoreScreenState extends State<MoreScreen> {
                               ),
                             ] else ...[
                               const SizedBox(height: 2),
-                              const Text(
-                                'COMING\nSOON',
+                              Text(
+                                AppLocalizations.of(context)!.comingSoon,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: GameColors.textSecondary,
                                   fontSize: 7,
                                   fontWeight: FontWeight.w700,
@@ -561,13 +567,13 @@ class _MoreScreenState extends State<MoreScreen> {
       await auth.saveProfile(nickname, avatarId, countryCode: countryCode);
       if (mounted) {
         setState(() => _loading = false);
-        _showSuccess('아바타가 변경되었습니다');
+        _showSuccess(AppLocalizations.of(context)!.avatarChanged);
       }
     } catch (e) {
       if (mounted) {
         setState(() => _loading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('변경 실패: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.saveFailed(e.toString()))),
         );
       }
     }
@@ -684,7 +690,7 @@ class _MoreScreenState extends State<MoreScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
-                    _providerLabel,
+                    _providerLabel(AppLocalizations.of(context)!),
                     style: TextStyle(
                       color: isAnonymous
                           ? GameColors.textSecondary
@@ -711,13 +717,13 @@ class _MoreScreenState extends State<MoreScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader('계정'),
+        _buildSectionHeader(AppLocalizations.of(context)!.accountSection),
         const SizedBox(height: 8),
 
         if (isAnonymous) ...[
           // 익명 사용자: 소셜 연동 버튼
           _buildLinkButton(
-            label: 'Google로 연동',
+            label: AppLocalizations.of(context)!.linkGoogle,
             icon: Icons.g_mobiledata,
             color: GameColors.blockColors[BlockColor.blue]!,
             onTap: _linkGoogle,
@@ -727,7 +733,7 @@ class _MoreScreenState extends State<MoreScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: _buildLinkButton(
-                label: 'Apple로 연동',
+                label: AppLocalizations.of(context)!.linkApple,
                 icon: Icons.apple,
                 color: GameColors.textPrimary,
                 onTap: _linkApple,
@@ -736,7 +742,7 @@ class _MoreScreenState extends State<MoreScreen> {
         ] else ...[
           // 로그인 사용자: 로그아웃
           _buildActionButton(
-            label: '로그아웃',
+            label: AppLocalizations.of(context)!.logout,
             color: GameColors.textSecondary,
             onTap: _signOut,
           ),

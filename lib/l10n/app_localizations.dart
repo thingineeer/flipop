@@ -485,6 +485,102 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'시작하기!'**
   String get tutorialStart;
+
+  /// No description provided for @moreTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'더보기'**
+  String get moreTitle;
+
+  /// No description provided for @gameSection.
+  ///
+  /// In ko, this message translates to:
+  /// **'게임'**
+  String get gameSection;
+
+  /// No description provided for @ranking.
+  ///
+  /// In ko, this message translates to:
+  /// **'랭킹'**
+  String get ranking;
+
+  /// No description provided for @accountSection.
+  ///
+  /// In ko, this message translates to:
+  /// **'계정'**
+  String get accountSection;
+
+  /// No description provided for @infoSection.
+  ///
+  /// In ko, this message translates to:
+  /// **'정보'**
+  String get infoSection;
+
+  /// No description provided for @privacyPolicy.
+  ///
+  /// In ko, this message translates to:
+  /// **'개인정보 처리방침'**
+  String get privacyPolicy;
+
+  /// No description provided for @termsOfService.
+  ///
+  /// In ko, this message translates to:
+  /// **'이용약관'**
+  String get termsOfService;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In ko, this message translates to:
+  /// **'앱 버전'**
+  String get appVersion;
+
+  /// No description provided for @avatarPicker.
+  ///
+  /// In ko, this message translates to:
+  /// **'아바타 선택'**
+  String get avatarPicker;
+
+  /// No description provided for @avatarBasic.
+  ///
+  /// In ko, this message translates to:
+  /// **'기본'**
+  String get avatarBasic;
+
+  /// No description provided for @avatarExtra.
+  ///
+  /// In ko, this message translates to:
+  /// **'추가'**
+  String get avatarExtra;
+
+  /// No description provided for @avatarSpecial.
+  ///
+  /// In ko, this message translates to:
+  /// **'특별'**
+  String get avatarSpecial;
+
+  /// No description provided for @save.
+  ///
+  /// In ko, this message translates to:
+  /// **'저장'**
+  String get save;
+
+  /// No description provided for @avatarChanged.
+  ///
+  /// In ko, this message translates to:
+  /// **'아바타가 변경되었습니다'**
+  String get avatarChanged;
+
+  /// No description provided for @saveFailed.
+  ///
+  /// In ko, this message translates to:
+  /// **'변경 실패: {error}'**
+  String saveFailed(String error);
+
+  /// No description provided for @comingSoon.
+  ///
+  /// In ko, this message translates to:
+  /// **'COMING\nSOON'**
+  String get comingSoon;
 }
 
 class _AppLocalizationsDelegate

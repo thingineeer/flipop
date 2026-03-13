@@ -92,5 +92,29 @@
   "tutorialComboTitle": "连锁连击！",
   "tutorialComboDesc": "消除后方块下落，\n连锁消除可获得超高分数！",
   "tutorialNext": "下一步",
-  "tutorialStart": "开始！"
+  "tutorialStart": "开始！",
+
+  "moreTitle": "更多",
+  "gameSection": "游戏",
+  "ranking": "排名",
+  "accountSection": "账号",
+  "infoSection": "信息",
+  "privacyPolicy": "隐私政策",
+  "termsOfService": "使用条款",
+  "appVersion": "应用版本",
+  "avatarPicker": "选择头像",
+  "avatarBasic": "基础",
+  "avatarExtra": "额外",
+  "avatarSpecial": "特别",
+  "save": "保存",
+  "avatarChanged": "头像已更改",
+  "saveFailed": "更改失败: {error}",
+  "@saveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "COMING\nSOON"
 }

@@ -207,4 +207,54 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get tutorialStart => '시작하기!';
+
+  @override
+  String get moreTitle => '더보기';
+
+  @override
+  String get gameSection => '게임';
+
+  @override
+  String get ranking => '랭킹';
+
+  @override
+  String get accountSection => '계정';
+
+  @override
+  String get infoSection => '정보';
+
+  @override
+  String get privacyPolicy => '개인정보 처리방침';
+
+  @override
+  String get termsOfService => '이용약관';
+
+  @override
+  String get appVersion => '앱 버전';
+
+  @override
+  String get avatarPicker => '아바타 선택';
+
+  @override
+  String get avatarBasic => '기본';
+
+  @override
+  String get avatarExtra => '추가';
+
+  @override
+  String get avatarSpecial => '특별';
+
+  @override
+  String get save => '저장';
+
+  @override
+  String get avatarChanged => '아바타가 변경되었습니다';
+
+  @override
+  String saveFailed(String error) {
+    return '변경 실패: $error';
+  }
+
+  @override
+  String get comingSoon => 'COMING\nSOON';
 }

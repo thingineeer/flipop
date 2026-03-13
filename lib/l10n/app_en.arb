@@ -92,5 +92,29 @@
   "tutorialComboTitle": "Chain combo!",
   "tutorialComboDesc": "After clearing, blocks fall down\nand chain clears earn huge scores!",
   "tutorialNext": "Next",
-  "tutorialStart": "Start!"
+  "tutorialStart": "Start!",
+
+  "moreTitle": "More",
+  "gameSection": "Game",
+  "ranking": "Ranking",
+  "accountSection": "Account",
+  "infoSection": "Info",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "appVersion": "App Version",
+  "avatarPicker": "Choose Avatar",
+  "avatarBasic": "Basic",
+  "avatarExtra": "Extra",
+  "avatarSpecial": "Special",
+  "save": "Save",
+  "avatarChanged": "Avatar has been changed",
+  "saveFailed": "Save failed: {error}",
+  "@saveFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "comingSoon": "COMING\nSOON"
 }

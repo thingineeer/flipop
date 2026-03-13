@@ -205,4 +205,54 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get tutorialStart => '开始！';
+
+  @override
+  String get moreTitle => '更多';
+
+  @override
+  String get gameSection => '游戏';
+
+  @override
+  String get ranking => '排名';
+
+  @override
+  String get accountSection => '账号';
+
+  @override
+  String get infoSection => '信息';
+
+  @override
+  String get privacyPolicy => '隐私政策';
+
+  @override
+  String get termsOfService => '使用条款';
+
+  @override
+  String get appVersion => '应用版本';
+
+  @override
+  String get avatarPicker => '选择头像';
+
+  @override
+  String get avatarBasic => '基础';
+
+  @override
+  String get avatarExtra => '额外';
+
+  @override
+  String get avatarSpecial => '特别';
+
+  @override
+  String get save => '保存';
+
+  @override
+  String get avatarChanged => '头像已更改';
+
+  @override
+  String saveFailed(String error) {
+    return '更改失败: $error';
+  }
+
+  @override
+  String get comingSoon => 'COMING\nSOON';
 }
