@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (failure != null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Google 로그인 실패: ${failure.message}')),
+            SnackBar(content: Text(AppLocalizations.of(context)!.googleSignInFailed(failure.message))),
           );
         }
         return;
@@ -59,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Google 로그인 실패: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.googleSignInFailed(e.toString()))),
         );
       }
     } finally {
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (failure != null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Apple 로그인 실패: ${failure.message}')),
+            SnackBar(content: Text(AppLocalizations.of(context)!.appleSignInFailed(failure.message))),
           );
         }
         return;
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Apple 로그인 실패: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.appleSignInFailed(e.toString()))),
         );
       }
     } finally {

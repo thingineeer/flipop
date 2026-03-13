@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
+import '../game/avatar_data.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 import '../services/auth_service.dart';
@@ -48,12 +49,14 @@ class _NicknameScreenState extends State<NicknameScreen> {
     ('RU', '러시아'),
   ];
 
-  static const _avatars = [
-    {'id': 'cat', 'image': 'assets/images/cat_red.png', 'color': BlockColor.red},
-    {'id': 'puppy', 'image': 'assets/images/puppy_blue.png', 'color': BlockColor.blue},
-    {'id': 'bunny', 'image': 'assets/images/bunny_yellow.png', 'color': BlockColor.yellow},
-    {'id': 'frog', 'image': 'assets/images/frog_green.png', 'color': BlockColor.green},
-  ];
+  static final _avatars = AvatarData.allAvatars
+      .where((id) => AvatarData.availableAvatars.contains(id))
+      .map((id) => {
+            'id': id,
+            'image': AvatarData.images[id]!,
+            'color': AvatarData.avatarColors[id]!,
+          })
+      .toList();
 
   @override
   void initState() {

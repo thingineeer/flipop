@@ -581,6 +581,18 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'COMING\nSOON'**
   String get comingSoon;
+
+  /// No description provided for @googleSignInFailed.
+  ///
+  /// In ko, this message translates to:
+  /// **'Google 로그인 실패: {error}'**
+  String googleSignInFailed(String error);
+
+  /// No description provided for @appleSignInFailed.
+  ///
+  /// In ko, this message translates to:
+  /// **'Apple 로그인 실패: {error}'**
+  String appleSignInFailed(String error);
 }
 
 class _AppLocalizationsDelegate

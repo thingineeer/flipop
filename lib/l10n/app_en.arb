@@ -116,5 +116,17 @@
       }
     }
   },
-  "comingSoon": "COMING\nSOON"
+  "comingSoon": "COMING\nSOON",
+  "googleSignInFailed": "Google sign-in failed: {error}",
+  "@googleSignInFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "appleSignInFailed": "Apple sign-in failed: {error}",
+  "@appleSignInFailed": {
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  }
 }

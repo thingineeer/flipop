@@ -265,4 +265,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get comingSoon => 'COMING\nSOON';
+
+  @override
+  String googleSignInFailed(String error) {
+    return 'Google sign-in failed: $error';
+  }
+
+  @override
+  String appleSignInFailed(String error) {
+    return 'Apple sign-in failed: $error';
+  }
 }

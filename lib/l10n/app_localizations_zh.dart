@@ -255,4 +255,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get comingSoon => 'COMING\nSOON';
+
+  @override
+  String googleSignInFailed(String error) {
+    return 'Google登录失败: $error';
+  }
+
+  @override
+  String appleSignInFailed(String error) {
+    return 'Apple登录失败: $error';
+  }
 }

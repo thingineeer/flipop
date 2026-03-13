@@ -257,4 +257,14 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get comingSoon => 'COMING\nSOON';
+
+  @override
+  String googleSignInFailed(String error) {
+    return 'Googleログイン失敗: $error';
+  }
+
+  @override
+  String appleSignInFailed(String error) {
+    return 'Appleログイン失敗: $error';
+  }
 }
