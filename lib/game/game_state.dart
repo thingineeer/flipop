@@ -358,6 +358,19 @@ class GameState {
         nextId: nextId,
       );
 
+  /// 게임 오버 상태 변경 (타임 보너스 등에서 사용)
+  GameState withGameOver(bool gameOver) => GameState(
+        grid: grid,
+        score: score,
+        bestScore: bestScore,
+        moves: moves,
+        combo: 0,
+        colorCount: colorCount,
+        isGameOver: gameOver,
+        addRowEvery: addRowEvery,
+        nextId: nextId,
+      );
+
   int get highestRow {
     for (int r = rows - 1; r >= 0; r--) {
       for (int c = 0; c < cols; c++) {

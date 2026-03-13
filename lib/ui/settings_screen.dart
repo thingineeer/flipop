@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 import '../domain/entities/app_user.dart';
 import '../domain/failures/auth_failure.dart';
@@ -22,20 +23,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   AppUser? get _user => AuthService().appUser;
 
-  String get _providerLabel {
+  String _providerLabel(AppLocalizations l10n) {
     final user = _user;
-    if (user == null) return '로그인 안 됨';
+    if (user == null) return l10n.notLoggedIn;
     return switch (user.provider) {
-      SignInProvider.google => 'Google 계정',
-      SignInProvider.apple => 'Apple 계정',
-      SignInProvider.anonymous => '게스트',
+      SignInProvider.google => l10n.googleAccount,
+      SignInProvider.apple => l10n.appleAccount,
+      SignInProvider.anonymous => l10n.guest,
     };
   }
 
-  String get _providerDetail {
+  String _providerDetail(AppLocalizations l10n) {
     final user = _user;
     if (user == null || user.isAnonymous) {
-      return '소셜 계정을 연동하면 앱을 삭제해도\n계정이 유지됩니다';
+      return l10n.accountLinkHint;
     }
     return user.email ?? '';
   }
@@ -51,7 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return;
     }
     if (user != null) {
-      _showSuccess('Google 계정이 연동되었습니다');
+      _showSuccess(AppLocalizations.of(context)!.googleLinked);
     }
   }
 
@@ -66,14 +67,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
       return;
     }
     if (user != null) {
-      _showSuccess('Apple 계정이 연동되었습니다');
+      _showSuccess(AppLocalizations.of(context)!.appleLinked);
     }
   }
 
   Future<void> _signOut() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await _showConfirmDialog(
-      title: '로그아웃',
-      message: '로그아웃하면 게스트로 새 세션이 시작됩니다.\n소셜 로그인으로 다시 돌아올 수 있습니다.',
+      title: l10n.logoutTitle,
+      message: l10n.logoutMessage,
     );
     if (confirmed != true) return;
 
@@ -90,9 +92,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _deleteAccount() async {
+    final l10n = AppLocalizations.of(context)!;
     final confirmed = await _showConfirmDialog(
-      title: '계정 삭제',
-      message: '계정을 삭제하면 모든 게임 데이터와\n랭킹 기록이 영구적으로 삭제됩니다.\n\n이 작업은 되돌릴 수 없습니다.',
+      title: l10n.deleteTitle,
+      message: l10n.deleteMessage,
       destructive: true,
     );
     if (confirmed != true) return;
@@ -160,9 +163,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
             ),
-            title: const Text(
-              '국가 변경',
-              style: TextStyle(
+            title: Text(
+              AppLocalizations.of(context)!.changeCountry,
+              style: const TextStyle(
                 color: GameColors.textPrimary,
                 fontWeight: FontWeight.w800,
               ),
@@ -205,12 +208,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('취소'),
+                child: Text(AppLocalizations.of(context)!.cancel),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, tempSelected),
                 child: Text(
-                  '변경',
+                  AppLocalizations.of(context)!.change,
                   style: TextStyle(
                     color: GameColors.blockColors[BlockColor.blue],
                     fontWeight: FontWeight.w700,
@@ -233,7 +236,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       await AuthService().saveProfile(nickname, avatarId, countryCode: selected);
       if (mounted) {
         setState(() => _loading = false);
-        _showSuccess('국가가 변경되었습니다');
+        _showSuccess(AppLocalizations.of(context)!.countryChanged);
       }
     } catch (e) {
       if (mounted) {
@@ -293,12 +296,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('취소'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text(
-              destructive ? '삭제' : '확인',
+              destructive ? AppLocalizations.of(context)!.delete : AppLocalizations.of(context)!.confirm,
               style: TextStyle(
                 color: destructive
                     ? GameColors.blockColors[BlockColor.red]
@@ -314,6 +317,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final user = _user;
     final isAnonymous = user?.isAnonymous ?? true;
 
@@ -326,9 +330,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
           icon: const Icon(Icons.arrow_back_ios, color: GameColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          '설정',
-          style: TextStyle(
+        title: Text(
+          l10n.settings,
+          style: const TextStyle(
             color: GameColors.textPrimary,
             fontWeight: FontWeight.w800,
             fontSize: 18,
@@ -356,9 +360,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                     // 소셜 연동 (익명일 때만)
                     if (isAnonymous) ...[
-                      const Text(
-                        '계정 연동',
-                        style: TextStyle(
+                      Text(
+                        l10n.linkAccount,
+                        style: const TextStyle(
                           color: GameColors.textSecondary,
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -367,7 +371,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       const SizedBox(height: 12),
                       _buildLinkButton(
-                        label: 'Google로 연동',
+                        label: l10n.linkGoogle,
                         icon: Icons.g_mobiledata,
                         color: GameColors.blockColors[BlockColor.blue]!,
                         onTap: _linkGoogle,
@@ -375,7 +379,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       const SizedBox(height: 10),
                       if (Platform.isIOS)
                         _buildLinkButton(
-                          label: 'Apple로 연동',
+                          label: l10n.linkApple,
                           icon: Icons.apple,
                           color: GameColors.textPrimary,
                           onTap: _linkApple,
@@ -388,13 +392,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     // 하단 버튼들
                     if (!isAnonymous)
                       _buildActionButton(
-                        label: '로그아웃',
+                        label: l10n.logout,
                         color: GameColors.textSecondary,
                         onTap: _signOut,
                       ),
                     const SizedBox(height: 12),
                     _buildActionButton(
-                      label: '계정 삭제',
+                      label: l10n.deleteAccount,
                       color: GameColors.blockColors[BlockColor.red]!,
                       onTap: _deleteAccount,
                     ),
@@ -407,6 +411,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Widget _buildAccountCard() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -431,7 +436,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
-                  _providerLabel,
+                  _providerLabel(l10n),
                   style: TextStyle(
                     color: (_user?.isAnonymous ?? true)
                         ? GameColors.textSecondary
@@ -475,7 +480,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      '국가 변경',
+                      l10n.changeCountry,
                       style: TextStyle(
                         color: GameColors.blockColors[BlockColor.blue],
                         fontSize: 12,
@@ -488,7 +493,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           const SizedBox(height: 4),
           Text(
-            _providerDetail,
+            _providerDetail(l10n),
             style: const TextStyle(
               color: GameColors.textSecondary,
               fontSize: 13,

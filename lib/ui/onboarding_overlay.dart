@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 
@@ -23,11 +24,15 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
 
   late AnimationController _lineController;
 
-  final _titles = const ['블록을 탭!', '한 줄 완성!', '연쇄 콤보!'];
-  final _descriptions = const [
-    '탭하면 상하좌우 블록이\n다음 색으로 바뀌어요',
-    '가로 한 줄을 같은 색으로\n채우면 클리어!',
-    '클리어 후 블록이 떨어져서\n연쇄가 터지면 대박 점수!',
+  List<String> _titles(AppLocalizations l10n) => [
+    l10n.tutorialTapTitle,
+    l10n.tutorialClearTitle,
+    l10n.tutorialComboTitle,
+  ];
+  List<String> _descriptions(AppLocalizations l10n) => [
+    l10n.tutorialTapDesc,
+    l10n.tutorialClearDesc,
+    l10n.tutorialComboDesc,
   ];
 
   @override
@@ -122,6 +127,7 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: _next,
       child: Container(
@@ -185,7 +191,7 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
                     ),
                     child: Center(
                       child: Text(
-                        _currentPage < _totalSteps - 1 ? '다음' : '시작하기!',
+                        _currentPage < _totalSteps - 1 ? l10n.tutorialNext : l10n.tutorialStart,
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 16,
@@ -228,6 +234,7 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
 
   /// 각 페이지 콘텐츠
   Widget _buildPage(int step) {
+    final l10n = AppLocalizations.of(context)!;
     return LayoutBuilder(
       builder: (context, constraints) {
         return Column(
@@ -239,7 +246,7 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
 
             // 제목
             Text(
-              _titles[step],
+              _titles(l10n)[step],
               style: const TextStyle(
                 color: GameColors.textPrimary,
                 fontSize: 22,
@@ -250,7 +257,7 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
 
             // 설명
             Text(
-              _descriptions[step],
+              _descriptions(l10n)[step],
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: GameColors.textSecondary,
@@ -277,8 +284,9 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
     }
   }
 
-  /// Step 1: 탭 → 주변 색 변화 (before → after)
+  /// Step 1: tap -> adjacent color change (before -> after)
   Widget _buildTapIllustration(double maxWidth) {
+    final l10n = AppLocalizations.of(context)!;
     const arrowSpace = 46.0;
     const gap = 3.0;
     final gridWidth = (maxWidth - arrowSpace) / 2;
@@ -320,20 +328,13 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
         ),
         const SizedBox(height: 6),
         // 바뀌는 방향 힌트
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('탭 → ',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: GameColors.blockColors[BlockColor.blue],
-                    fontWeight: FontWeight.w800)),
-            const Text('주변 4칸이 다음 색으로!',
-                style: TextStyle(
-                    fontSize: 12,
-                    color: GameColors.textSecondary,
-                    fontWeight: FontWeight.w600)),
-          ],
+        Text(
+          l10n.tutorialTapHint,
+          style: const TextStyle(
+            fontSize: 12,
+            color: GameColors.textSecondary,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         _buildColorCycleHint(),
       ],

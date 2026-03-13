@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 import '../services/auth_service.dart';
@@ -97,7 +98,7 @@ class _NicknameScreenState extends State<NicknameScreen> {
       if (!available) {
         if (mounted) {
           setState(() {
-            _errorText = '이미 사용 중인 닉네임입니다';
+            _errorText = AppLocalizations.of(context)!.nicknameTaken;
             _saving = false;
           });
         }
@@ -126,6 +127,7 @@ class _NicknameScreenState extends State<NicknameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: GameColors.background,
       body: SafeArea(
@@ -134,9 +136,9 @@ class _NicknameScreenState extends State<NicknameScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'FLIPOP',
-                style: TextStyle(
+              Text(
+                l10n.appTitle,
+                style: const TextStyle(
                   color: GameColors.textPrimary,
                   fontSize: 36,
                   fontWeight: FontWeight.w900,
@@ -144,9 +146,9 @@ class _NicknameScreenState extends State<NicknameScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                '닉네임을 정해주세요!',
-                style: TextStyle(
+              Text(
+                l10n.setNickname,
+                style: const TextStyle(
                   color: GameColors.textSecondary,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -268,8 +270,8 @@ class _NicknameScreenState extends State<NicknameScreen> {
                     fontSize: 18,
                     fontWeight: FontWeight.w700,
                   ),
-                  decoration: const InputDecoration(
-                    hintText: '닉네임 (2~12자)',
+                  decoration: InputDecoration(
+                    hintText: l10n.nicknameHint,
                     hintStyle: TextStyle(
                       color: GameColors.textSecondary,
                       fontWeight: FontWeight.w500,

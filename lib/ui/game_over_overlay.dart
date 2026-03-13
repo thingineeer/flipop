@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../game/game_state.dart';
 import '../game/game_colors.dart';
 import '../services/ad_service.dart';
@@ -8,7 +9,6 @@ class GameOverOverlay extends StatefulWidget {
   final int score;
   final int bestScore;
   final VoidCallback onRestart;
-  final VoidCallback? onLeaderboard;
   final VoidCallback? onRevive;
   final bool canRevive;
   final VoidCallback? onTimeBonus;
@@ -21,7 +21,6 @@ class GameOverOverlay extends StatefulWidget {
     required this.score,
     required this.bestScore,
     required this.onRestart,
-    this.onLeaderboard,
     this.onRevive,
     this.canRevive = false,
     this.onTimeBonus,
@@ -89,6 +88,7 @@ class _GameOverOverlayState extends State<GameOverOverlay>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final isNewBest = widget.score >= widget.bestScore && widget.score > 0;
 
     return AnimatedBuilder(
@@ -119,7 +119,7 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        isNewBest ? '🎉 NEW BEST!' : 'GAME OVER',
+                        isNewBest ? l10n.newBest : l10n.gameOver,
                         style: const TextStyle(
                           color: GameColors.textPrimary,
                           fontSize: 24,
@@ -137,9 +137,9 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                         ),
                       ),
                       const SizedBox(height: 4),
-                      const Text(
-                        'SCORE',
-                        style: TextStyle(
+                      Text(
+                        l10n.scoreLabel,
+                        style: const TextStyle(
                           color: GameColors.textSecondary,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -148,7 +148,7 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'BEST: ${widget.bestScore}',
+                        '${l10n.bestLabel}: ${widget.bestScore}',
                         style: const TextStyle(
                           color: GameColors.textSecondary,
                           fontSize: 14,
@@ -160,21 +160,21 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                       // 리워드 광고 버튼들
                       _buildRewardButton(
                         icon: Icons.play_circle_outline,
-                        label: '이어하기 (광고)',
+                        label: l10n.continueWithAd,
                         enabled: widget.canRevive && widget.onRevive != null,
                         onTap: _onReviveTap,
                       ),
                       const SizedBox(height: 8),
                       _buildRewardButton(
                         icon: Icons.timer_outlined,
-                        label: '시간 +30초 (광고)',
+                        label: l10n.timeBonus,
                         enabled: widget.canTimeBonus && widget.onTimeBonus != null,
                         onTap: _onTimeBonusTap,
                       ),
                       const SizedBox(height: 8),
                       _buildRewardButton(
                         icon: Icons.star_outline,
-                        label: '점수 2배 (광고)',
+                        label: l10n.scoreDouble,
                         enabled: widget.canScoreDouble && widget.onScoreDouble != null,
                         onTap: _onScoreDoubleTap,
                       ),
@@ -199,10 +199,10 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                               ),
                             ],
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              'PLAY AGAIN',
-                              style: TextStyle(
+                              l10n.playAgain,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w800,
@@ -229,10 +229,10 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                             border: Border.all(
                                 color: GameColors.gridLine, width: 2),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Text(
-                              'RANKING',
-                              style: TextStyle(
+                              l10n.rankingLabel,
+                              style: const TextStyle(
                                 color: GameColors.textPrimary,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w800,

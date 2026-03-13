@@ -1,5 +1,6 @@
 import 'dart:io' show Platform;
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 
@@ -80,6 +81,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   /// 1페이지: 귀여운 캐릭터와 함께!
   Widget _buildPage1() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -112,7 +114,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
           // FLIPOP 로고
           Text(
-            'FLIPOP',
+            l10n.appTitle,
             style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.w900,
@@ -131,9 +133,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           const SizedBox(height: 12),
 
           // 페이지 제목
-          const Text(
-            '귀여운 캐릭터와 함께!',
-            style: TextStyle(
+          Text(
+            l10n.welcomeCharacters,
+            style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
               color: GameColors.textPrimary,
@@ -142,10 +144,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           const SizedBox(height: 16),
 
           // 설명
-          const Text(
-            '블록을 탭해서 색을 바꾸고,\n한 줄을 완성하세요!',
+          Text(
+            l10n.welcomeDescription,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               height: 1.6,
               color: GameColors.textSecondary,
@@ -158,6 +160,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   /// 2페이지: 전 세계 플레이어와 경쟁!
   Widget _buildPage2() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -181,9 +184,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           const SizedBox(height: 32),
 
           // 페이지 제목
-          const Text(
-            '전 세계 플레이어와 경쟁!',
-            style: TextStyle(
+          Text(
+            l10n.welcomeCompete,
+            style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
               color: GameColors.textPrimary,
@@ -192,10 +195,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           const SizedBox(height: 16),
 
           // 설명 1
-          const Text(
-            '로그인하면 점수가 저장되고\n세계 랭킹에 참여!',
+          Text(
+            l10n.welcomeCompeteDesc,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               height: 1.6,
               color: GameColors.textSecondary,
@@ -211,10 +214,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   .withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Text(
-              '계정을 연동하면 앱을 삭제해도\n기록이 유지됩니다',
+            child: Text(
+              l10n.welcomeAccountHint,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 height: 1.5,
                 color: GameColors.textSecondary,
@@ -229,14 +232,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   /// 3페이지: 지금 시작하세요!
   Widget _buildPage3() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            '지금 시작하세요!',
-            style: TextStyle(
+          Text(
+            l10n.welcomeStart,
+            style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.w900,
               color: GameColors.textPrimary,
@@ -261,14 +265,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     elevation: 0,
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.apple, size: 24),
-                      SizedBox(width: 8),
+                      const Icon(Icons.apple, size: 24),
+                      const SizedBox(width: 8),
                       Text(
-                        'Apple로 시작',
-                        style: TextStyle(
+                        l10n.signInApple,
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -309,9 +313,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     },
                   ),
                   const SizedBox(width: 8),
-                  const Text(
-                    'Google로 시작',
-                    style: TextStyle(
+                  Text(
+                    l10n.signInGoogle,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
                     ),
@@ -331,11 +335,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   color: GameColors.gridLine,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  '또는',
-                  style: TextStyle(
+                  l10n.orDivider,
+                  style: const TextStyle(
                     fontSize: 13,
                     color: GameColors.textSecondary,
                   ),
@@ -354,9 +358,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           // 로그인 없이 시작하기
           GestureDetector(
             onTap: widget.onSkip,
-            child: const Text(
-              '로그인 없이 시작하기',
-              style: TextStyle(
+            child: Text(
+              l10n.signInGuest,
+              style: const TextStyle(
                 fontSize: 14,
                 color: GameColors.textSecondary,
                 fontWeight: FontWeight.w500,
@@ -368,9 +372,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           const SizedBox(height: 32),
 
           // 하단 안내 문구
-          const Text(
-            '나중에 설정에서 언제든 로그인할 수 있어요',
-            style: TextStyle(
+          Text(
+            l10n.signInLaterHint,
+            style: const TextStyle(
               fontSize: 12,
               color: GameColors.textSecondary,
             ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import '../l10n/app_localizations.dart';
 
 import '../services/auth_service.dart';
 import '../game/game_colors.dart';
@@ -95,6 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: GameColors.background,
       body: SafeArea(
@@ -105,9 +107,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const Spacer(flex: 2),
 
               // 로고
-              const Text(
-                'FLIPOP',
-                style: TextStyle(
+              Text(
+                l10n.appTitle,
+                style: const TextStyle(
                   color: GameColors.textPrimary,
                   fontSize: 48,
                   fontWeight: FontWeight.w900,
@@ -146,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // 바로 시작하기 버튼 (메인 CTA)
               _buildMainButton(
-                label: '바로 시작하기',
+                label: l10n.startNow,
                 color: GameColors.blockColors[BlockColor.blue]!,
                 shadowColor: GameColors.blockDarkColors[BlockColor.blue]!,
                 textColor: Colors.white,
@@ -163,11 +165,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: GameColors.gridLine,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      '또는',
-                      style: TextStyle(
+                      l10n.orDivider,
+                      style: const TextStyle(
                         color: GameColors.textSecondary,
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
@@ -186,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // Google로 시작 버튼
               _buildSocialButton(
-                label: 'Google로 시작',
+                label: l10n.signInGoogle,
                 backgroundColor: Colors.white,
                 textColor: GameColors.textPrimary,
                 borderColor: GameColors.gridLine,
@@ -198,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
               // Apple로 시작 버튼 (iOS만)
               if (Platform.isIOS)
                 _buildSocialButton(
-                  label: 'Apple로 시작',
+                  label: l10n.signInApple,
                   backgroundColor: Colors.black,
                   textColor: Colors.white,
                   borderColor: Colors.black,
@@ -209,12 +211,12 @@ class _HomeScreenState extends State<HomeScreen> {
               const Spacer(),
 
               // 하단 유도 메시지
-              const Padding(
-                padding: EdgeInsets.only(bottom: 24),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 24),
                 child: Text(
-                  '로그인하면 기록이 저장되고 랭킹에 참여할 수 있어요!',
+                  l10n.loginBenefitHint,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: GameColors.textSecondary,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
