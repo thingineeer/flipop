@@ -20,14 +20,11 @@ service cloud.firestore {
       allow delete: if request.auth != null && request.auth.uid == userId;
     }
 
-    // 순위표: 인증된 사용자 읽기, 본인만 쓰기
+    // 순위표: 인증된 사용자 읽기만 허용
+    // 쓰기는 Cloud Function (submitScore)을 통해서만 가능
     match /leaderboard/{userId} {
       allow read: if request.auth != null;
-      allow create, update: if request.auth != null && request.auth.uid == userId
-                            && request.resource.data.bestScore is int
-                            && request.resource.data.bestScore >= 0
-                            && isValidNickname(request.resource.data.nickname);
-      allow delete: if request.auth != null && request.auth.uid == userId;
+      allow write: if false; // 클라이언트 직접 쓰기 차단 — Cloud Function 전용
     }
   }
 }
