@@ -576,6 +576,42 @@ abstract class AppLocalizations {
   /// **'변경 실패: {error}'**
   String saveFailed(String error);
 
+  /// No description provided for @startButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'START'**
+  String get startButton;
+
+  /// No description provided for @leaderboardAll.
+  ///
+  /// In ko, this message translates to:
+  /// **'전체'**
+  String get leaderboardAll;
+
+  /// No description provided for @leaderboardCountry.
+  ///
+  /// In ko, this message translates to:
+  /// **'국가'**
+  String get leaderboardCountry;
+
+  /// No description provided for @comboInfo1.
+  ///
+  /// In ko, this message translates to:
+  /// **'COMBO x1  →  +100점  +3초'**
+  String get comboInfo1;
+
+  /// No description provided for @comboInfo2.
+  ///
+  /// In ko, this message translates to:
+  /// **'COMBO x2  →  +200점  +5초'**
+  String get comboInfo2;
+
+  /// No description provided for @comboInfo3.
+  ///
+  /// In ko, this message translates to:
+  /// **'COMBO x3  →  +300점  +7초 🔥'**
+  String get comboInfo3;
+
   /// No description provided for @comingSoon.
   ///
   /// In ko, this message translates to:

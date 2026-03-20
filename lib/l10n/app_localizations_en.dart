@@ -264,6 +264,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get startButton => 'START';
+
+  @override
+  String get leaderboardAll => 'All';
+
+  @override
+  String get leaderboardCountry => 'Country';
+
+  @override
+  String get comboInfo1 => 'COMBO x1  →  +100pts  +3s';
+
+  @override
+  String get comboInfo2 => 'COMBO x2  →  +200pts  +5s';
+
+  @override
+  String get comboInfo3 => 'COMBO x3  →  +300pts  +7s 🔥';
+
+  @override
   String get comingSoon => 'COMING\nSOON';
 
   @override

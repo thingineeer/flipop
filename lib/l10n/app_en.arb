@@ -116,6 +116,12 @@
       }
     }
   },
+  "startButton": "START",
+  "leaderboardAll": "All",
+  "leaderboardCountry": "Country",
+  "comboInfo1": "COMBO x1  →  +100pts  +3s",
+  "comboInfo2": "COMBO x2  →  +200pts  +5s",
+  "comboInfo3": "COMBO x3  →  +300pts  +7s 🔥",
   "comingSoon": "COMING\nSOON",
   "googleSignInFailed": "Google sign-in failed: {error}",
   "@googleSignInFailed": {

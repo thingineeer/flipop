@@ -116,6 +116,12 @@
       }
     }
   },
+  "startButton": "START",
+  "leaderboardAll": "全部",
+  "leaderboardCountry": "国家",
+  "comboInfo1": "COMBO x1  →  +100分  +3秒",
+  "comboInfo2": "COMBO x2  →  +200分  +5秒",
+  "comboInfo3": "COMBO x3  →  +300分  +7秒 🔥",
   "comingSoon": "COMING\nSOON",
   "googleSignInFailed": "Google登录失败: {error}",
   "@googleSignInFailed": {

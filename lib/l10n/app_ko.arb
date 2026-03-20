@@ -116,6 +116,12 @@
       }
     }
   },
+  "startButton": "START",
+  "leaderboardAll": "전체",
+  "leaderboardCountry": "국가",
+  "comboInfo1": "COMBO x1  →  +100점  +3초",
+  "comboInfo2": "COMBO x2  →  +200점  +5초",
+  "comboInfo3": "COMBO x3  →  +300점  +7초 🔥",
   "comingSoon": "COMING\nSOON",
   "googleSignInFailed": "Google 로그인 실패: {error}",
   "@googleSignInFailed": {

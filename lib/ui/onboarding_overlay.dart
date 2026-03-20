@@ -421,14 +421,14 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
             ],
           ),
           const SizedBox(height: 8),
-          const Text('COMBO x1  →  +100점  +3초',
-              style:
-                  TextStyle(fontSize: 14, color: GameColors.textSecondary)),
-          const Text('COMBO x2  →  +200점  +5초',
-              style:
-                  TextStyle(fontSize: 14, color: GameColors.textSecondary)),
-          const Text('COMBO x3  →  +300점  +7초 🔥',
-              style: TextStyle(
+          Text(AppLocalizations.of(context)!.comboInfo1,
+              style: const TextStyle(
+                  fontSize: 14, color: GameColors.textSecondary)),
+          Text(AppLocalizations.of(context)!.comboInfo2,
+              style: const TextStyle(
+                  fontSize: 14, color: GameColors.textSecondary)),
+          Text(AppLocalizations.of(context)!.comboInfo3,
+              style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w800,
                   color: GameColors.textPrimary)),

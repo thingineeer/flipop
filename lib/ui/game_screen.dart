@@ -7,6 +7,7 @@ import '../game/game_colors.dart';
 import '../services/ad_service.dart';
 import '../services/auth_service.dart';
 import '../services/leaderboard_service.dart';
+import '../l10n/app_localizations.dart';
 import '../services/secure_storage_service.dart';
 import 'block_widget.dart';
 import 'game_over_overlay.dart';
@@ -370,7 +371,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Text(
-                      '탭하면 주변 색이 바뀌어요! 한 줄을 같은 색으로 🎯',
+                      AppLocalizations.of(context)!.tapHint,
                       style: TextStyle(
                         color: GameColors.textSecondary,
                         fontSize: 13,
@@ -409,6 +410,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildHeader() {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -419,7 +421,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'SCORE',
+                  l10n.scoreLabel,
                   style: TextStyle(
                     color: GameColors.textSecondary,
                     fontSize: 11,
@@ -438,9 +440,9 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               ],
             ),
           ),
-          const Text(
-            'FLIPOP',
-            style: TextStyle(
+          Text(
+            l10n.appTitle,
+            style: const TextStyle(
               color: GameColors.textPrimary,
               fontSize: 24,
               fontWeight: FontWeight.w900,
@@ -452,7 +454,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'BEST',
+                  l10n.bestLabel,
                   style: TextStyle(
                     color: GameColors.textSecondary,
                     fontSize: 11,
@@ -491,7 +493,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'TIME',
+                AppLocalizations.of(context)!.timeLabel,
                 style: TextStyle(
                   color: isUrgent
                       ? GameColors.blockColors[BlockColor.red]
@@ -544,7 +546,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '새 줄까지 $remaining턴',
+                AppLocalizations.of(context)!.turnsUntilNewRow(remaining),
                 style: TextStyle(
                   color: remaining <= 1
                       ? GameColors.blockColors[BlockColor.red]
@@ -561,7 +563,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
-                    'COMBO x${_state.combo}',
+                    AppLocalizations.of(context)!.comboDisplay(_state.combo),
                     style: TextStyle(
                       color: GameColors.textPrimary,
                       fontSize: 11,
@@ -611,10 +613,10 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            child: const Text(
-              'START',
+            child: Text(
+              AppLocalizations.of(context)!.startButton,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 28,
                 fontWeight: FontWeight.w900,

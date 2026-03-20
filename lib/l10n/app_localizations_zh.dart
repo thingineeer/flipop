@@ -254,6 +254,24 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get startButton => 'START';
+
+  @override
+  String get leaderboardAll => '全部';
+
+  @override
+  String get leaderboardCountry => '国家';
+
+  @override
+  String get comboInfo1 => 'COMBO x1  →  +100分  +3秒';
+
+  @override
+  String get comboInfo2 => 'COMBO x2  →  +200分  +5秒';
+
+  @override
+  String get comboInfo3 => 'COMBO x3  →  +300分  +7秒 🔥';
+
+  @override
   String get comingSoon => 'COMING\nSOON';
 
   @override
