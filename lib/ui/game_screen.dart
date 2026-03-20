@@ -594,6 +594,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
 
   Widget _buildStartOverlay() {
     return GestureDetector(
+      key: const Key('start_overlay'),
       onTap: _restart,
       child: Container(
         color: Colors.black.withValues(alpha: 0.5),

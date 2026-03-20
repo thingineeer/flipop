@@ -184,6 +184,7 @@ class _GameOverOverlayState extends State<GameOverOverlay>
 
                       // PLAY AGAIN 버튼
                       GestureDetector(
+                        key: const Key('play_again_button'),
                         onTap: widget.onRestart,
                         child: Container(
                           width: double.infinity,
