@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../game/avatar_data.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
+import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/leaderboard_service.dart';
 
@@ -24,6 +25,7 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
   List<LeaderboardEntry>? _entries;
   int? _myRank;
   bool _loading = true;
+  bool _filterByCountry = false; // false = 전체, true = 국가별
 
   @override
   void initState() {
@@ -48,15 +50,27 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
     _loadData();
   }
 
+  String? get _activeCountryCode {
+    if (!_filterByCountry) return null;
+    return AuthService().countryCode;
+  }
+
   Future<void> _loadData() async {
     setState(() => _loading = true);
 
     try {
-      final entries = await LeaderboardService().getTopScores(limit: 50);
+      final countryCode = _activeCountryCode;
+      final entries = await LeaderboardService().getTopScores(
+        limit: 50,
+        countryCode: countryCode,
+      );
       final uid = AuthService().currentUser?.uid;
       int? myRank;
       if (uid != null) {
-        myRank = await LeaderboardService().getMyRank(uid);
+        myRank = await LeaderboardService().getMyRank(
+          uid,
+          countryCode: countryCode,
+        );
       }
 
       if (mounted) {
@@ -73,6 +87,12 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
     }
   }
 
+  void _onFilterChanged(bool byCountry) {
+    if (_filterByCountry == byCountry) return;
+    setState(() => _filterByCountry = byCountry);
+    _loadData();
+  }
+
   @override
   Widget build(BuildContext context) {
     final body = SafeArea(
@@ -80,6 +100,7 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
       child: Column(
         children: [
           _buildHeader(),
+          _buildFilterTabs(),
           if (_myRank != null) _buildMyRankCard(),
           Expanded(
             child: _loading
@@ -89,10 +110,10 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
                     ),
                   )
                 : _entries == null || _entries!.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
-                          '아직 기록이 없어요!',
-                          style: TextStyle(
+                          AppLocalizations.of(context)!.noRecords,
+                          style: const TextStyle(
                             color: GameColors.textSecondary,
                             fontSize: 16,
                           ),
@@ -154,10 +175,10 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
             ),
             const SizedBox(width: 12),
           ],
-          const Expanded(
+          Expanded(
             child: Text(
-              'RANKING',
-              style: TextStyle(
+              AppLocalizations.of(context)!.rankingLabel,
+              style: const TextStyle(
                 color: GameColors.textPrimary,
                 fontSize: 24,
                 fontWeight: FontWeight.w900,
@@ -183,6 +204,77 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFilterTabs() {
+    final l10n = AppLocalizations.of(context)!;
+    final myCountry = AuthService().countryCode;
+    final flag = countryCodeToFlag(myCountry);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Row(
+        children: [
+          _buildFilterTab(
+            label: l10n.leaderboardAll,
+            icon: '🌍',
+            selected: !_filterByCountry,
+            onTap: () => _onFilterChanged(false),
+          ),
+          const SizedBox(width: 8),
+          _buildFilterTab(
+            label: flag.isNotEmpty ? flag : l10n.leaderboardCountry,
+            icon: null,
+            selected: _filterByCountry,
+            onTap: myCountry != null ? () => _onFilterChanged(true) : null,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFilterTab({
+    required String label,
+    String? icon,
+    required bool selected,
+    VoidCallback? onTap,
+  }) {
+    final enabled = onTap != null;
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            color: selected
+                ? GameColors.blockColors[BlockColor.blue]
+                : GameColors.gridBackground,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: selected
+                  ? GameColors.blockColors[BlockColor.blue]!
+                  : GameColors.gridLine,
+              width: 2,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              icon != null ? '$icon $label' : label,
+              style: TextStyle(
+                color: selected
+                    ? Colors.white
+                    : enabled
+                        ? GameColors.textPrimary
+                        : GameColors.textSecondary,
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -232,7 +324,7 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
                   ),
                 ),
                 Text(
-                  '내 순위: #$_myRank',
+                  AppLocalizations.of(context)!.myRank(_myRank!),
                   style: const TextStyle(
                     color: GameColors.textSecondary,
                     fontSize: 12,

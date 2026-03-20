@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
 class LeaderboardEntry {
   final String uid;
@@ -46,8 +47,9 @@ class LeaderboardService {
   LeaderboardService._();
 
   final _firestore = FirebaseFirestore.instance;
+  final _functions = FirebaseFunctions.instance;
 
-  /// 점수 제출 (베스트 스코어만 갱신)
+  /// 점수 제출 (Cloud Function 서버사이드 검증)
   Future<void> submitScore({
     required String uid,
     required String nickname,
@@ -55,24 +57,26 @@ class LeaderboardService {
     required int score,
     String? countryCode,
   }) async {
-    final docRef = _firestore.collection('leaderboard').doc(uid);
-    final doc = await docRef.get();
-
-    if (!doc.exists || (doc.data()?['bestScore'] as int? ?? 0) < score) {
-      await docRef.set({
-        'nickname': nickname,
-        'avatarId': avatarId,
-        'bestScore': score,
-        'updatedAt': FieldValue.serverTimestamp(),
-        if (countryCode != null) 'countryCode': countryCode,
-      }, SetOptions(merge: true));
-    }
+    await _functions.httpsCallable('submitScore').call<dynamic>({
+      'score': score,
+      'nickname': nickname,
+      'avatarId': avatarId,
+      if (countryCode != null) 'countryCode': countryCode,
+    });
   }
 
-  /// 상위 N명 조회
-  Future<List<LeaderboardEntry>> getTopScores({int limit = 50}) async {
-    final snapshot = await _firestore
-        .collection('leaderboard')
+  /// 상위 N명 조회 (국가 필터 옵션)
+  Future<List<LeaderboardEntry>> getTopScores({
+    int limit = 50,
+    String? countryCode,
+  }) async {
+    Query<Map<String, dynamic>> query = _firestore.collection('leaderboard');
+
+    if (countryCode != null) {
+      query = query.where('countryCode', isEqualTo: countryCode);
+    }
+
+    final snapshot = await query
         .orderBy('bestScore', descending: true)
         .limit(limit)
         .get();
@@ -80,18 +84,21 @@ class LeaderboardService {
     return snapshot.docs.map((doc) => LeaderboardEntry.fromDoc(doc)).toList();
   }
 
-  /// 내 순위 조회
-  Future<int?> getMyRank(String uid) async {
+  /// 내 순위 조회 (국가 필터 옵션)
+  Future<int?> getMyRank(String uid, {String? countryCode}) async {
     final myDoc = await _firestore.collection('leaderboard').doc(uid).get();
     if (!myDoc.exists) return null;
 
     final myScore = myDoc.data()?['bestScore'] as int? ?? 0;
 
-    final higherCount = await _firestore
-        .collection('leaderboard')
-        .where('bestScore', isGreaterThan: myScore)
-        .count()
-        .get();
+    Query<Map<String, dynamic>> query = _firestore.collection('leaderboard')
+        .where('bestScore', isGreaterThan: myScore);
+
+    if (countryCode != null) {
+      query = query.where('countryCode', isEqualTo: countryCode);
+    }
+
+    final higherCount = await query.count().get();
 
     return (higherCount.count ?? 0) + 1;
   }
