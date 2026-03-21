@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart' show VoidCallback, kReleaseMode;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'iap_service.dart';
 
 class AdService {
   static final AdService _instance = AdService._();
@@ -9,12 +10,18 @@ class AdService {
 
   InterstitialAd? _interstitialAd;
   RewardedAd? _rewardedAd;
+  AppOpenAd? _appOpenAd;
 
   bool _isInterstitialReady = false;
   bool _isRewardedReady = false;
+  bool _isAppOpenReady = false;
 
   bool get isInterstitialReady => _isInterstitialReady;
   bool get isRewardedReady => _isRewardedReady;
+
+  // 인터스티셜 빈도 제어: N판마다 1회
+  int _gameOverCount = 0;
+  static const int _interstitialFrequency = 3;
 
   String get _interstitialAdUnitId {
     if (!kReleaseMode) {
@@ -39,11 +46,34 @@ class AdService {
         : 'ca-app-pub-5283496525222246/2307535181';
   }
 
+  String get _appOpenAdUnitId {
+    if (!kReleaseMode) {
+      return Platform.isAndroid
+          ? 'ca-app-pub-3940256099942544/9257395921'
+          : 'ca-app-pub-3940256099942544/5575463023';
+    }
+    return Platform.isAndroid
+        ? 'ca-app-pub-5283496525222246/2823584084'
+        : 'ca-app-pub-5283496525222246/9841751134';
+  }
+
+  String get bannerAdUnitId {
+    if (!kReleaseMode) {
+      return Platform.isAndroid
+          ? 'ca-app-pub-3940256099942544/6300978111'
+          : 'ca-app-pub-3940256099942544/2435281174';
+    }
+    return Platform.isAndroid
+        ? 'ca-app-pub-5283496525222246/6524355051'
+        : 'ca-app-pub-5283496525222246/6556144644';
+  }
+
   /// AdMob SDK 초기화
   Future<void> initialize() async {
     await MobileAds.instance.initialize();
     loadInterstitialAd();
     loadRewardedAd();
+    loadAppOpenAd();
   }
 
   // ─── 인터스티셜 광고 (게임 오버 후 1회) ─────────────────
@@ -77,9 +107,20 @@ class AdService {
     );
   }
 
-  /// 인터스티셜 광고 표시 (게임 오버 후 호출)
+  /// 인터스티셜 광고 표시 (게임 오버 후 호출, N판마다 1회)
   void showInterstitialAd({VoidCallback? onAdDismissed}) {
-    if (!_isInterstitialReady || _interstitialAd == null) {
+    if (IAPService().adsRemoved) {
+      onAdDismissed?.call();
+      return;
+    }
+
+    _gameOverCount++;
+
+    // 첫 3게임은 광고 없음 (온보딩 보호)
+    if (_gameOverCount <= 3 ||
+        _gameOverCount % _interstitialFrequency != 0 ||
+        !_isInterstitialReady ||
+        _interstitialAd == null) {
       onAdDismissed?.call();
       return;
     }
@@ -156,8 +197,49 @@ class AdService {
     _rewardedAd = null;
   }
 
+  // ─── 앱 오프닝 광고 (포그라운드 복귀 시) ──────────────
+
+  void loadAppOpenAd() {
+    AppOpenAd.load(
+      adUnitId: _appOpenAdUnitId,
+      request: const AdRequest(),
+      adLoadCallback: AppOpenAdLoadCallback(
+        onAdLoaded: (ad) {
+          _appOpenAd = ad;
+          _isAppOpenReady = true;
+        },
+        onAdFailedToLoad: (error) {
+          _isAppOpenReady = false;
+        },
+      ),
+    );
+  }
+
+  /// 앱 오프닝 광고 표시 (앱이 포그라운드로 돌아올 때)
+  void showAppOpenAd() {
+    if (IAPService().adsRemoved) return;
+    if (!_isAppOpenReady || _appOpenAd == null) return;
+
+    _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
+        _isAppOpenReady = false;
+        loadAppOpenAd();
+      },
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
+        _isAppOpenReady = false;
+        loadAppOpenAd();
+      },
+    );
+
+    _appOpenAd!.show();
+    _appOpenAd = null;
+  }
+
   void dispose() {
     _interstitialAd?.dispose();
     _rewardedAd?.dispose();
+    _appOpenAd?.dispose();
   }
 }
