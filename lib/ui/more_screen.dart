@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../domain/entities/app_user.dart';
 import '../domain/failures/auth_failure.dart';
@@ -9,8 +10,16 @@ import '../game/avatar_data.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
 import '../l10n/app_localizations.dart';
+import '../services/ad_service.dart';
+import '../services/analytics_service.dart';
 import '../services/auth_service.dart';
+import '../services/iap_service.dart';
 import '../services/leaderboard_service.dart';
+import '../services/daily_bonus_service.dart';
+import '../services/secure_storage_service.dart';
+import '../services/sound_service.dart';
+import '../main.dart';
+import 'achievement_screen.dart';
 
 /// 더보기(설정/프로필) 화면
 class MoreScreen extends StatefulWidget {
@@ -26,11 +35,35 @@ class MoreScreen extends StatefulWidget {
 class _MoreScreenState extends State<MoreScreen> {
   bool _loading = false;
   String _appVersion = '';
+  Set<String> _unlockedAvatars = {};
+  bool _adsRemoved = false;
+  bool _musicEnabled = true;
+  bool _sfxEnabled = true;
+  int _coins = 0;
 
   @override
   void initState() {
     super.initState();
     _loadAppVersion();
+    _loadUnlockedAvatars();
+    _loadCoins();
+    _adsRemoved = IAPService().adsRemoved;
+    _musicEnabled = SoundService().musicEnabled;
+    _sfxEnabled = SoundService().sfxEnabled;
+  }
+
+  Future<void> _loadUnlockedAvatars() async {
+    final unlocked = await SecureStorageService().getUnlockedAvatars();
+    if (mounted) {
+      setState(() => _unlockedAvatars = unlocked);
+    }
+  }
+
+  Future<void> _loadCoins() async {
+    final coins = await DailyBonusService().getCoins();
+    if (mounted) {
+      setState(() => _coins = coins);
+    }
   }
 
   Future<void> _loadAppVersion() async {
@@ -131,6 +164,47 @@ class _MoreScreenState extends State<MoreScreen> {
     }
   }
 
+  // ── IAP 구매 ──
+
+  Future<void> _purchaseRemoveAds() async {
+    setState(() => _loading = true);
+    try {
+      await IAPService().purchaseRemoveAds();
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.purchaseFailed),
+            backgroundColor: GameColors.blockColors[BlockColor.red],
+          ),
+        );
+      }
+    }
+    if (mounted) {
+      setState(() {
+        _loading = false;
+        _adsRemoved = IAPService().adsRemoved;
+      });
+    }
+  }
+
+  Future<void> _restorePurchases() async {
+    setState(() => _loading = true);
+    try {
+      await IAPService().restorePurchases();
+    } catch (_) {
+      // 복원 실패는 조용히 처리
+    }
+    // 잠시 대기 후 상태 갱신 (스트림 콜백 처리 시간)
+    await Future.delayed(const Duration(seconds: 2));
+    if (mounted) {
+      setState(() {
+        _loading = false;
+        _adsRemoved = IAPService().adsRemoved;
+      });
+    }
+  }
+
   // ── URL 오픈 ──
 
   Future<void> _openUrl(String url) async {
@@ -226,8 +300,9 @@ class _MoreScreenState extends State<MoreScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: GameColors.background,
+      backgroundColor: GameColors.getBackground(isDark),
       body: SafeArea(
         bottom: false, // 탭 바가 하단 처리
         child: _loading
@@ -271,13 +346,76 @@ class _MoreScreenState extends State<MoreScreen> {
                       ),
                       onTap: widget.onSwitchToRanking,
                     ),
+                    _buildDivider(),
+                    _buildListTile(
+                      icon: Icons.military_tech_rounded,
+                      iconColor: GameColors.blockColors[BlockColor.red]!,
+                      title: l.meta_achievements,
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '$_coins ${l.meta_coins}',
+                            style: TextStyle(
+                              color: GameColors.blockColors[BlockColor.yellow],
+                              fontSize: 13,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          const Icon(
+                            Icons.chevron_right_rounded,
+                            color: GameColors.textSecondary,
+                          ),
+                        ],
+                      ),
+                      onTap: () async {
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AchievementScreen(),
+                          ),
+                        );
+                        _loadCoins();
+                      },
+                    ),
+                    _buildDivider(),
+                    _buildSwitchTile(
+                      icon: Icons.music_note_rounded,
+                      iconColor: GameColors.blockColors[BlockColor.blue]!,
+                      title: l.soundMusic,
+                      value: _musicEnabled,
+                      onChanged: (v) async {
+                        setState(() => _musicEnabled = v);
+                        await SoundService().setMusicEnabled(v);
+                      },
+                    ),
+                    _buildDivider(),
+                    _buildSwitchTile(
+                      icon: Icons.volume_up_rounded,
+                      iconColor: GameColors.blockColors[BlockColor.green]!,
+                      title: l.soundSfx,
+                      value: _sfxEnabled,
+                      onChanged: (v) async {
+                        setState(() => _sfxEnabled = v);
+                        await SoundService().setSFXEnabled(v);
+                      },
+                    ),
                   ]),
                   const SizedBox(height: 28),
 
-                  // 3) 계정 섹션
+                  // 2.5) 설정 섹션 (다크 모드)
+                  _buildSettingsSection(l),
+
+                  // 3) 구매 섹션
+                  _buildPurchaseSection(l),
+
+                  // 4) 계정 섹션
                   _buildAccountSection(),
 
-                  // 4) 정보 섹션
+                  // 4.5) 친구 초대
+                  _buildInviteSection(l),
+
+                  // 5) 정보 섹션
                   _buildSectionHeader(l.infoSection),
                   const SizedBox(height: 8),
                   _buildSectionCard(children: [
@@ -320,6 +458,21 @@ class _MoreScreenState extends State<MoreScreen> {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
+                      ),
+                    ),
+                    _buildDivider(),
+                    _buildListTile(
+                      icon: Icons.article_outlined,
+                      iconColor: GameColors.textSecondary,
+                      title: l.openSourceLicenses,
+                      trailing: const Icon(
+                        Icons.chevron_right_rounded,
+                        color: GameColors.textSecondary,
+                      ),
+                      onTap: () => showLicensePage(
+                        context: context,
+                        applicationName: 'FLIPOP',
+                        applicationVersion: _appVersion,
                       ),
                     ),
                   ]),
@@ -407,14 +560,27 @@ class _MoreScreenState extends State<MoreScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // 특별 섹션
+                  // 특별 섹션 (광고 시청으로 해금)
                   _buildAvatarSectionLabel(AppLocalizations.of(context)!.avatarSpecial),
                   const SizedBox(height: 8),
                   _buildAvatarGrid(
                     AvatarData.specialAvatars,
                     selectedId,
-                    forceLockedAll: true,
-                    onSelect: (_) {},
+                    adUnlockable: true,
+                    onSelect: (id) => setSheetState(() => selectedId = id),
+                    onAdUnlock: (id) async {
+                      AdService().showRewardedAd(
+                        onRewarded: () async {
+                          await SecureStorageService().unlockAvatar(id);
+                          final unlocked = await SecureStorageService().getUnlockedAvatars();
+                          AnalyticsService().logAdWatched(type: 'rewarded_avatar_$id');
+                          if (mounted) {
+                            setState(() => _unlockedAvatars = unlocked);
+                            setSheetState(() => selectedId = id);
+                          }
+                        },
+                      );
+                    },
                   ),
                   const SizedBox(height: 24),
 
@@ -478,20 +644,24 @@ class _MoreScreenState extends State<MoreScreen> {
   Widget _buildAvatarGrid(
     List<String> avatarIds,
     String selectedId, {
-    bool forceLockedAll = false,
+    bool adUnlockable = false,
     required ValueChanged<String> onSelect,
+    ValueChanged<String>? onAdUnlock,
   }) {
     return Row(
       children: avatarIds.map((id) {
         final isAvailable = AvatarData.availableAvatars.contains(id);
-        final locked = forceLockedAll || !isAvailable;
+        final isUnlockedByAd = _unlockedAvatars.contains(id);
+        final locked = adUnlockable ? (!isUnlockedByAd) : !isAvailable;
         final isSelected = id == selectedId;
         final image = AvatarData.images[id] ?? 'assets/images/cat_red.png';
         final color = AvatarData.avatarColors[id] ?? BlockColor.red;
 
         return Expanded(
           child: GestureDetector(
-            onTap: locked ? null : () => onSelect(id),
+            onTap: locked
+                ? (adUnlockable ? () => onAdUnlock?.call(id) : null)
+                : () => onSelect(id),
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               padding: const EdgeInsets.all(6),
@@ -511,8 +681,8 @@ class _MoreScreenState extends State<MoreScreen> {
                 aspectRatio: 1,
                 child: Stack(
                   children: [
-                    // 아바타 이미지 (이미지가 있을 때만 표시)
-                    if (isAvailable)
+                    // 아바타 이미지
+                    if (isAvailable || isUnlockedByAd)
                       Center(
                         child: Opacity(
                           opacity: locked ? 0.3 : 1.0,
@@ -526,35 +696,31 @@ class _MoreScreenState extends State<MoreScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.lock_rounded,
-                              color: GameColors.textSecondary,
+                            Icon(
+                              adUnlockable
+                                  ? Icons.play_circle_filled_rounded
+                                  : Icons.lock_rounded,
+                              color: adUnlockable
+                                  ? GameColors.blockColors[BlockColor.yellow]
+                                  : GameColors.textSecondary,
                               size: 20,
                             ),
-                            if (AvatarData.unlockConditions.containsKey(id)) ...[
-                              const SizedBox(height: 2),
-                              Text(
-                                AvatarData.unlockConditions[id]!,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: GameColors.textSecondary,
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            const SizedBox(height: 2),
+                            Text(
+                              adUnlockable
+                                  ? AppLocalizations.of(context)!.watchAd
+                                  : (AvatarData.unlockConditions[id] ??
+                                      AppLocalizations.of(context)!.comingSoon),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: adUnlockable
+                                    ? GameColors.blockColors[BlockColor.yellow]
+                                    : GameColors.textSecondary,
+                                fontSize: adUnlockable ? 8 : 7,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.5,
                               ),
-                            ] else ...[
-                              const SizedBox(height: 2),
-                              Text(
-                                AppLocalizations.of(context)!.comingSoon,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  color: GameColors.textSecondary,
-                                  fontSize: 7,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ],
+                            ),
                           ],
                         ),
                       ),
@@ -719,6 +885,122 @@ class _MoreScreenState extends State<MoreScreen> {
     );
   }
 
+  // ── 설정 섹션 (다크 모드) ──
+
+  Widget _buildSettingsSection(AppLocalizations l) {
+    final provider = DarkModeProvider.maybeOf(context);
+    if (provider == null) return const SizedBox.shrink();
+
+    final notifier = provider.themeModeNotifier;
+    final isDarkOn = notifier.value == ThemeMode.dark ||
+        (notifier.value == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionHeader(l.ui_settingsSection),
+        const SizedBox(height: 8),
+        _buildSectionCard(children: [
+          _buildSwitchTile(
+            icon: Icons.dark_mode_rounded,
+            iconColor: GameColors.blockColors[BlockColor.blue]!,
+            title: l.ui_darkMode,
+            value: isDarkOn,
+            onChanged: (v) async {
+              final newMode = v ? ThemeMode.dark : ThemeMode.light;
+              notifier.value = newMode;
+              await SecureStorageService()
+                  .setDarkMode(v ? 'true' : 'false');
+              if (mounted) setState(() {});
+            },
+          ),
+        ]),
+        const SizedBox(height: 28),
+      ],
+    );
+  }
+
+  // ── 구매 섹션 ──
+
+  Widget _buildPurchaseSection(AppLocalizations l) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionHeader(l.purchaseSection),
+        const SizedBox(height: 8),
+        _buildSectionCard(children: [
+          _buildListTile(
+            icon: _adsRemoved
+                ? Icons.check_circle_rounded
+                : Icons.block_rounded,
+            iconColor: _adsRemoved
+                ? GameColors.blockColors[BlockColor.green]!
+                : GameColors.blockColors[BlockColor.yellow]!,
+            title: _adsRemoved ? l.adsRemoved : l.removeAds,
+            trailing: _adsRemoved
+                ? null
+                : Text(
+                    l.removeAdsPrice,
+                    style: const TextStyle(
+                      color: GameColors.textPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+            onTap: _adsRemoved ? null : _purchaseRemoveAds,
+          ),
+          _buildDivider(),
+          _buildListTile(
+            icon: IAPService().avatarPack
+                ? Icons.check_circle_rounded
+                : Icons.auto_awesome_rounded,
+            iconColor: IAPService().avatarPack
+                ? GameColors.blockColors[BlockColor.green]!
+                : GameColors.blockColors[BlockColor.blue]!,
+            title: IAPService().avatarPack
+                ? l.avatarPackOwned
+                : l.avatarPack,
+            trailing: IAPService().avatarPack
+                ? null
+                : Text(
+                    l.avatarPackPrice,
+                    style: const TextStyle(
+                      color: GameColors.textPrimary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+            onTap: IAPService().avatarPack
+                ? null
+                : () async {
+                    setState(() => _loading = true);
+                    try {
+                      await IAPService().purchaseAvatarPack();
+                    } catch (_) {}
+                    await Future.delayed(const Duration(seconds: 2));
+                    if (mounted) {
+                      setState(() => _loading = false);
+                    }
+                  },
+          ),
+          _buildDivider(),
+          _buildListTile(
+            icon: Icons.restore_rounded,
+            iconColor: GameColors.textSecondary,
+            title: l.restorePurchases,
+            trailing: const Icon(
+              Icons.chevron_right_rounded,
+              color: GameColors.textSecondary,
+            ),
+            onTap: _restorePurchases,
+          ),
+        ]),
+        const SizedBox(height: 28),
+      ],
+    );
+  }
+
   // ── 계정 섹션 (조건부) ──
 
   Widget _buildAccountSection() {
@@ -758,6 +1040,57 @@ class _MoreScreenState extends State<MoreScreen> {
             onTap: _signOut,
           ),
         ],
+        const SizedBox(height: 28),
+      ],
+    );
+  }
+
+  // ── 친구 초대 섹션 ──
+
+  Widget _buildInviteSection(AppLocalizations l) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            final message = l.social_inviteMessage;
+            // 앱스토어 링크 (placeholder)
+            const appLink = 'https://apps.apple.com/app/flipop/id6744066907';
+            Share.share('$message\n$appLink');
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+            decoration: BoxDecoration(
+              color: GameColors.blockColors[BlockColor.green],
+              borderRadius: BorderRadius.circular(14),
+              boxShadow: [
+                BoxShadow(
+                  color: GameColors.blockDarkColors[BlockColor.green]!
+                      .withValues(alpha: 0.4),
+                  offset: const Offset(0, 3),
+                  blurRadius: 0,
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.person_add_rounded,
+                    color: Colors.white, size: 20),
+                const SizedBox(width: 8),
+                Text(
+                  l.social_inviteFriends,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
         const SizedBox(height: 28),
       ],
     );
@@ -818,9 +1151,42 @@ class _MoreScreenState extends State<MoreScreen> {
                 ),
               ),
             ),
-            ?trailing,
+            if (trailing != null) trailing,
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSwitchTile({
+    required IconData icon,
+    required Color iconColor,
+    required String title,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
+          Icon(icon, color: iconColor, size: 22),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: GameColors.textPrimary,
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Switch.adaptive(
+            value: value,
+            onChanged: onChanged,
+            activeTrackColor: GameColors.blockColors[BlockColor.blue],
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../game/game_colors.dart';
+import 'banner_ad_widget.dart';
+import 'daily_challenge_screen.dart';
 import 'game_screen.dart';
 import 'leaderboard_screen.dart';
 import 'more_screen.dart';
@@ -39,49 +41,56 @@ class _MainScreenState extends State<MainScreen> {
 
     // 탭 활성 상태 알림
     gameTabVisible.value = (index == 0);
-    rankingTabVisible.value = (index == 1);
+    rankingTabVisible.value = (index == 2);
   }
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: GameColors.background,
+      backgroundColor: GameColors.getBackground(isDark),
       body: IndexedStack(
         index: _currentIndex,
         children: [
           // 0: 게임
           GameScreen(gameTabVisible: gameTabVisible),
-          // 1: 랭킹
+          // 1: 챌린지
+          const DailyChallengeScreen(),
+          // 2: 랭킹
           LeaderboardScreen(embedded: true, tabVisible: rankingTabVisible),
-          // 2: 더보기
-          MoreScreen(onSwitchToRanking: () => _onTabSelected(1)),
+          // 3: 더보기
+          MoreScreen(onSwitchToRanking: () => _onTabSelected(2)),
         ],
       ),
-      bottomNavigationBar: Theme(
+      bottomNavigationBar: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const BannerAdWidget(),
+          Theme(
         data: Theme.of(context).copyWith(
           navigationBarTheme: NavigationBarThemeData(
             iconTheme: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.selected)) {
-                return const IconThemeData(
-                  color: GameColors.textPrimary,
+                return IconThemeData(
+                  color: GameColors.getTextPrimary(isDark),
                   size: 24,
                 );
               }
-              return const IconThemeData(
-                color: GameColors.textSecondary,
+              return IconThemeData(
+                color: GameColors.getTextSecondary(isDark),
                 size: 24,
               );
             }),
             labelTextStyle: WidgetStateProperty.resolveWith((states) {
               if (states.contains(WidgetState.selected)) {
-                return const TextStyle(
-                  color: GameColors.textPrimary,
+                return TextStyle(
+                  color: GameColors.getTextPrimary(isDark),
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 );
               }
-              return const TextStyle(
-                color: GameColors.textSecondary,
+              return TextStyle(
+                color: GameColors.getTextSecondary(isDark),
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               );
@@ -91,17 +100,22 @@ class _MainScreenState extends State<MainScreen> {
         child: NavigationBar(
           selectedIndex: _currentIndex,
           onDestinationSelected: _onTabSelected,
-          backgroundColor: GameColors.background,
+          backgroundColor: GameColors.getBackground(isDark),
           elevation: 0,
           shadowColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          indicatorColor: GameColors.gridBackground,
+          indicatorColor: GameColors.getGridBackground(isDark),
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           destinations: const [
             NavigationDestination(
               icon: Icon(Icons.videogame_asset_outlined),
               selectedIcon: Icon(Icons.videogame_asset),
               label: 'Game',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.calendar_today_outlined),
+              selectedIcon: Icon(Icons.calendar_today),
+              label: 'Challenge',
             ),
             NavigationDestination(
               icon: Icon(Icons.leaderboard_outlined),
@@ -115,6 +129,8 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
+      ),
+        ],
       ),
     );
   }

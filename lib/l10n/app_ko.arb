@@ -3,7 +3,7 @@
 
   "appTitle": "FLIPOP",
   "welcomeCharacters": "귀여운 캐릭터와 함께!",
-  "welcomeDescription": "블록을 탭해서 색을 바꾸고,\n한 줄을 완성하세요!",
+  "welcomeDescription": "블록을 탭해서 색을 바꾸고,\n줄을 완성하세요!",
   "welcomeCompete": "전 세계 플레이어와 경쟁!",
   "welcomeCompeteDesc": "로그인하면 점수가 저장되고\n세계 랭킹에 참여!",
   "welcomeAccountHint": "계정을 연동하면 앱을 삭제해도\n기록이 유지됩니다",
@@ -37,13 +37,10 @@
       }
     }
   },
-  "tapHint": "탭하면 주변 색이 바뀌어요! 한 줄을 같은 색으로 🎯",
+  "tapHint": "탭하면 주변 색이 바뀌어요! 가로·세로 줄을 맞춰보세요 🎯",
 
   "gameOver": "GAME OVER",
   "newBest": "🎉 NEW BEST!",
-  "continueWithAd": "이어하기 (광고)",
-  "timeBonus": "시간 +30초 (광고)",
-  "scoreDouble": "점수 2배 (광고)",
   "playAgain": "PLAY AGAIN",
 
   "setNickname": "닉네임을 정해주세요!",
@@ -87,8 +84,8 @@
   "tutorialTapTitle": "블록을 탭!",
   "tutorialTapDesc": "탭하면 상하좌우 블록이\n다음 색으로 바뀌어요",
   "tutorialTapHint": "탭 → 주변 4칸이 다음 색으로!",
-  "tutorialClearTitle": "한 줄 완성!",
-  "tutorialClearDesc": "가로 한 줄을 같은 색으로\n채우면 클리어!",
+  "tutorialClearTitle": "줄 완성!",
+  "tutorialClearDesc": "가로 또는 세로 줄을 같은 색으로\n채우면 클리어!",
   "tutorialComboTitle": "연쇄 콤보!",
   "tutorialComboDesc": "클리어 후 블록이 떨어져서\n연쇄가 터지면 대박 점수!",
   "tutorialNext": "다음",
@@ -102,6 +99,7 @@
   "privacyPolicy": "개인정보 처리방침",
   "termsOfService": "이용약관",
   "appVersion": "앱 버전",
+  "openSourceLicenses": "오픈소스 라이선스",
   "avatarPicker": "아바타 선택",
   "avatarBasic": "기본",
   "avatarExtra": "추가",
@@ -128,5 +126,142 @@
     "placeholders": {
       "error": { "type": "String" }
     }
-  }
+  },
+
+  "watchAd": "광고 보고\n해금",
+  "shareButton": "공유하기",
+  "shareScore": "FLIPOP에서 {score}점 달성했어요! 도전해보세요!",
+  "@shareScore": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+
+  "tutorialPuzzleTapTitle": "탭의 효과",
+  "tutorialPuzzleTapDesc": "가운데 블록을 탭해서\n주변 색이 바뀌는 걸 확인하세요!",
+  "tutorialPuzzleTapSuccess": "잘했어요! 탭하면 주변이 바뀌어요!",
+  "tutorialPuzzleLineTitle": "줄 맞추기",
+  "tutorialPuzzleLineDesc": "블록을 탭해서\n가로줄을 같은 색으로 맞춰보세요!",
+  "tutorialPuzzleLineSuccess": "완벽해요! 줄 클리어 성공!",
+  "tutorialPuzzleComboTitle": "콤보 도전",
+  "tutorialPuzzleComboDesc": "연쇄 클리어를 만들어보세요!",
+  "tutorialPuzzleComboSuccess": "대단해요! 연쇄 콤보!",
+  "tutorialReady": "준비 완료!",
+  "guidedHint": "반짝이는 줄을 완성해보세요!",
+  "guidedStart": "준비됐나요? 게임 시작!",
+
+  "dailyChallenge": "데일리 챌린지",
+  "challengeTimeAttack": "타임어택",
+  "challengeLimitedMoves": "제한 터치",
+  "challengeComboMaster": "콤보 마스터",
+  "challengeSpeedRun": "스피드런",
+  "challengeNormal": "자유 모드",
+  "attemptsLeft": "남은 시도: {count}회",
+  "@attemptsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tryAgainTomorrow": "내일 다시 도전!",
+  "movesLeft": "남은 터치: {count}",
+  "@movesLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "targetScore": "목표: {score}점",
+  "@targetScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "noAttemptsLeft": "오늘 시도 횟수를 모두 사용했어요",
+
+  "soundMusic": "음악",
+  "soundSfx": "효과음",
+
+  "removeAds": "광고 제거",
+  "removeAdsPrice": "$2.99",
+  "removeAdsDesc": "배너/전면 광고를 영구 제거합니다",
+  "restorePurchases": "구매 복원",
+  "adsRemoved": "광고 제거됨",
+  "purchaseFailed": "구매 실패",
+  "purchaseSection": "구매",
+  "avatarPack": "스페셜 아바타 팩",
+  "avatarPackPrice": "$1.99",
+  "avatarPackOwned": "아바타 팩 보유 중",
+
+  "ui_darkMode": "다크 모드",
+  "ui_newBest": "신기록!",
+  "ui_settingsSection": "설정",
+
+  "social_inviteFriends": "친구 초대",
+  "social_inviteMessage": "FLIPOP 같이 하자! \uD83C\uDFAE",
+  "social_challengeMe": "이 점수 깰 수 있어?",
+
+  "infraForceUpdate": "업데이트 필요",
+  "infraForceUpdateDesc": "새 버전이 출시되었습니다. 업데이트 해주세요.",
+  "infraMaintenance": "점검 중",
+  "infraMaintenanceDesc": "더 좋은 서비스를 위해 점검 중입니다. 잠시만 기다려주세요.",
+  "infraUpdateButton": "업데이트",
+
+  "meta_achievements": "업적",
+  "meta_coins": "코인",
+  "meta_coinReward": "+{amount} 코인",
+  "@meta_coinReward": {
+    "placeholders": {
+      "amount": { "type": "int" }
+    }
+  },
+
+  "meta_achFirstStep": "첫 걸음",
+  "meta_achFirstStepDesc": "첫 게임 완료",
+  "meta_achTrainee": "연습생",
+  "meta_achTraineeDesc": "10게임 완료",
+  "meta_achFirstClear": "첫 클리어",
+  "meta_achFirstClearDesc": "첫 줄 클리어",
+  "meta_achComboIntro": "콤보 입문",
+  "meta_achComboIntroDesc": "콤보 x2 달성",
+  "meta_achTutorial": "튜토리얼 마스터",
+  "meta_achTutorialDesc": "튜토리얼 완료",
+
+  "meta_ach100": "100점 클럽",
+  "meta_ach100Desc": "점수 100+ 달성",
+  "meta_ach500": "500점 클럽",
+  "meta_ach500Desc": "점수 500+ 달성",
+  "meta_ach1000": "1000점 클럽",
+  "meta_ach1000Desc": "점수 1000+ 달성",
+  "meta_achComboMaster": "콤보 마스터",
+  "meta_achComboMasterDesc": "콤보 x5 달성",
+  "meta_achChainReaction": "연쇄 반응",
+  "meta_achChainReactionDesc": "연쇄 3연속",
+
+  "meta_ach3000": "3000점 돌파",
+  "meta_ach3000Desc": "점수 3000+ 달성",
+  "meta_achComboKing": "콤보 킹",
+  "meta_achComboKingDesc": "콤보 x10 달성",
+  "meta_achSurvivor": "타임 서바이버",
+  "meta_achSurvivorDesc": "한 게임에서 500점+ 달성",
+  "meta_achPerfect": "퍼펙트 게임",
+  "meta_achPerfectDesc": "10줄 이상 클리어",
+  "meta_achBombMaster": "폭탄 마스터",
+  "meta_achBombMasterDesc": "점수 3000+ 달성",
+
+  "meta_achShareKing": "공유왕",
+  "meta_achShareKingDesc": "5회 게임 플레이",
+  "meta_achTop100": "글로벌 탑100",
+  "meta_achTop100Desc": "최고점수 2000+ 달성",
+  "meta_achChallenger": "챌린지 도전자",
+  "meta_achChallengerDesc": "7일 연속 접속",
+
+  "meta_achZoo": "동물원",
+  "meta_achZooDesc": "아바타 8종 해금",
+  "meta_achFullCollection": "풀 컬렉션",
+  "meta_achFullCollectionDesc": "아바타 12종 해금"
 }

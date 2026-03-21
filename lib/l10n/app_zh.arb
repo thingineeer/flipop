@@ -37,13 +37,10 @@
       }
     }
   },
-  "tapHint": "点击改变周围颜色！将一行变为相同颜色 🎯",
+  "tapHint": "点击改变周围颜色！完成横排或竖排 🎯",
 
   "gameOver": "GAME OVER",
   "newBest": "🎉 NEW BEST!",
-  "continueWithAd": "继续（广告）",
-  "timeBonus": "时间 +30秒（广告）",
-  "scoreDouble": "分数翻倍（广告）",
   "playAgain": "PLAY AGAIN",
 
   "setNickname": "请设置昵称！",
@@ -88,7 +85,7 @@
   "tutorialTapDesc": "点击后上下左右的方块\n会变成下一个颜色",
   "tutorialTapHint": "点击 → 周围4格变为下一个颜色！",
   "tutorialClearTitle": "完成一行！",
-  "tutorialClearDesc": "将横排一行填满\n相同颜色即可消除！",
+  "tutorialClearDesc": "将横排或竖排填满\n相同颜色即可消除！",
   "tutorialComboTitle": "连锁连击！",
   "tutorialComboDesc": "消除后方块下落，\n连锁消除可获得超高分数！",
   "tutorialNext": "下一步",
@@ -102,6 +99,7 @@
   "privacyPolicy": "隐私政策",
   "termsOfService": "使用条款",
   "appVersion": "应用版本",
+  "openSourceLicenses": "开源许可证",
   "avatarPicker": "选择头像",
   "avatarBasic": "基础",
   "avatarExtra": "额外",
@@ -128,5 +126,142 @@
     "placeholders": {
       "error": { "type": "String" }
     }
-  }
+  },
+
+  "watchAd": "看广告\n解锁",
+  "shareButton": "分享",
+  "shareScore": "我在FLIPOP中获得了{score}分！来挑战吧！",
+  "@shareScore": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+
+  "tutorialPuzzleTapTitle": "点击效果",
+  "tutorialPuzzleTapDesc": "点击中间的方块\n看看周围颜色的变化！",
+  "tutorialPuzzleTapSuccess": "很好！点击会改变周围的方块！",
+  "tutorialPuzzleLineTitle": "凑齐一行",
+  "tutorialPuzzleLineDesc": "点击方块，让\n一整行变成相同颜色！",
+  "tutorialPuzzleLineSuccess": "完美！成功消除一行！",
+  "tutorialPuzzleComboTitle": "连击挑战",
+  "tutorialPuzzleComboDesc": "试试创造连锁消除！",
+  "tutorialPuzzleComboSuccess": "太厉害了！连锁连击！",
+  "tutorialReady": "准备完毕！",
+  "guidedHint": "完成闪烁的那一行！",
+  "guidedStart": "准备好了吗？开始吧！",
+
+  "dailyChallenge": "每日挑战",
+  "challengeTimeAttack": "限时挑战",
+  "challengeLimitedMoves": "限制触碰",
+  "challengeComboMaster": "连击大师",
+  "challengeSpeedRun": "竞速挑战",
+  "challengeNormal": "自由模式",
+  "attemptsLeft": "剩余{count}次",
+  "@attemptsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tryAgainTomorrow": "明天再来挑战吧！",
+  "movesLeft": "剩余触碰: {count}",
+  "@movesLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "targetScore": "目标: {score}分",
+  "@targetScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "noAttemptsLeft": "今天的挑战次数已用完",
+
+  "soundMusic": "音乐",
+  "soundSfx": "音效",
+
+  "removeAds": "移除广告",
+  "removeAdsPrice": "$2.99",
+  "removeAdsDesc": "永久移除横幅和插页广告",
+  "restorePurchases": "恢复购买",
+  "adsRemoved": "广告已移除",
+  "purchaseFailed": "购买失败",
+  "purchaseSection": "购买",
+  "avatarPack": "特别头像包",
+  "avatarPackPrice": "$1.99",
+  "avatarPackOwned": "已拥有头像包",
+
+  "ui_darkMode": "深色模式",
+  "ui_newBest": "新纪录!",
+  "ui_settingsSection": "设置",
+
+  "social_inviteFriends": "邀请好友",
+  "social_inviteMessage": "一起玩FLIPOP吧！\uD83C\uDFAE",
+  "social_challengeMe": "你能超过这个分数吗？",
+
+  "infraForceUpdate": "需要更新",
+  "infraForceUpdateDesc": "新版本已发布，请更新后继续使用。",
+  "infraMaintenance": "维护中",
+  "infraMaintenanceDesc": "为了提供更好的服务，正在进行维护。请稍候。",
+  "infraUpdateButton": "更新",
+
+  "meta_achievements": "成就",
+  "meta_coins": "金币",
+  "meta_coinReward": "+{amount} 金币",
+  "@meta_coinReward": {
+    "placeholders": {
+      "amount": { "type": "int" }
+    }
+  },
+
+  "meta_achFirstStep": "第一步",
+  "meta_achFirstStepDesc": "完成第一局游戏",
+  "meta_achTrainee": "练习生",
+  "meta_achTraineeDesc": "完成10局游戏",
+  "meta_achFirstClear": "首次消除",
+  "meta_achFirstClearDesc": "首次消除一行",
+  "meta_achComboIntro": "连击入门",
+  "meta_achComboIntroDesc": "达成连击 x2",
+  "meta_achTutorial": "教程大师",
+  "meta_achTutorialDesc": "完成教程",
+
+  "meta_ach100": "100分俱乐部",
+  "meta_ach100Desc": "得分100+",
+  "meta_ach500": "500分俱乐部",
+  "meta_ach500Desc": "得分500+",
+  "meta_ach1000": "1000分俱乐部",
+  "meta_ach1000Desc": "得分1000+",
+  "meta_achComboMaster": "连击大师",
+  "meta_achComboMasterDesc": "达成连击 x5",
+  "meta_achChainReaction": "连锁反应",
+  "meta_achChainReactionDesc": "达成3连锁",
+
+  "meta_ach3000": "3000分突破",
+  "meta_ach3000Desc": "得分3000+",
+  "meta_achComboKing": "连击之王",
+  "meta_achComboKingDesc": "达成连击 x10",
+  "meta_achSurvivor": "时间幸存者",
+  "meta_achSurvivorDesc": "单局得分500+",
+  "meta_achPerfect": "完美游戏",
+  "meta_achPerfectDesc": "消除10行以上",
+  "meta_achBombMaster": "炸弹大师",
+  "meta_achBombMasterDesc": "得分3000+",
+
+  "meta_achShareKing": "分享达人",
+  "meta_achShareKingDesc": "玩5局游戏",
+  "meta_achTop100": "全球前100",
+  "meta_achTop100Desc": "最高分2000+",
+  "meta_achChallenger": "挑战者",
+  "meta_achChallengerDesc": "连续登录7天",
+
+  "meta_achZoo": "动物园",
+  "meta_achZooDesc": "解锁8种头像",
+  "meta_achFullCollection": "全收集",
+  "meta_achFullCollectionDesc": "解锁12种头像"
 }

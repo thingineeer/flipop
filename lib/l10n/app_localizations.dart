@@ -65,7 +65,7 @@ import 'app_localizations_zh.dart';
 /// property.
 abstract class AppLocalizations {
   AppLocalizations(String locale)
-    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+      : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -88,18 +88,18 @@ abstract class AppLocalizations {
   /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
-        delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ];
+    delegate,
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+  ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('ja'),
     Locale('ko'),
-    Locale('zh'),
+    Locale('zh')
   ];
 
   /// No description provided for @appTitle.
@@ -117,7 +117,7 @@ abstract class AppLocalizations {
   /// No description provided for @welcomeDescription.
   ///
   /// In ko, this message translates to:
-  /// **'블록을 탭해서 색을 바꾸고,\n한 줄을 완성하세요!'**
+  /// **'블록을 탭해서 색을 바꾸고,\n줄을 완성하세요!'**
   String get welcomeDescription;
 
   /// No description provided for @welcomeCompete.
@@ -225,7 +225,7 @@ abstract class AppLocalizations {
   /// No description provided for @tapHint.
   ///
   /// In ko, this message translates to:
-  /// **'탭하면 주변 색이 바뀌어요! 한 줄을 같은 색으로 🎯'**
+  /// **'탭하면 주변 색이 바뀌어요! 가로·세로 줄을 맞춰보세요 🎯'**
   String get tapHint;
 
   /// No description provided for @gameOver.
@@ -239,24 +239,6 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'🎉 NEW BEST!'**
   String get newBest;
-
-  /// No description provided for @continueWithAd.
-  ///
-  /// In ko, this message translates to:
-  /// **'이어하기 (광고)'**
-  String get continueWithAd;
-
-  /// No description provided for @timeBonus.
-  ///
-  /// In ko, this message translates to:
-  /// **'시간 +30초 (광고)'**
-  String get timeBonus;
-
-  /// No description provided for @scoreDouble.
-  ///
-  /// In ko, this message translates to:
-  /// **'점수 2배 (광고)'**
-  String get scoreDouble;
 
   /// No description provided for @playAgain.
   ///
@@ -453,13 +435,13 @@ abstract class AppLocalizations {
   /// No description provided for @tutorialClearTitle.
   ///
   /// In ko, this message translates to:
-  /// **'한 줄 완성!'**
+  /// **'줄 완성!'**
   String get tutorialClearTitle;
 
   /// No description provided for @tutorialClearDesc.
   ///
   /// In ko, this message translates to:
-  /// **'가로 한 줄을 같은 색으로\n채우면 클리어!'**
+  /// **'가로 또는 세로 줄을 같은 색으로\n채우면 클리어!'**
   String get tutorialClearDesc;
 
   /// No description provided for @tutorialComboTitle.
@@ -534,6 +516,12 @@ abstract class AppLocalizations {
   /// **'앱 버전'**
   String get appVersion;
 
+  /// No description provided for @openSourceLicenses.
+  ///
+  /// In ko, this message translates to:
+  /// **'오픈소스 라이선스'**
+  String get openSourceLicenses;
+
   /// No description provided for @avatarPicker.
   ///
   /// In ko, this message translates to:
@@ -593,6 +581,558 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'Apple 로그인 실패: {error}'**
   String appleSignInFailed(String error);
+
+  /// No description provided for @watchAd.
+  ///
+  /// In ko, this message translates to:
+  /// **'광고 보고\n해금'**
+  String get watchAd;
+
+  /// No description provided for @shareButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'공유하기'**
+  String get shareButton;
+
+  /// No description provided for @shareScore.
+  ///
+  /// In ko, this message translates to:
+  /// **'FLIPOP에서 {score}점 달성했어요! 도전해보세요!'**
+  String shareScore(int score);
+
+  /// No description provided for @tutorialPuzzleTapTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'탭의 효과'**
+  String get tutorialPuzzleTapTitle;
+
+  /// No description provided for @tutorialPuzzleTapDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'가운데 블록을 탭해서\n주변 색이 바뀌는 걸 확인하세요!'**
+  String get tutorialPuzzleTapDesc;
+
+  /// No description provided for @tutorialPuzzleTapSuccess.
+  ///
+  /// In ko, this message translates to:
+  /// **'잘했어요! 탭하면 주변이 바뀌어요!'**
+  String get tutorialPuzzleTapSuccess;
+
+  /// No description provided for @tutorialPuzzleLineTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'줄 맞추기'**
+  String get tutorialPuzzleLineTitle;
+
+  /// No description provided for @tutorialPuzzleLineDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'블록을 탭해서\n가로줄을 같은 색으로 맞춰보세요!'**
+  String get tutorialPuzzleLineDesc;
+
+  /// No description provided for @tutorialPuzzleLineSuccess.
+  ///
+  /// In ko, this message translates to:
+  /// **'완벽해요! 줄 클리어 성공!'**
+  String get tutorialPuzzleLineSuccess;
+
+  /// No description provided for @tutorialPuzzleComboTitle.
+  ///
+  /// In ko, this message translates to:
+  /// **'콤보 도전'**
+  String get tutorialPuzzleComboTitle;
+
+  /// No description provided for @tutorialPuzzleComboDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'연쇄 클리어를 만들어보세요!'**
+  String get tutorialPuzzleComboDesc;
+
+  /// No description provided for @tutorialPuzzleComboSuccess.
+  ///
+  /// In ko, this message translates to:
+  /// **'대단해요! 연쇄 콤보!'**
+  String get tutorialPuzzleComboSuccess;
+
+  /// No description provided for @tutorialReady.
+  ///
+  /// In ko, this message translates to:
+  /// **'준비 완료!'**
+  String get tutorialReady;
+
+  /// No description provided for @guidedHint.
+  ///
+  /// In ko, this message translates to:
+  /// **'반짝이는 줄을 완성해보세요!'**
+  String get guidedHint;
+
+  /// No description provided for @guidedStart.
+  ///
+  /// In ko, this message translates to:
+  /// **'준비됐나요? 게임 시작!'**
+  String get guidedStart;
+
+  /// No description provided for @dailyChallenge.
+  ///
+  /// In ko, this message translates to:
+  /// **'데일리 챌린지'**
+  String get dailyChallenge;
+
+  /// No description provided for @challengeTimeAttack.
+  ///
+  /// In ko, this message translates to:
+  /// **'타임어택'**
+  String get challengeTimeAttack;
+
+  /// No description provided for @challengeLimitedMoves.
+  ///
+  /// In ko, this message translates to:
+  /// **'제한 터치'**
+  String get challengeLimitedMoves;
+
+  /// No description provided for @challengeComboMaster.
+  ///
+  /// In ko, this message translates to:
+  /// **'콤보 마스터'**
+  String get challengeComboMaster;
+
+  /// No description provided for @challengeSpeedRun.
+  ///
+  /// In ko, this message translates to:
+  /// **'스피드런'**
+  String get challengeSpeedRun;
+
+  /// No description provided for @challengeNormal.
+  ///
+  /// In ko, this message translates to:
+  /// **'자유 모드'**
+  String get challengeNormal;
+
+  /// No description provided for @attemptsLeft.
+  ///
+  /// In ko, this message translates to:
+  /// **'남은 시도: {count}회'**
+  String attemptsLeft(int count);
+
+  /// No description provided for @tryAgainTomorrow.
+  ///
+  /// In ko, this message translates to:
+  /// **'내일 다시 도전!'**
+  String get tryAgainTomorrow;
+
+  /// No description provided for @movesLeft.
+  ///
+  /// In ko, this message translates to:
+  /// **'남은 터치: {count}'**
+  String movesLeft(int count);
+
+  /// No description provided for @targetScore.
+  ///
+  /// In ko, this message translates to:
+  /// **'목표: {score}점'**
+  String targetScore(int score);
+
+  /// No description provided for @noAttemptsLeft.
+  ///
+  /// In ko, this message translates to:
+  /// **'오늘 시도 횟수를 모두 사용했어요'**
+  String get noAttemptsLeft;
+
+  /// No description provided for @soundMusic.
+  ///
+  /// In ko, this message translates to:
+  /// **'음악'**
+  String get soundMusic;
+
+  /// No description provided for @soundSfx.
+  ///
+  /// In ko, this message translates to:
+  /// **'효과음'**
+  String get soundSfx;
+
+  /// No description provided for @removeAds.
+  ///
+  /// In ko, this message translates to:
+  /// **'광고 제거'**
+  String get removeAds;
+
+  /// No description provided for @removeAdsPrice.
+  ///
+  /// In ko, this message translates to:
+  /// **'\$2.99'**
+  String get removeAdsPrice;
+
+  /// No description provided for @removeAdsDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'배너/전면 광고를 영구 제거합니다'**
+  String get removeAdsDesc;
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In ko, this message translates to:
+  /// **'구매 복원'**
+  String get restorePurchases;
+
+  /// No description provided for @adsRemoved.
+  ///
+  /// In ko, this message translates to:
+  /// **'광고 제거됨'**
+  String get adsRemoved;
+
+  /// No description provided for @purchaseFailed.
+  ///
+  /// In ko, this message translates to:
+  /// **'구매 실패'**
+  String get purchaseFailed;
+
+  /// No description provided for @purchaseSection.
+  ///
+  /// In ko, this message translates to:
+  /// **'구매'**
+  String get purchaseSection;
+
+  /// No description provided for @avatarPack.
+  ///
+  /// In ko, this message translates to:
+  /// **'스페셜 아바타 팩'**
+  String get avatarPack;
+
+  /// No description provided for @avatarPackPrice.
+  ///
+  /// In ko, this message translates to:
+  /// **'\$1.99'**
+  String get avatarPackPrice;
+
+  /// No description provided for @avatarPackOwned.
+  ///
+  /// In ko, this message translates to:
+  /// **'아바타 팩 보유 중'**
+  String get avatarPackOwned;
+
+  /// No description provided for @ui_darkMode.
+  ///
+  /// In ko, this message translates to:
+  /// **'다크 모드'**
+  String get ui_darkMode;
+
+  /// No description provided for @ui_newBest.
+  ///
+  /// In ko, this message translates to:
+  /// **'신기록!'**
+  String get ui_newBest;
+
+  /// No description provided for @ui_settingsSection.
+  ///
+  /// In ko, this message translates to:
+  /// **'설정'**
+  String get ui_settingsSection;
+
+  /// No description provided for @social_inviteFriends.
+  ///
+  /// In ko, this message translates to:
+  /// **'친구 초대'**
+  String get social_inviteFriends;
+
+  /// No description provided for @social_inviteMessage.
+  ///
+  /// In ko, this message translates to:
+  /// **'FLIPOP 같이 하자! 🎮'**
+  String get social_inviteMessage;
+
+  /// No description provided for @social_challengeMe.
+  ///
+  /// In ko, this message translates to:
+  /// **'이 점수 깰 수 있어?'**
+  String get social_challengeMe;
+
+  /// No description provided for @infraForceUpdate.
+  ///
+  /// In ko, this message translates to:
+  /// **'업데이트 필요'**
+  String get infraForceUpdate;
+
+  /// No description provided for @infraForceUpdateDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'새 버전이 출시되었습니다. 업데이트 해주세요.'**
+  String get infraForceUpdateDesc;
+
+  /// No description provided for @infraMaintenance.
+  ///
+  /// In ko, this message translates to:
+  /// **'점검 중'**
+  String get infraMaintenance;
+
+  /// No description provided for @infraMaintenanceDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'더 좋은 서비스를 위해 점검 중입니다. 잠시만 기다려주세요.'**
+  String get infraMaintenanceDesc;
+
+  /// No description provided for @infraUpdateButton.
+  ///
+  /// In ko, this message translates to:
+  /// **'업데이트'**
+  String get infraUpdateButton;
+
+  /// No description provided for @meta_achievements.
+  ///
+  /// In ko, this message translates to:
+  /// **'업적'**
+  String get meta_achievements;
+
+  /// No description provided for @meta_coins.
+  ///
+  /// In ko, this message translates to:
+  /// **'코인'**
+  String get meta_coins;
+
+  /// No description provided for @meta_coinReward.
+  ///
+  /// In ko, this message translates to:
+  /// **'+{amount} 코인'**
+  String meta_coinReward(int amount);
+
+  /// No description provided for @meta_achFirstStep.
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 걸음'**
+  String get meta_achFirstStep;
+
+  /// No description provided for @meta_achFirstStepDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 게임 완료'**
+  String get meta_achFirstStepDesc;
+
+  /// No description provided for @meta_achTrainee.
+  ///
+  /// In ko, this message translates to:
+  /// **'연습생'**
+  String get meta_achTrainee;
+
+  /// No description provided for @meta_achTraineeDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'10게임 완료'**
+  String get meta_achTraineeDesc;
+
+  /// No description provided for @meta_achFirstClear.
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 클리어'**
+  String get meta_achFirstClear;
+
+  /// No description provided for @meta_achFirstClearDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'첫 줄 클리어'**
+  String get meta_achFirstClearDesc;
+
+  /// No description provided for @meta_achComboIntro.
+  ///
+  /// In ko, this message translates to:
+  /// **'콤보 입문'**
+  String get meta_achComboIntro;
+
+  /// No description provided for @meta_achComboIntroDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'콤보 x2 달성'**
+  String get meta_achComboIntroDesc;
+
+  /// No description provided for @meta_achTutorial.
+  ///
+  /// In ko, this message translates to:
+  /// **'튜토리얼 마스터'**
+  String get meta_achTutorial;
+
+  /// No description provided for @meta_achTutorialDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'튜토리얼 완료'**
+  String get meta_achTutorialDesc;
+
+  /// No description provided for @meta_ach100.
+  ///
+  /// In ko, this message translates to:
+  /// **'100점 클럽'**
+  String get meta_ach100;
+
+  /// No description provided for @meta_ach100Desc.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 100+ 달성'**
+  String get meta_ach100Desc;
+
+  /// No description provided for @meta_ach500.
+  ///
+  /// In ko, this message translates to:
+  /// **'500점 클럽'**
+  String get meta_ach500;
+
+  /// No description provided for @meta_ach500Desc.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 500+ 달성'**
+  String get meta_ach500Desc;
+
+  /// No description provided for @meta_ach1000.
+  ///
+  /// In ko, this message translates to:
+  /// **'1000점 클럽'**
+  String get meta_ach1000;
+
+  /// No description provided for @meta_ach1000Desc.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 1000+ 달성'**
+  String get meta_ach1000Desc;
+
+  /// No description provided for @meta_achComboMaster.
+  ///
+  /// In ko, this message translates to:
+  /// **'콤보 마스터'**
+  String get meta_achComboMaster;
+
+  /// No description provided for @meta_achComboMasterDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'콤보 x5 달성'**
+  String get meta_achComboMasterDesc;
+
+  /// No description provided for @meta_achChainReaction.
+  ///
+  /// In ko, this message translates to:
+  /// **'연쇄 반응'**
+  String get meta_achChainReaction;
+
+  /// No description provided for @meta_achChainReactionDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'연쇄 3연속'**
+  String get meta_achChainReactionDesc;
+
+  /// No description provided for @meta_ach3000.
+  ///
+  /// In ko, this message translates to:
+  /// **'3000점 돌파'**
+  String get meta_ach3000;
+
+  /// No description provided for @meta_ach3000Desc.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 3000+ 달성'**
+  String get meta_ach3000Desc;
+
+  /// No description provided for @meta_achComboKing.
+  ///
+  /// In ko, this message translates to:
+  /// **'콤보 킹'**
+  String get meta_achComboKing;
+
+  /// No description provided for @meta_achComboKingDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'콤보 x10 달성'**
+  String get meta_achComboKingDesc;
+
+  /// No description provided for @meta_achSurvivor.
+  ///
+  /// In ko, this message translates to:
+  /// **'타임 서바이버'**
+  String get meta_achSurvivor;
+
+  /// No description provided for @meta_achSurvivorDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'한 게임에서 500점+ 달성'**
+  String get meta_achSurvivorDesc;
+
+  /// No description provided for @meta_achPerfect.
+  ///
+  /// In ko, this message translates to:
+  /// **'퍼펙트 게임'**
+  String get meta_achPerfect;
+
+  /// No description provided for @meta_achPerfectDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'10줄 이상 클리어'**
+  String get meta_achPerfectDesc;
+
+  /// No description provided for @meta_achBombMaster.
+  ///
+  /// In ko, this message translates to:
+  /// **'폭탄 마스터'**
+  String get meta_achBombMaster;
+
+  /// No description provided for @meta_achBombMasterDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'점수 3000+ 달성'**
+  String get meta_achBombMasterDesc;
+
+  /// No description provided for @meta_achShareKing.
+  ///
+  /// In ko, this message translates to:
+  /// **'공유왕'**
+  String get meta_achShareKing;
+
+  /// No description provided for @meta_achShareKingDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'5회 게임 플레이'**
+  String get meta_achShareKingDesc;
+
+  /// No description provided for @meta_achTop100.
+  ///
+  /// In ko, this message translates to:
+  /// **'글로벌 탑100'**
+  String get meta_achTop100;
+
+  /// No description provided for @meta_achTop100Desc.
+  ///
+  /// In ko, this message translates to:
+  /// **'최고점수 2000+ 달성'**
+  String get meta_achTop100Desc;
+
+  /// No description provided for @meta_achChallenger.
+  ///
+  /// In ko, this message translates to:
+  /// **'챌린지 도전자'**
+  String get meta_achChallenger;
+
+  /// No description provided for @meta_achChallengerDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'7일 연속 접속'**
+  String get meta_achChallengerDesc;
+
+  /// No description provided for @meta_achZoo.
+  ///
+  /// In ko, this message translates to:
+  /// **'동물원'**
+  String get meta_achZoo;
+
+  /// No description provided for @meta_achZooDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아바타 8종 해금'**
+  String get meta_achZooDesc;
+
+  /// No description provided for @meta_achFullCollection.
+  ///
+  /// In ko, this message translates to:
+  /// **'풀 컬렉션'**
+  String get meta_achFullCollection;
+
+  /// No description provided for @meta_achFullCollectionDesc.
+  ///
+  /// In ko, this message translates to:
+  /// **'아바타 12종 해금'**
+  String get meta_achFullCollectionDesc;
 }
 
 class _AppLocalizationsDelegate
@@ -626,9 +1166,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-    'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-    'an issue with the localizations generation tool. Please file an issue '
-    'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.',
-  );
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+      'an issue with the localizations generation tool. Please file an issue '
+      'on GitHub with a reproducible sample app and the gen-l10n configuration '
+      'that was used.');
 }

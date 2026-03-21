@@ -15,7 +15,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get welcomeCharacters => '귀여운 캐릭터와 함께!';
 
   @override
-  String get welcomeDescription => '블록을 탭해서 색을 바꾸고,\n한 줄을 완성하세요!';
+  String get welcomeDescription => '블록을 탭해서 색을 바꾸고,\n줄을 완성하세요!';
 
   @override
   String get welcomeCompete => '전 세계 플레이어와 경쟁!';
@@ -73,22 +73,13 @@ class AppLocalizationsKo extends AppLocalizations {
   }
 
   @override
-  String get tapHint => '탭하면 주변 색이 바뀌어요! 한 줄을 같은 색으로 🎯';
+  String get tapHint => '탭하면 주변 색이 바뀌어요! 가로·세로 줄을 맞춰보세요 🎯';
 
   @override
   String get gameOver => 'GAME OVER';
 
   @override
   String get newBest => '🎉 NEW BEST!';
-
-  @override
-  String get continueWithAd => '이어하기 (광고)';
-
-  @override
-  String get timeBonus => '시간 +30초 (광고)';
-
-  @override
-  String get scoreDouble => '점수 2배 (광고)';
 
   @override
   String get playAgain => 'PLAY AGAIN';
@@ -191,10 +182,10 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tutorialTapHint => '탭 → 주변 4칸이 다음 색으로!';
 
   @override
-  String get tutorialClearTitle => '한 줄 완성!';
+  String get tutorialClearTitle => '줄 완성!';
 
   @override
-  String get tutorialClearDesc => '가로 한 줄을 같은 색으로\n채우면 클리어!';
+  String get tutorialClearDesc => '가로 또는 세로 줄을 같은 색으로\n채우면 클리어!';
 
   @override
   String get tutorialComboTitle => '연쇄 콤보!';
@@ -233,6 +224,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get appVersion => '앱 버전';
 
   @override
+  String get openSourceLicenses => '오픈소스 라이선스';
+
+  @override
   String get avatarPicker => '아바타 선택';
 
   @override
@@ -267,4 +261,290 @@ class AppLocalizationsKo extends AppLocalizations {
   String appleSignInFailed(String error) {
     return 'Apple 로그인 실패: $error';
   }
+
+  @override
+  String get watchAd => '광고 보고\n해금';
+
+  @override
+  String get shareButton => '공유하기';
+
+  @override
+  String shareScore(int score) {
+    return 'FLIPOP에서 $score점 달성했어요! 도전해보세요!';
+  }
+
+  @override
+  String get tutorialPuzzleTapTitle => '탭의 효과';
+
+  @override
+  String get tutorialPuzzleTapDesc => '가운데 블록을 탭해서\n주변 색이 바뀌는 걸 확인하세요!';
+
+  @override
+  String get tutorialPuzzleTapSuccess => '잘했어요! 탭하면 주변이 바뀌어요!';
+
+  @override
+  String get tutorialPuzzleLineTitle => '줄 맞추기';
+
+  @override
+  String get tutorialPuzzleLineDesc => '블록을 탭해서\n가로줄을 같은 색으로 맞춰보세요!';
+
+  @override
+  String get tutorialPuzzleLineSuccess => '완벽해요! 줄 클리어 성공!';
+
+  @override
+  String get tutorialPuzzleComboTitle => '콤보 도전';
+
+  @override
+  String get tutorialPuzzleComboDesc => '연쇄 클리어를 만들어보세요!';
+
+  @override
+  String get tutorialPuzzleComboSuccess => '대단해요! 연쇄 콤보!';
+
+  @override
+  String get tutorialReady => '준비 완료!';
+
+  @override
+  String get guidedHint => '반짝이는 줄을 완성해보세요!';
+
+  @override
+  String get guidedStart => '준비됐나요? 게임 시작!';
+
+  @override
+  String get dailyChallenge => '데일리 챌린지';
+
+  @override
+  String get challengeTimeAttack => '타임어택';
+
+  @override
+  String get challengeLimitedMoves => '제한 터치';
+
+  @override
+  String get challengeComboMaster => '콤보 마스터';
+
+  @override
+  String get challengeSpeedRun => '스피드런';
+
+  @override
+  String get challengeNormal => '자유 모드';
+
+  @override
+  String attemptsLeft(int count) {
+    return '남은 시도: $count회';
+  }
+
+  @override
+  String get tryAgainTomorrow => '내일 다시 도전!';
+
+  @override
+  String movesLeft(int count) {
+    return '남은 터치: $count';
+  }
+
+  @override
+  String targetScore(int score) {
+    return '목표: $score점';
+  }
+
+  @override
+  String get noAttemptsLeft => '오늘 시도 횟수를 모두 사용했어요';
+
+  @override
+  String get soundMusic => '음악';
+
+  @override
+  String get soundSfx => '효과음';
+
+  @override
+  String get removeAds => '광고 제거';
+
+  @override
+  String get removeAdsPrice => '\$2.99';
+
+  @override
+  String get removeAdsDesc => '배너/전면 광고를 영구 제거합니다';
+
+  @override
+  String get restorePurchases => '구매 복원';
+
+  @override
+  String get adsRemoved => '광고 제거됨';
+
+  @override
+  String get purchaseFailed => '구매 실패';
+
+  @override
+  String get purchaseSection => '구매';
+
+  @override
+  String get avatarPack => '스페셜 아바타 팩';
+
+  @override
+  String get avatarPackPrice => '\$1.99';
+
+  @override
+  String get avatarPackOwned => '아바타 팩 보유 중';
+
+  @override
+  String get ui_darkMode => '다크 모드';
+
+  @override
+  String get ui_newBest => '신기록!';
+
+  @override
+  String get ui_settingsSection => '설정';
+
+  @override
+  String get social_inviteFriends => '친구 초대';
+
+  @override
+  String get social_inviteMessage => 'FLIPOP 같이 하자! 🎮';
+
+  @override
+  String get social_challengeMe => '이 점수 깰 수 있어?';
+
+  @override
+  String get infraForceUpdate => '업데이트 필요';
+
+  @override
+  String get infraForceUpdateDesc => '새 버전이 출시되었습니다. 업데이트 해주세요.';
+
+  @override
+  String get infraMaintenance => '점검 중';
+
+  @override
+  String get infraMaintenanceDesc => '더 좋은 서비스를 위해 점검 중입니다. 잠시만 기다려주세요.';
+
+  @override
+  String get infraUpdateButton => '업데이트';
+
+  @override
+  String get meta_achievements => '업적';
+
+  @override
+  String get meta_coins => '코인';
+
+  @override
+  String meta_coinReward(int amount) {
+    return '+$amount 코인';
+  }
+
+  @override
+  String get meta_achFirstStep => '첫 걸음';
+
+  @override
+  String get meta_achFirstStepDesc => '첫 게임 완료';
+
+  @override
+  String get meta_achTrainee => '연습생';
+
+  @override
+  String get meta_achTraineeDesc => '10게임 완료';
+
+  @override
+  String get meta_achFirstClear => '첫 클리어';
+
+  @override
+  String get meta_achFirstClearDesc => '첫 줄 클리어';
+
+  @override
+  String get meta_achComboIntro => '콤보 입문';
+
+  @override
+  String get meta_achComboIntroDesc => '콤보 x2 달성';
+
+  @override
+  String get meta_achTutorial => '튜토리얼 마스터';
+
+  @override
+  String get meta_achTutorialDesc => '튜토리얼 완료';
+
+  @override
+  String get meta_ach100 => '100점 클럽';
+
+  @override
+  String get meta_ach100Desc => '점수 100+ 달성';
+
+  @override
+  String get meta_ach500 => '500점 클럽';
+
+  @override
+  String get meta_ach500Desc => '점수 500+ 달성';
+
+  @override
+  String get meta_ach1000 => '1000점 클럽';
+
+  @override
+  String get meta_ach1000Desc => '점수 1000+ 달성';
+
+  @override
+  String get meta_achComboMaster => '콤보 마스터';
+
+  @override
+  String get meta_achComboMasterDesc => '콤보 x5 달성';
+
+  @override
+  String get meta_achChainReaction => '연쇄 반응';
+
+  @override
+  String get meta_achChainReactionDesc => '연쇄 3연속';
+
+  @override
+  String get meta_ach3000 => '3000점 돌파';
+
+  @override
+  String get meta_ach3000Desc => '점수 3000+ 달성';
+
+  @override
+  String get meta_achComboKing => '콤보 킹';
+
+  @override
+  String get meta_achComboKingDesc => '콤보 x10 달성';
+
+  @override
+  String get meta_achSurvivor => '타임 서바이버';
+
+  @override
+  String get meta_achSurvivorDesc => '한 게임에서 500점+ 달성';
+
+  @override
+  String get meta_achPerfect => '퍼펙트 게임';
+
+  @override
+  String get meta_achPerfectDesc => '10줄 이상 클리어';
+
+  @override
+  String get meta_achBombMaster => '폭탄 마스터';
+
+  @override
+  String get meta_achBombMasterDesc => '점수 3000+ 달성';
+
+  @override
+  String get meta_achShareKing => '공유왕';
+
+  @override
+  String get meta_achShareKingDesc => '5회 게임 플레이';
+
+  @override
+  String get meta_achTop100 => '글로벌 탑100';
+
+  @override
+  String get meta_achTop100Desc => '최고점수 2000+ 달성';
+
+  @override
+  String get meta_achChallenger => '챌린지 도전자';
+
+  @override
+  String get meta_achChallengerDesc => '7일 연속 접속';
+
+  @override
+  String get meta_achZoo => '동물원';
+
+  @override
+  String get meta_achZooDesc => '아바타 8종 해금';
+
+  @override
+  String get meta_achFullCollection => '풀 컬렉션';
+
+  @override
+  String get meta_achFullCollectionDesc => '아바타 12종 해금';
 }

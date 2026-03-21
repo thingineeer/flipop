@@ -3,7 +3,7 @@
 
   "appTitle": "FLIPOP",
   "welcomeCharacters": "かわいいキャラと一緒に！",
-  "welcomeDescription": "ブロックをタップして色を変えて、\n一列を完成させよう！",
+  "welcomeDescription": "ブロックをタップして色を変えて、\nラインを完成させよう！",
   "welcomeCompete": "世界中のプレイヤーと競争！",
   "welcomeCompeteDesc": "ログインするとスコアが保存され\n世界ランキングに参加できます！",
   "welcomeAccountHint": "アカウントを連携すると\nアプリを削除しても記録が残ります",
@@ -37,13 +37,10 @@
       }
     }
   },
-  "tapHint": "タップすると周りの色が変わる！一列を同じ色に 🎯",
+  "tapHint": "タップすると周りの色が変わる！縦横のラインを揃えよう 🎯",
 
   "gameOver": "GAME OVER",
   "newBest": "🎉 NEW BEST!",
-  "continueWithAd": "続ける（広告）",
-  "timeBonus": "時間 +30秒（広告）",
-  "scoreDouble": "スコア2倍（広告）",
   "playAgain": "PLAY AGAIN",
 
   "setNickname": "ニックネームを決めよう！",
@@ -87,8 +84,8 @@
   "tutorialTapTitle": "ブロックをタップ！",
   "tutorialTapDesc": "タップすると上下左右のブロックが\n次の色に変わります",
   "tutorialTapHint": "タップ → 周り4マスが次の色に！",
-  "tutorialClearTitle": "一列完成！",
-  "tutorialClearDesc": "横一列を同じ色で\n揃えるとクリア！",
+  "tutorialClearTitle": "ライン完成！",
+  "tutorialClearDesc": "横または縦のラインを同じ色で\n揃えるとクリア！",
   "tutorialComboTitle": "連鎖コンボ！",
   "tutorialComboDesc": "クリア後にブロックが落ちて\n連鎖すると大量スコア！",
   "tutorialNext": "次へ",
@@ -102,6 +99,7 @@
   "privacyPolicy": "プライバシーポリシー",
   "termsOfService": "利用規約",
   "appVersion": "アプリバージョン",
+  "openSourceLicenses": "オープンソースライセンス",
   "avatarPicker": "アバター選択",
   "avatarBasic": "基本",
   "avatarExtra": "追加",
@@ -128,5 +126,142 @@
     "placeholders": {
       "error": { "type": "String" }
     }
-  }
+  },
+
+  "watchAd": "広告を見て\n解除",
+  "shareButton": "シェア",
+  "shareScore": "FLIPOPで{score}点達成！挑戦してみて！",
+  "@shareScore": {
+    "placeholders": {
+      "score": { "type": "int" }
+    }
+  },
+
+  "tutorialPuzzleTapTitle": "タップの効果",
+  "tutorialPuzzleTapDesc": "真ん中のブロックをタップして\n周りの色が変わるのを確認！",
+  "tutorialPuzzleTapSuccess": "よくできました！タップで周りが変わる！",
+  "tutorialPuzzleLineTitle": "ライン揃え",
+  "tutorialPuzzleLineDesc": "ブロックをタップして\n横ラインを同じ色に揃えよう！",
+  "tutorialPuzzleLineSuccess": "完璧！ラインクリア成功！",
+  "tutorialPuzzleComboTitle": "コンボに挑戦",
+  "tutorialPuzzleComboDesc": "連鎖クリアを作ってみよう！",
+  "tutorialPuzzleComboSuccess": "すごい！連鎖コンボ！",
+  "tutorialReady": "準備完了！",
+  "guidedHint": "光っているラインを完成させよう！",
+  "guidedStart": "準備はいい？ゲームスタート！",
+
+  "dailyChallenge": "デイリーチャレンジ",
+  "challengeTimeAttack": "タイムアタック",
+  "challengeLimitedMoves": "限定タッチ",
+  "challengeComboMaster": "コンボマスター",
+  "challengeSpeedRun": "スピードラン",
+  "challengeNormal": "フリーモード",
+  "attemptsLeft": "残り{count}回",
+  "@attemptsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tryAgainTomorrow": "明日また挑戦しよう！",
+  "movesLeft": "残りタッチ: {count}",
+  "@movesLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "targetScore": "目標: {score}点",
+  "@targetScore": {
+    "placeholders": {
+      "score": {
+        "type": "int"
+      }
+    }
+  },
+  "noAttemptsLeft": "今日の挑戦回数を使い切りました",
+
+  "soundMusic": "音楽",
+  "soundSfx": "効果音",
+
+  "removeAds": "広告を削除",
+  "removeAdsPrice": "$2.99",
+  "removeAdsDesc": "バナー・インタースティシャル広告を永久に削除します",
+  "restorePurchases": "購入を復元",
+  "adsRemoved": "広告削除済み",
+  "purchaseFailed": "購入に失敗しました",
+  "purchaseSection": "購入",
+  "avatarPack": "スペシャルアバターパック",
+  "avatarPackPrice": "$1.99",
+  "avatarPackOwned": "アバターパック保有中",
+
+  "ui_darkMode": "ダークモード",
+  "ui_newBest": "新記録!",
+  "ui_settingsSection": "設定",
+
+  "social_inviteFriends": "友達を招待",
+  "social_inviteMessage": "FLIPOPやろう！\uD83C\uDFAE",
+  "social_challengeMe": "この点数超えられる？",
+
+  "infraForceUpdate": "アップデート必要",
+  "infraForceUpdateDesc": "新しいバージョンがリリースされました。アップデートしてください。",
+  "infraMaintenance": "メンテナンス中",
+  "infraMaintenanceDesc": "より良いサービスのためメンテナンス中です。しばらくお待ちください。",
+  "infraUpdateButton": "アップデート",
+
+  "meta_achievements": "実績",
+  "meta_coins": "コイン",
+  "meta_coinReward": "+{amount} コイン",
+  "@meta_coinReward": {
+    "placeholders": {
+      "amount": { "type": "int" }
+    }
+  },
+
+  "meta_achFirstStep": "はじめの一歩",
+  "meta_achFirstStepDesc": "初めてのゲームクリア",
+  "meta_achTrainee": "練習生",
+  "meta_achTraineeDesc": "10ゲームクリア",
+  "meta_achFirstClear": "初クリア",
+  "meta_achFirstClearDesc": "初めてのラインクリア",
+  "meta_achComboIntro": "コンボ入門",
+  "meta_achComboIntroDesc": "コンボ x2 達成",
+  "meta_achTutorial": "チュートリアルマスター",
+  "meta_achTutorialDesc": "チュートリアル完了",
+
+  "meta_ach100": "100点クラブ",
+  "meta_ach100Desc": "スコア100+達成",
+  "meta_ach500": "500点クラブ",
+  "meta_ach500Desc": "スコア500+達成",
+  "meta_ach1000": "1000点クラブ",
+  "meta_ach1000Desc": "スコア1000+達成",
+  "meta_achComboMaster": "コンボマスター",
+  "meta_achComboMasterDesc": "コンボ x5 達成",
+  "meta_achChainReaction": "連鎖反応",
+  "meta_achChainReactionDesc": "3連鎖達成",
+
+  "meta_ach3000": "3000点突破",
+  "meta_ach3000Desc": "スコア3000+達成",
+  "meta_achComboKing": "コンボキング",
+  "meta_achComboKingDesc": "コンボ x10 達成",
+  "meta_achSurvivor": "タイムサバイバー",
+  "meta_achSurvivorDesc": "1ゲームでスコア500+",
+  "meta_achPerfect": "パーフェクトゲーム",
+  "meta_achPerfectDesc": "10ライン以上クリア",
+  "meta_achBombMaster": "ボムマスター",
+  "meta_achBombMasterDesc": "スコア3000+達成",
+
+  "meta_achShareKing": "シェア王",
+  "meta_achShareKingDesc": "5ゲームプレイ",
+  "meta_achTop100": "グローバルトップ100",
+  "meta_achTop100Desc": "最高スコア2000+",
+  "meta_achChallenger": "チャレンジャー",
+  "meta_achChallengerDesc": "7日連続ログイン",
+
+  "meta_achZoo": "動物園",
+  "meta_achZooDesc": "アバター8種解除",
+  "meta_achFullCollection": "フルコレクション",
+  "meta_achFullCollectionDesc": "アバター12種解除"
 }
