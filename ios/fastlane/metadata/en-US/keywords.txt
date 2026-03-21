@@ -1,1 +1,1 @@
-puzzle,block,combo,casual,brain,flip,cute,animal,cat,dog,bunny,frog,match,line,color
+puzzle,block,casual,brain,matching,color,flip,pop,cute,animal

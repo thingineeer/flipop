@@ -11,6 +11,16 @@ platform :ios do
     end
   end
 
+  # ── App.framework MinimumOSVersion 수정 (Flutter 3.27 이슈 대응) ──
+  private_lane :fix_minimum_os_version do |options|
+    archive_path = options[:archive_path]
+    app_fw = File.join(archive_path, "Products", "Applications", "Runner.app", "Frameworks", "App.framework", "Info.plist")
+    if File.exist?(app_fw)
+      sh("plutil", "-insert", "MinimumOSVersion", "-string", "13.0", app_fw) rescue nil
+      UI.success("Fixed MinimumOSVersion in App.framework")
+    end
+  end
+
   # ──────────────────────────────────────────
   # beta: Flutter build → TestFlight 업로드
   # ──────────────────────────────────────────
@@ -24,6 +34,26 @@ platform :ios do
       export_method: "app-store",
       output_directory: "./build",
       output_name: "flipop.ipa",
+      archive_path: "./build/Runner.xcarchive",
+      export_options: {
+        signingStyle: "automatic",
+        teamID: "8Q4H7X3Q58",
+        uploadBitcode: false,
+        uploadSymbols: true,
+      },
+      skip_package_ipa: true,
+    )
+
+    fix_minimum_os_version(archive_path: "./build/Runner.xcarchive")
+
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      output_directory: "./build",
+      output_name: "flipop.ipa",
+      archive_path: "./build/Runner.xcarchive",
+      skip_build_archive: true,
       export_options: {
         signingStyle: "automatic",
         teamID: "8Q4H7X3Q58",

@@ -1,1 +1,1 @@
-パズル,ブロック,コンボ,カジュアル,脳トレ,猫,動物,puzzle,block,combo,flip,casual,brain,cute
+パズル,ブロック,カジュアル,脳トレ,マッチング,色,かわいい
