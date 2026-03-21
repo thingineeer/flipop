@@ -83,10 +83,14 @@ class AvatarData {
 
   // 특별 아바타 해제 조건
   static const Map<String, String> unlockConditions = {
-    'dragon': '최고점 500점 달성',
-    'unicorn': '30일 연속 플레이',
-    'phoenix': '리워드 광고 10회 시청',
-    'robot': '소셜 계정 연동 완료',
+    'penguin': '10게임 플레이',
+    'bear': '50게임 플레이',
+    'fox': '최고점수 1000+',
+    'turtle': '7일 연속 접속',
+    'dragon': '콤보 x10 달성',
+    'unicorn': '100게임 플레이',
+    'phoenix': '최고점수 3000+',
+    'robot': 'IAP 구매',
   };
 
   // 기본/추가 아바타인지 확인
