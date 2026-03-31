@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart' show VoidCallback, kReleaseMode;
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'analytics_service.dart';
 import 'iap_service.dart';
 
 class AdService {
@@ -142,6 +143,7 @@ class AdService {
 
     _interstitialAd!.show();
     _interstitialAd = null;
+    AnalyticsService().logAdWatched(type: 'interstitial');
   }
 
   // ─── 보상형 광고 (이어하기) ────────────────────────────
@@ -192,6 +194,7 @@ class AdService {
     _rewardedAd!.show(
       onUserEarnedReward: (ad, reward) {
         onRewarded();
+        AnalyticsService().logAdWatched(type: 'rewarded');
       },
     );
     _rewardedAd = null;

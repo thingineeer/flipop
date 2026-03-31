@@ -105,9 +105,9 @@ class ShareCardWidget extends StatelessWidget {
                 decoration: TextDecoration.none,
               ),
             ),
-            const Text(
-              'SCORE',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context)?.scoreLabel ?? 'SCORE',
+              style: const TextStyle(
                 color: Color(0xFF8A7E72),
                 fontSize: 14,
                 fontWeight: FontWeight.w700,

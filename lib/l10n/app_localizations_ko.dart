@@ -547,4 +547,72 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get meta_achFullCollectionDesc => '아바타 12종 해금';
+
+  @override
+  String get tabGame => '게임';
+
+  @override
+  String get tabChallenge => '챌린지';
+
+  @override
+  String get tabRanking => '랭킹';
+
+  @override
+  String get tabMore => '더보기';
+
+  @override
+  String get errorNetwork => '네트워크 연결을 확인해주세요';
+
+  @override
+  String get errorLoginCancelled => '로그인이 취소되었습니다';
+
+  @override
+  String get errorGeneric => '일시적인 오류가 발생했습니다';
+
+  @override
+  String get errorPermission => '권한 오류가 발생했습니다';
+
+  @override
+  String get errorSaveFailed => '저장에 실패했습니다. 다시 시도해주세요';
+
+  @override
+  String get restoreComplete => '구매 복원이 완료되었습니다';
+
+  @override
+  String get labelStart => 'START';
+
+  @override
+  String get labelSkip => '건너뛰기';
+
+  @override
+  String get labelReset => '다시';
+
+  @override
+  String get labelMoves => '터치';
+
+  @override
+  String get labelDailyBonus => '데일리 보너스';
+
+  @override
+  String get labelCoins => '코인';
+
+  @override
+  String get labelBest => 'BEST';
+
+  @override
+  String get watchAdAndClaim => '광고 보고 받기';
+
+  @override
+  String get labelLater => '나중에';
+
+  @override
+  String get labelRanking => '랭킹';
+
+  @override
+  String get labelTap => '탭';
+
+  @override
+  String labelDay(int day) {
+    return 'DAY $day';
+  }
 }

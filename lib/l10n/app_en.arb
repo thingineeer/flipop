@@ -263,5 +263,39 @@
   "meta_achZoo": "Zoo",
   "meta_achZooDesc": "Unlock 8 avatars",
   "meta_achFullCollection": "Full Collection",
-  "meta_achFullCollectionDesc": "Unlock 12 avatars"
+  "meta_achFullCollectionDesc": "Unlock 12 avatars",
+
+  "tabGame": "Game",
+  "tabChallenge": "Challenge",
+  "tabRanking": "Ranking",
+  "tabMore": "More",
+
+  "errorNetwork": "Please check your network connection",
+  "errorLoginCancelled": "Login was cancelled",
+  "errorGeneric": "A temporary error occurred",
+  "errorPermission": "Permission error occurred",
+  "errorSaveFailed": "Save failed. Please try again",
+
+  "restoreComplete": "Purchases restored successfully",
+
+  "labelStart": "START",
+  "labelSkip": "SKIP",
+  "labelReset": "Reset",
+  "labelMoves": "MOVES",
+  "labelDailyBonus": "DAILY BONUS",
+  "labelCoins": "COINS",
+
+  "labelBest": "BEST",
+  "watchAdAndClaim": "Watch Ad & Claim",
+  "labelLater": "Later",
+
+  "labelRanking": "RANKING",
+  "labelTap": "TAP",
+
+  "labelDay": "DAY {day}",
+  "@labelDay": {
+    "placeholders": {
+      "day": { "type": "int" }
+    }
+  }
 }

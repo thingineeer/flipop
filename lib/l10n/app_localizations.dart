@@ -1133,6 +1133,138 @@ abstract class AppLocalizations {
   /// In ko, this message translates to:
   /// **'아바타 12종 해금'**
   String get meta_achFullCollectionDesc;
+
+  /// No description provided for @tabGame.
+  ///
+  /// In ko, this message translates to:
+  /// **'게임'**
+  String get tabGame;
+
+  /// No description provided for @tabChallenge.
+  ///
+  /// In ko, this message translates to:
+  /// **'챌린지'**
+  String get tabChallenge;
+
+  /// No description provided for @tabRanking.
+  ///
+  /// In ko, this message translates to:
+  /// **'랭킹'**
+  String get tabRanking;
+
+  /// No description provided for @tabMore.
+  ///
+  /// In ko, this message translates to:
+  /// **'더보기'**
+  String get tabMore;
+
+  /// No description provided for @errorNetwork.
+  ///
+  /// In ko, this message translates to:
+  /// **'네트워크 연결을 확인해주세요'**
+  String get errorNetwork;
+
+  /// No description provided for @errorLoginCancelled.
+  ///
+  /// In ko, this message translates to:
+  /// **'로그인이 취소되었습니다'**
+  String get errorLoginCancelled;
+
+  /// No description provided for @errorGeneric.
+  ///
+  /// In ko, this message translates to:
+  /// **'일시적인 오류가 발생했습니다'**
+  String get errorGeneric;
+
+  /// No description provided for @errorPermission.
+  ///
+  /// In ko, this message translates to:
+  /// **'권한 오류가 발생했습니다'**
+  String get errorPermission;
+
+  /// No description provided for @errorSaveFailed.
+  ///
+  /// In ko, this message translates to:
+  /// **'저장에 실패했습니다. 다시 시도해주세요'**
+  String get errorSaveFailed;
+
+  /// No description provided for @restoreComplete.
+  ///
+  /// In ko, this message translates to:
+  /// **'구매 복원이 완료되었습니다'**
+  String get restoreComplete;
+
+  /// No description provided for @labelStart.
+  ///
+  /// In ko, this message translates to:
+  /// **'START'**
+  String get labelStart;
+
+  /// No description provided for @labelSkip.
+  ///
+  /// In ko, this message translates to:
+  /// **'건너뛰기'**
+  String get labelSkip;
+
+  /// No description provided for @labelReset.
+  ///
+  /// In ko, this message translates to:
+  /// **'다시'**
+  String get labelReset;
+
+  /// No description provided for @labelMoves.
+  ///
+  /// In ko, this message translates to:
+  /// **'터치'**
+  String get labelMoves;
+
+  /// No description provided for @labelDailyBonus.
+  ///
+  /// In ko, this message translates to:
+  /// **'데일리 보너스'**
+  String get labelDailyBonus;
+
+  /// No description provided for @labelCoins.
+  ///
+  /// In ko, this message translates to:
+  /// **'코인'**
+  String get labelCoins;
+
+  /// No description provided for @labelBest.
+  ///
+  /// In ko, this message translates to:
+  /// **'BEST'**
+  String get labelBest;
+
+  /// No description provided for @watchAdAndClaim.
+  ///
+  /// In ko, this message translates to:
+  /// **'광고 보고 받기'**
+  String get watchAdAndClaim;
+
+  /// No description provided for @labelLater.
+  ///
+  /// In ko, this message translates to:
+  /// **'나중에'**
+  String get labelLater;
+
+  /// No description provided for @labelRanking.
+  ///
+  /// In ko, this message translates to:
+  /// **'랭킹'**
+  String get labelRanking;
+
+  /// No description provided for @labelTap.
+  ///
+  /// In ko, this message translates to:
+  /// **'탭'**
+  String get labelTap;
+
+  /// No description provided for @labelDay.
+  ///
+  /// In ko, this message translates to:
+  /// **'DAY {day}'**
+  String labelDay(int day);
 }
 
 class _AppLocalizationsDelegate

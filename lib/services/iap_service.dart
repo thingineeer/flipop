@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:in_app_purchase/in_app_purchase.dart';
+import 'analytics_service.dart';
 import 'secure_storage_service.dart';
 
 /// 인앱 결제 서비스 (싱글톤)
@@ -99,6 +100,9 @@ class IAPService {
       } else if (purchase.productID == avatarPackId) {
         _avatarPack = true;
         await SecureStorageService().setAvatarPack(true);
+      }
+      if (purchase.status == PurchaseStatus.purchased) {
+        AnalyticsService().logIAPPurchase(productId: purchase.productID);
       }
     }
 

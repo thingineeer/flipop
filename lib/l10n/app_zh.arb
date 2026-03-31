@@ -263,5 +263,39 @@
   "meta_achZoo": "动物园",
   "meta_achZooDesc": "解锁8种头像",
   "meta_achFullCollection": "全收集",
-  "meta_achFullCollectionDesc": "解锁12种头像"
+  "meta_achFullCollectionDesc": "解锁12种头像",
+
+  "tabGame": "游戏",
+  "tabChallenge": "挑战",
+  "tabRanking": "排行榜",
+  "tabMore": "更多",
+
+  "errorNetwork": "请检查网络连接",
+  "errorLoginCancelled": "登录已取消",
+  "errorGeneric": "发生临时错误",
+  "errorPermission": "权限错误",
+  "errorSaveFailed": "保存失败，请重试",
+
+  "restoreComplete": "购买恢复成功",
+
+  "labelStart": "START",
+  "labelSkip": "跳过",
+  "labelReset": "重置",
+  "labelMoves": "触摸",
+  "labelDailyBonus": "每日奖励",
+  "labelCoins": "金币",
+
+  "labelBest": "最佳",
+  "watchAdAndClaim": "看广告领取",
+  "labelLater": "稍后",
+
+  "labelRanking": "排行榜",
+  "labelTap": "点击",
+
+  "labelDay": "第{day}天",
+  "@labelDay": {
+    "placeholders": {
+      "day": { "type": "int" }
+    }
+  }
 }

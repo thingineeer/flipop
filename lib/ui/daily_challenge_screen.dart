@@ -466,7 +466,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'SCORE',
+                  l10n.scoreLabel,
                   style: TextStyle(
                     color: GameColors.textSecondary,
                     fontSize: 11,
@@ -562,7 +562,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'TIME',
+                AppLocalizations.of(context)!.timeLabel,
                 style: TextStyle(
                   color: isUrgent
                       ? GameColors.blockColors[BlockColor.red]
@@ -615,7 +615,7 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'MOVES',
+                AppLocalizations.of(context)!.labelMoves,
                 style: TextStyle(
                   color: isUrgent
                       ? GameColors.blockColors[BlockColor.red]
@@ -863,10 +863,10 @@ class _DailyChallengeScreenState extends State<DailyChallengeScreen>
                       ),
                     ],
                   ),
-                  child: const Text(
-                    'START',
+                  child: Text(
+                    AppLocalizations.of(context)!.labelStart,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 28,
                       fontWeight: FontWeight.w900,

@@ -95,14 +95,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String _friendlyErrorMessage(Object e) {
+    final l10n = AppLocalizations.of(context)!;
     final msg = e.toString().toLowerCase();
     if (msg.contains('network') || msg.contains('socket') || msg.contains('timeout')) {
-      return '네트워크 연결을 확인해주세요';
+      return l10n.errorNetwork;
     }
     if (msg.contains('cancel')) {
-      return '로그인이 취소되었습니다';
+      return l10n.errorLoginCancelled;
     }
-    return '일시적인 오류가 발생했습니다';
+    return l10n.errorGeneric;
   }
 
   @override

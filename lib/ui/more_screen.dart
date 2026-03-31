@@ -193,7 +193,13 @@ class _MoreScreenState extends State<MoreScreen> {
     try {
       await IAPService().restorePurchases();
     } catch (_) {
-      // 복원 실패는 조용히 처리
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.purchaseFailed),
+          ),
+        );
+      }
     }
     // 잠시 대기 후 상태 갱신 (스트림 콜백 처리 시간)
     await Future.delayed(const Duration(seconds: 2));
@@ -202,6 +208,11 @@ class _MoreScreenState extends State<MoreScreen> {
         _loading = false;
         _adsRemoved = IAPService().adsRemoved;
       });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.restoreComplete),
+        ),
+      );
     }
   }
 
@@ -217,14 +228,15 @@ class _MoreScreenState extends State<MoreScreen> {
   // ── 유틸 ──
 
   String _friendlyErrorMessage(Object e) {
+    final l10n = AppLocalizations.of(context)!;
     final msg = e.toString().toLowerCase();
     if (msg.contains('network') || msg.contains('socket') || msg.contains('timeout')) {
-      return '네트워크 연결을 확인해주세요';
+      return l10n.errorNetwork;
     }
     if (msg.contains('permission')) {
-      return '권한 오류가 발생했습니다';
+      return l10n.errorPermission;
     }
-    return '일시적인 오류가 발생했습니다';
+    return l10n.errorGeneric;
   }
 
   void _showError(AuthFailure failure) {
@@ -977,7 +989,15 @@ class _MoreScreenState extends State<MoreScreen> {
                     setState(() => _loading = true);
                     try {
                       await IAPService().purchaseAvatarPack();
-                    } catch (_) {}
+                    } catch (_) {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context)!.purchaseFailed),
+                          ),
+                        );
+                      }
+                    }
                     await Future.delayed(const Duration(seconds: 2));
                     if (mounted) {
                       setState(() => _loading = false);

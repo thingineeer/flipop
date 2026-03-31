@@ -547,4 +547,72 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get meta_achFullCollectionDesc => 'アバター12種解除';
+
+  @override
+  String get tabGame => 'ゲーム';
+
+  @override
+  String get tabChallenge => 'チャレンジ';
+
+  @override
+  String get tabRanking => 'ランキング';
+
+  @override
+  String get tabMore => 'その他';
+
+  @override
+  String get errorNetwork => 'ネットワーク接続を確認してください';
+
+  @override
+  String get errorLoginCancelled => 'ログインがキャンセルされました';
+
+  @override
+  String get errorGeneric => '一時的なエラーが発生しました';
+
+  @override
+  String get errorPermission => '権限エラーが発生しました';
+
+  @override
+  String get errorSaveFailed => '保存に失敗しました。もう一度お試しください';
+
+  @override
+  String get restoreComplete => '購入の復元が完了しました';
+
+  @override
+  String get labelStart => 'START';
+
+  @override
+  String get labelSkip => 'スキップ';
+
+  @override
+  String get labelReset => 'リセット';
+
+  @override
+  String get labelMoves => 'タッチ';
+
+  @override
+  String get labelDailyBonus => 'デイリーボーナス';
+
+  @override
+  String get labelCoins => 'コイン';
+
+  @override
+  String get labelBest => 'BEST';
+
+  @override
+  String get watchAdAndClaim => '広告を見て受け取る';
+
+  @override
+  String get labelLater => 'あとで';
+
+  @override
+  String get labelRanking => 'ランキング';
+
+  @override
+  String get labelTap => 'タップ';
+
+  @override
+  String labelDay(int day) {
+    return '$day日目';
+  }
 }

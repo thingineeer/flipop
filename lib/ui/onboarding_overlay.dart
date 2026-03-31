@@ -713,7 +713,7 @@ class _OnboardingOverlayState extends State<OnboardingOverlay>
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: Text(
-                          'TAP',
+                          AppLocalizations.of(context)!.labelTap,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: cellSize * 0.22,

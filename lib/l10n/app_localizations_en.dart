@@ -560,4 +560,72 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get meta_achFullCollectionDesc => 'Unlock 12 avatars';
+
+  @override
+  String get tabGame => 'Game';
+
+  @override
+  String get tabChallenge => 'Challenge';
+
+  @override
+  String get tabRanking => 'Ranking';
+
+  @override
+  String get tabMore => 'More';
+
+  @override
+  String get errorNetwork => 'Please check your network connection';
+
+  @override
+  String get errorLoginCancelled => 'Login was cancelled';
+
+  @override
+  String get errorGeneric => 'A temporary error occurred';
+
+  @override
+  String get errorPermission => 'Permission error occurred';
+
+  @override
+  String get errorSaveFailed => 'Save failed. Please try again';
+
+  @override
+  String get restoreComplete => 'Purchases restored successfully';
+
+  @override
+  String get labelStart => 'START';
+
+  @override
+  String get labelSkip => 'SKIP';
+
+  @override
+  String get labelReset => 'Reset';
+
+  @override
+  String get labelMoves => 'MOVES';
+
+  @override
+  String get labelDailyBonus => 'DAILY BONUS';
+
+  @override
+  String get labelCoins => 'COINS';
+
+  @override
+  String get labelBest => 'BEST';
+
+  @override
+  String get watchAdAndClaim => 'Watch Ad & Claim';
+
+  @override
+  String get labelLater => 'Later';
+
+  @override
+  String get labelRanking => 'RANKING';
+
+  @override
+  String get labelTap => 'TAP';
+
+  @override
+  String labelDay(int day) {
+    return 'DAY $day';
+  }
 }

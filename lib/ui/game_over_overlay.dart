@@ -353,18 +353,21 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                                 ),
                               ),
                             ),
-                            // 코인 리워드 광고 버튼
-                            if (AdService().isRewardedReady) ...[
-                              const SizedBox(height: 12),
-                              GestureDetector(
-                                onTap: () {
-                                  AdService().showRewardedAd(
-                                    onRewarded: () async {
-                                      await DailyBonusService().addCoins(30);
-                                      AnalyticsService().logAdWatched(type: 'rewarded_coins');
-                                    },
-                                  );
-                                },
+                            // 코인 리워드 광고 버튼 (항상 표시, 미로딩 시 비활성)
+                            const SizedBox(height: 12),
+                            GestureDetector(
+                              onTap: AdService().isRewardedReady
+                                  ? () {
+                                      AdService().showRewardedAd(
+                                        onRewarded: () async {
+                                          await DailyBonusService().addCoins(30);
+                                          AnalyticsService().logAdWatched(type: 'rewarded_coins');
+                                        },
+                                      );
+                                    }
+                                  : null,
+                              child: Opacity(
+                                opacity: AdService().isRewardedReady ? 1.0 : 0.4,
                                 child: Container(
                                   width: double.infinity,
                                   padding: const EdgeInsets.symmetric(vertical: 12),
@@ -397,7 +400,7 @@ class _GameOverOverlayState extends State<GameOverOverlay>
                                   ),
                                 ),
                               ),
-                            ],
+                            ),
                             if (widget.onClose != null) ...[
                               const SizedBox(height: 16),
                               GestureDetector(

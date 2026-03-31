@@ -263,5 +263,39 @@
   "meta_achZoo": "動物園",
   "meta_achZooDesc": "アバター8種解除",
   "meta_achFullCollection": "フルコレクション",
-  "meta_achFullCollectionDesc": "アバター12種解除"
+  "meta_achFullCollectionDesc": "アバター12種解除",
+
+  "tabGame": "ゲーム",
+  "tabChallenge": "チャレンジ",
+  "tabRanking": "ランキング",
+  "tabMore": "その他",
+
+  "errorNetwork": "ネットワーク接続を確認してください",
+  "errorLoginCancelled": "ログインがキャンセルされました",
+  "errorGeneric": "一時的なエラーが発生しました",
+  "errorPermission": "権限エラーが発生しました",
+  "errorSaveFailed": "保存に失敗しました。もう一度お試しください",
+
+  "restoreComplete": "購入の復元が完了しました",
+
+  "labelStart": "START",
+  "labelSkip": "スキップ",
+  "labelReset": "リセット",
+  "labelMoves": "タッチ",
+  "labelDailyBonus": "デイリーボーナス",
+  "labelCoins": "コイン",
+
+  "labelBest": "BEST",
+  "watchAdAndClaim": "広告を見て受け取る",
+  "labelLater": "あとで",
+
+  "labelRanking": "ランキング",
+  "labelTap": "タップ",
+
+  "labelDay": "{day}日目",
+  "@labelDay": {
+    "placeholders": {
+      "day": { "type": "int" }
+    }
+  }
 }

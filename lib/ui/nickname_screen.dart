@@ -122,14 +122,15 @@ class _NicknameScreenState extends State<NicknameScreen> {
   }
 
   String _friendlyErrorMessage(Object e) {
+    final l10n = AppLocalizations.of(context)!;
     final msg = e.toString().toLowerCase();
     if (msg.contains('network') || msg.contains('socket') || msg.contains('timeout')) {
-      return '네트워크 연결을 확인해주세요';
+      return l10n.errorNetwork;
     }
     if (msg.contains('permission')) {
-      return '권한 오류가 발생했습니다';
+      return l10n.errorPermission;
     }
-    return '저장에 실패했습니다. 다시 시도해주세요';
+    return l10n.errorSaveFailed;
   }
 
   @override

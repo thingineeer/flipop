@@ -545,4 +545,72 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get meta_achFullCollectionDesc => '解锁12种头像';
+
+  @override
+  String get tabGame => '游戏';
+
+  @override
+  String get tabChallenge => '挑战';
+
+  @override
+  String get tabRanking => '排行榜';
+
+  @override
+  String get tabMore => '更多';
+
+  @override
+  String get errorNetwork => '请检查网络连接';
+
+  @override
+  String get errorLoginCancelled => '登录已取消';
+
+  @override
+  String get errorGeneric => '发生临时错误';
+
+  @override
+  String get errorPermission => '权限错误';
+
+  @override
+  String get errorSaveFailed => '保存失败，请重试';
+
+  @override
+  String get restoreComplete => '购买恢复成功';
+
+  @override
+  String get labelStart => 'START';
+
+  @override
+  String get labelSkip => '跳过';
+
+  @override
+  String get labelReset => '重置';
+
+  @override
+  String get labelMoves => '触摸';
+
+  @override
+  String get labelDailyBonus => '每日奖励';
+
+  @override
+  String get labelCoins => '金币';
+
+  @override
+  String get labelBest => '最佳';
+
+  @override
+  String get watchAdAndClaim => '看广告领取';
+
+  @override
+  String get labelLater => '稍后';
+
+  @override
+  String get labelRanking => '排行榜';
+
+  @override
+  String get labelTap => '点击';
+
+  @override
+  String labelDay(int day) {
+    return '第$day天';
+  }
 }

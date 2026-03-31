@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
+import '../l10n/app_localizations.dart';
 import '../services/ad_service.dart';
+import '../services/analytics_service.dart';
 import '../services/daily_bonus_service.dart';
 
 class DailyBonusDialog extends StatefulWidget {
@@ -98,6 +100,8 @@ class _DailyBonusDialogState extends State<DailyBonusDialog>
     if (!adService.isRewardedReady) {
       // 광고 미준비 시 그냥 수령
       final reward = await _bonusService.claimBonus();
+      final streak = await _bonusService.getStreak();
+      AnalyticsService().logDailyBonusClaim(streak: streak, coins: reward);
       if (mounted) Navigator.of(context).pop(reward);
       return;
     }
@@ -105,6 +109,8 @@ class _DailyBonusDialogState extends State<DailyBonusDialog>
     adService.showRewardedAd(
       onRewarded: () async {
         final reward = await _bonusService.claimBonus();
+        final streak = await _bonusService.getStreak();
+        AnalyticsService().logDailyBonusClaim(streak: streak, coins: reward);
         if (mounted) Navigator.of(context).pop(reward);
       },
       onAdDismissed: () {
@@ -160,9 +166,9 @@ class _DailyBonusDialogState extends State<DailyBonusDialog>
         mainAxisSize: MainAxisSize.min,
         children: [
           // 타이틀
-          const Text(
-            'DAILY BONUS',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.labelDailyBonus,
+            style: const TextStyle(
               color: GameColors.textPrimary,
               fontSize: 22,
               fontWeight: FontWeight.w900,
@@ -180,7 +186,7 @@ class _DailyBonusDialogState extends State<DailyBonusDialog>
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
-              'DAY $_streak',
+              AppLocalizations.of(context)!.labelDay(_streak),
               style: TextStyle(
                 color: GameColors.blockDarkColors[BlockColor.yellow],
                 fontSize: 16,
@@ -201,9 +207,9 @@ class _DailyBonusDialogState extends State<DailyBonusDialog>
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
-            'COINS',
-            style: TextStyle(
+          Text(
+            AppLocalizations.of(context)!.labelCoins,
+            style: const TextStyle(
               color: GameColors.textSecondary,
               fontSize: 12,
               fontWeight: FontWeight.w700,
@@ -246,7 +252,7 @@ class _DailyBonusDialogState extends State<DailyBonusDialog>
                     ),
                   if (!_claiming) const SizedBox(width: 8),
                   Text(
-                    _claiming ? '...' : 'Watch Ad & Claim',
+                    _claiming ? '...' : AppLocalizations.of(context)!.watchAdAndClaim,
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
@@ -271,10 +277,10 @@ class _DailyBonusDialogState extends State<DailyBonusDialog>
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: GameColors.gridLine, width: 2),
               ),
-              child: const Center(
+              child: Center(
                 child: Text(
-                  'Later',
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.labelLater,
+                  style: const TextStyle(
                     color: GameColors.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w800,

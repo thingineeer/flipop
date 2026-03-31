@@ -47,7 +47,7 @@ class _PopParticleState extends State<PopParticle>
     });
 
     _controller.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
+      if (status == AnimationStatus.completed && mounted) {
         widget.onComplete();
       }
     });

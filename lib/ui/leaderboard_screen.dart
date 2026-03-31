@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../game/avatar_data.dart';
 import '../game/game_colors.dart';
 import '../game/game_state.dart';
+import '../l10n/app_localizations.dart';
 import '../services/auth_service.dart';
 import '../services/leaderboard_service.dart';
 
@@ -154,10 +155,10 @@ class LeaderboardScreenState extends State<LeaderboardScreen> {
             ),
             const SizedBox(width: 12),
           ],
-          const Expanded(
+          Expanded(
             child: Text(
-              'RANKING',
-              style: TextStyle(
+              AppLocalizations.of(context)?.labelRanking ?? 'RANKING',
+              style: const TextStyle(
                 color: GameColors.textPrimary,
                 fontSize: 24,
                 fontWeight: FontWeight.w900,

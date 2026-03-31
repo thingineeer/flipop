@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../game/game_colors.dart';
 import 'banner_ad_widget.dart';
 import 'daily_challenge_screen.dart';
@@ -47,6 +48,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: GameColors.getBackground(isDark),
       body: IndexedStack(
@@ -106,26 +108,26 @@ class _MainScreenState extends State<MainScreen> {
           surfaceTintColor: Colors.transparent,
           indicatorColor: GameColors.getGridBackground(isDark),
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-          destinations: const [
+          destinations: [
             NavigationDestination(
-              icon: Icon(Icons.videogame_asset_outlined),
-              selectedIcon: Icon(Icons.videogame_asset),
-              label: 'Game',
+              icon: const Icon(Icons.videogame_asset_outlined),
+              selectedIcon: const Icon(Icons.videogame_asset),
+              label: l10n.tabGame,
             ),
             NavigationDestination(
-              icon: Icon(Icons.calendar_today_outlined),
-              selectedIcon: Icon(Icons.calendar_today),
-              label: 'Challenge',
+              icon: const Icon(Icons.calendar_today_outlined),
+              selectedIcon: const Icon(Icons.calendar_today),
+              label: l10n.tabChallenge,
             ),
             NavigationDestination(
-              icon: Icon(Icons.leaderboard_outlined),
-              selectedIcon: Icon(Icons.leaderboard),
-              label: 'Ranking',
+              icon: const Icon(Icons.leaderboard_outlined),
+              selectedIcon: const Icon(Icons.leaderboard),
+              label: l10n.tabRanking,
             ),
             NavigationDestination(
-              icon: Icon(Icons.more_horiz),
-              selectedIcon: Icon(Icons.more_horiz),
-              label: 'More',
+              icon: const Icon(Icons.more_horiz),
+              selectedIcon: const Icon(Icons.more_horiz),
+              label: l10n.tabMore,
             ),
           ],
         ),

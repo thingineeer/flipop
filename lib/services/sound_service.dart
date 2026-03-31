@@ -28,7 +28,7 @@ class SoundService {
 
   /// 효과음 재생
   Future<void> playSE(String id) async {
-    if (!_sfxEnabled) return;
+    if (!_initialized || !_sfxEnabled) return;
 
     try {
       await _player.stop();

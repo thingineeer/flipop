@@ -218,7 +218,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                     GestureDetector(
                       onTap: _skip,
                       child: Text(
-                        'SKIP',
+                        l10n.labelSkip,
                         style: TextStyle(
                           color: GameColors.textSecondary,
                           fontSize: 14,
@@ -350,7 +350,7 @@ class _TutorialScreenState extends State<TutorialScreen> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'Reset',
+                          l10n.labelReset,
                           style: TextStyle(
                             color: GameColors.textSecondary,
                             fontSize: 13,

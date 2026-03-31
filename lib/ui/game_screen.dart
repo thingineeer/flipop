@@ -558,6 +558,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
   }
 
   Widget _buildHeader(bool isDark) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
       child: Row(
@@ -568,7 +569,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'SCORE',
+                  l10n.scoreLabel,
                   style: TextStyle(
                     color: GameColors.getTextSecondary(isDark),
                     fontSize: 11,
@@ -611,7 +612,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'BEST',
+                  l10n.labelBest,
                   style: TextStyle(
                     color: GameColors.getTextSecondary(isDark),
                     fontSize: 11,
@@ -674,7 +675,7 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'TIME',
+                    AppLocalizations.of(context)!.timeLabel,
                     style: TextStyle(
                       color: isUrgent
                           ? GameColors.blockColors[BlockColor.red]
@@ -823,10 +824,10 @@ class _GameScreenState extends State<GameScreen> with TickerProviderStateMixin {
                 ),
               ],
             ),
-            child: const Text(
-              'START',
+            child: Text(
+              AppLocalizations.of(context)!.labelStart,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 28,
                 fontWeight: FontWeight.w900,
