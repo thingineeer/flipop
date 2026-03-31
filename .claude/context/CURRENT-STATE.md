@@ -170,4 +170,69 @@
   - 무엇을: 챌린지 시작/완료 AnalyticsService 이벤트 추가
   - 왜: 챌린지 데이터 수집 안 됨 (수익 최적화 불가)
   - 결과: 188 tests, analyze 0
+
+2026-03-21 루프18: 탭 네비게이션 l10n 적용
+  - 무엇을: main_screen.dart 탭 라벨 'Game/Challenge/Ranking/More' → l10n 키 적용
+  - 왜: 하단 탭이 영어 하드코딩이라 한/일/중 유저에게 어색한 UX
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프19: 리워드 광고 버튼 항상 표시
+  - 무엇을: game_over_overlay.dart 리워드 버튼 if(isRewardedReady) 조건 제거 → 항상 표시 + 미로딩 시 opacity 0.4
+  - 왜: 광고 미로딩 시 버튼 자체가 숨겨져 유저가 +30 코인 옵션 인지 불가 (수익 누락)
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프20: 에러 메시지 l10n 적용
+  - 무엇을: home_screen/nickname_screen/more_screen의 _friendlyErrorMessage 한국어 하드코딩 → l10n 키 5개 적용
+  - 왜: 일/중/영 유저에게 한국어 에러 메시지가 표시되는 l10n 누락
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프21: IAP 구매/복원 유저 피드백 추가
+  - 무엇을: 아바타 팩 구매 실패 시 purchaseFailed 스낵바 + 복원 완료 시 restoreComplete 스낵바
+  - 왜: 구매 실패/복원 완료 시 유저에게 아무 피드백 없음 (UX 결함)
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프22: UI 하드코딩 문자열 l10n 적용
+  - 무엇을: SCORE/TIME/MOVES/START/SKIP/Reset/DAILY BONUS/COINS → l10n 키 (6개 파일)
+  - 왜: game_screen/daily_challenge_screen/tutorial_screen/daily_bonus_dialog/share_card에 영어/한글 하드코딩
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프23: SoundService 초기화 전 재생 방지
+  - 무엇을: playSE()에 !_initialized 가드 추가
+  - 왜: initialize() 전 호출 시 설정 미복원 상태에서 기본값(true)으로 불필요한 재생 시도
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프24: PopParticle mounted 체크 추가
+  - 무엇을: pop_particle.dart onComplete 콜백에 mounted 가드 추가
+  - 왜: 부모 위젯 dispose 후 onComplete → setState 호출 시 크래시 위험
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프25: 데일리보너스/게임화면 나머지 l10n 적용
+  - 무엇을: 'Watch Ad & Claim'→watchAdAndClaim, 'Later'→labelLater, 'BEST'→labelBest (3개 키, 3개 파일)
+  - 왜: daily_bonus_dialog과 game_screen에 영어 하드코딩 잔존
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프26: 광고 시청 Analytics 이벤트 추가
+  - 무엇을: ad_service.dart에서 인터스티셜/리워드 광고 show 시 AnalyticsService().logAdWatched() 호출
+  - 왜: 인터스티셜 광고 시청이 전혀 추적 안 됨 (수익 최적화 데이터 부재)
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프27: 랭킹/온보딩 l10n 적용
+  - 무엇을: 'RANKING'→labelRanking, 'TAP'→labelTap (leaderboard_screen, onboarding_overlay)
+  - 왜: 화면 타이틀/인터랙션 힌트가 영어 하드코딩
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프28: 데일리보너스 DAY 표시 l10n 적용
+  - 무엇을: 'DAY $_streak' → labelDay(streak) 파라미터화 (한:DAY N, 일:N日目, 중:第N天)
+  - 왜: 'DAY 3' 형태가 일/중 유저에게 부자연스러움
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프29: 데일리보너스 클레임 Analytics 추가
+  - 무엇을: daily_bonus_dialog에서 claimBonus 성공 후 logDailyBonusClaim(streak, coins) 호출
+  - 왜: 데일리보너스 참여율 데이터가 전혀 수집 안 됨
+  - 결과: 188 tests, analyze 0
+
+2026-03-21 루프30: IAP 구매 성공 Analytics 추가
+  - 무엇을: iap_service _handlePurchase에서 purchased 상태일 때 logIAPPurchase(productId) 호출
+  - 왜: 구매 이벤트가 analytics에 전혀 기록 안 됨 (매출 추적 불가)
+  - 결과: 188 tests, analyze 0
 ```
