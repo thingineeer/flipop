@@ -1,3 +1,9 @@
+---
+name: resume-flipop
+description: Resume FLIPOP Flutter game session — restore context, check code health, and brief current state.
+disable-model-invocation: true
+---
+
 # FLIPOP 세션 재개
 
 이전 세션의 컨텍스트를 복구하고 작업을 이어서 진행합니다.
